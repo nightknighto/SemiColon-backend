@@ -1,20 +1,25 @@
 import dev from './dev';
 import prod from './prod';
 import test from './tst';
+import Configs from '../types/configs'
+
 
 const env = process.env.NODE_ENV?.trim();
-let keys: any;
+let configs: Configs;
 
 switch(env) {
     case 'development':
-        keys = dev;
+        configs = dev;
         break;
     case 'production':
-        keys = prod;
+        configs = prod;
         break;
     case 'test':
-        keys = test;
+        configs = test;
+        break;
+    default:
+        configs = dev;
         break;
 }
 
-export default keys;
+export default configs;
