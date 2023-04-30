@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-import configs from '../config/config';
+import keys from '../config/keys';
 
 export async function connectMONGODB(){
     try{
-        await mongoose.connect(configs.DB_URL as string);
+        await mongoose.connect(keys.DB_URL);
     } catch(err){
         console.log(err);
     }
