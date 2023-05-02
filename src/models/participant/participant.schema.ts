@@ -20,12 +20,12 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
     firstPreference: {
       type: String,
       required: true,
-      enum: ["webDev", "webDev2", "WebDev3"],
+      enum: ["webDev1", "webDev2", "WebDev3"],
     },
     secondPreference: {
       type: String,
       required: true,
-      enum: ["webDev", "webDev2", "WebDev3"],
+      enum: ["webDev1", "webDev2", "WebDev3"],
     },
     firstPrefReason: {
       type: String,
