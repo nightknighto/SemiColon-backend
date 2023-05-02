@@ -6,7 +6,7 @@ export function ValidateName(name: string): boolean {
         throw new ErrorWithStatusCode("Name is required", 400);
     } else if (!name.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Name: name must not contain special characters.",
+            "Invalid Name: name must not contain special characters or digits.",
             400
         );
     }
@@ -57,12 +57,12 @@ export function ValidateYear(year: string): boolean {
     }
     return true;
 }
-export function ValidatePreference(preference: string): boolean {
+export function ValidatePreference(preference: string, order: string): boolean {
     if (!preference) {
-        throw new ErrorWithStatusCode("Preference is required", 400);
+        throw new ErrorWithStatusCode(`${order} Preference is required`, 400);
     } else if (!preference.match(/^(webDev1|webDev2|webDev3)$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Preference: Preference must be one of webDev1, webDev2 or webDev3",
+            `Invalid ${order} Preference: Preference must be one of webDev1, webDev2 or webDev3`,
             400
         );
     }
@@ -73,13 +73,28 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
     if (!participant) {
         throw new ErrorWithStatusCode("Participant is required", 400);
     }
+    if(participant.firstPreference === participant.secondPreference) {
+        throw new ErrorWithStatusCode("Preferences must be different", 400);
+    }
+    if(!participant.firstPrefReason) {
+        throw new ErrorWithStatusCode("First Preference Reason is required", 400);
+    }
+    if(!participant.firstPrefKnowledge) {
+        throw new ErrorWithStatusCode("First Preference Knowledge is required", 400);
+    }
+    if(!participant.secondPrefReason) {
+        throw new ErrorWithStatusCode("Second Preference Reason is required", 400);
+    }
+    if(!participant.pastExperience) {
+        throw new ErrorWithStatusCode("Past Experience is required", 400);
+    }
     return (
         ValidateName(participant.name) &&
         ValidateEmail(participant.email) &&
         ValidatePhone(participant.phone) &&
         ValidateCollegeId(participant.collegeId) &&
         ValidateYear(participant.year) &&
-        ValidatePreference(participant.firstPreference) &&
-        ValidatePreference(participant.secondPreference)
+        ValidatePreference(participant.firstPreference, "first") &&
+        ValidatePreference(participant.secondPreference, "second")
     );
 }

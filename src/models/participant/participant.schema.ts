@@ -51,7 +51,7 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         required: true,
         enum: ["Freshman", "Sophomore", "Junior", "Senior 1", "Senior 2"],
       },
-      acceptanceSatus: {
+      acceptanceStatus: {
         type: String,
         required: true,
         default: "pending",

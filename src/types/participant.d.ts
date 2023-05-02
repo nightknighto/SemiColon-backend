@@ -13,6 +13,6 @@ export interface participant {
   secondPreference: string;
   secondPrefReason: string;
   pastExperience: string;
-  acceptanceSatus: string;
+  acceptanceStatus: string;
   emailedStatus: boolean;
 }
