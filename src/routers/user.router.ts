@@ -11,14 +11,10 @@ import {
 
 const userRouter = Router();
 
-userRouter.route('/:id').delete(deleteUser);
-
-userRouter.route('/:phone').get(getUserByPhone);
-
-userRouter.route('/').post(addNewUser).patch(updateUser);
-
-userRouter.route('/activate').post(activateUser);
-
-userRouter.route('/deactivate').post(deactivateUser);
-
+userRouter.get('/:phone', getUserByPhone);
+userRouter.post('/', addNewUser);
+userRouter.patch('/update/:id', updateUser);
+userRouter.patch('/activate/:id', activateUser);
+userRouter.patch('/deactivate/:id', deactivateUser);
+userRouter.delete('/:id', deleteUser)
 export default userRouter;
