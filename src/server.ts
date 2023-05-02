@@ -1,7 +1,6 @@
 import http from 'http';
 
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 import api from './api';
 import { connectMONGODB} from './services/mongodb';
