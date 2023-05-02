@@ -19,7 +19,7 @@ export async function getUserById(req: Request, res: Response) {
 			data: user,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -35,7 +35,7 @@ export async function getUserByPhone(req: Request, res: Response) {
 			data: user,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -51,7 +51,7 @@ export async function addNewUser(req: Request, res: Response) {
 			data: newUser,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -68,7 +68,7 @@ export async function updateUser(req: Request, res: Response) {
 			data: updatedUser,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -84,7 +84,7 @@ export async function deleteUser(req: Request, res: Response) {
 			data: deletedUser,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -92,7 +92,7 @@ export async function deleteUser(req: Request, res: Response) {
 }
 
 export async function activateUser(req: Request, res: Response) {
-	const { id } = req.body;
+	const { id } = req.params;
 	try {
 		const activatedUser = await dbActivateUserById(id);
 		res.status(200).json({
@@ -100,7 +100,7 @@ export async function activateUser(req: Request, res: Response) {
 			data: activatedUser,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
@@ -108,7 +108,7 @@ export async function activateUser(req: Request, res: Response) {
 }
 
 export async function deactivateUser(req: Request, res: Response) {
-	const { id } = req.body;
+	const { id } = req.params;
 	try {
 		const deactivatedUser = await dbDeactivateUserById(id);
 		res.status(200).json({
@@ -116,7 +116,7 @@ export async function deactivateUser(req: Request, res: Response) {
 			data: deactivatedUser,
 		});
 	} catch (error: any) {
-		res.status(500).json({
+		res.status(error.statusCode || 500).json({
 			status: 'failure',
 			data: error.message,
 		});
