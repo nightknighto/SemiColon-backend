@@ -4,53 +4,50 @@ import Participant from "./participant.schema";
 import ErrorWithStatusCode from "../../util/classes/ErrorWithStatusCode";
 
 export async function dbGetAllParticipants() {
-    const participants = await Participant.find();
-    if (!participants) {
-        throw new ErrorWithStatusCode(
-            "Error while getting all participants",
-            500
-        );
-    }
-    return participants;
+  const participants = await Participant.find();
+  if (!participants) {
+    throw new ErrorWithStatusCode("Error while getting all participants", 500);
+  }
+  return participants;
 }
 export async function dbAddParticipant(participant: Partial<ParticipantType>) {
-    const newParticipant = new Participant(participant);
-    if (!newParticipant) {
-        throw new ErrorWithStatusCode("Error while adding participant", 500);
-    }
+  const newParticipant = new Participant(participant);
+  if (!newParticipant) {
+    throw new ErrorWithStatusCode("Error while adding participant", 500);
+  }
 
-    return await newParticipant.save();
+  return await newParticipant.save();
 }
 
 export async function dbDeleteParticipantByEmail(email: string) {
-    let filter = { email: email };
-    const deletedParticipant = await Participant.deleteOne(filter);
-    if (deletedParticipant.deletedCount === 0) {
-        throw new ErrorWithStatusCode("Participant doesn't exist", 404);
-    }
-    return deletedParticipant;
+  let filter = { email: email };
+  const deletedParticipant = await Participant.deleteOne(filter);
+  if (deletedParticipant.deletedCount === 0) {
+    throw new ErrorWithStatusCode("Participant doesn't exist", 404);
+  }
+  return deletedParticipant;
 }
 export async function dbUpsertParticipant(participant: ParticipantType) {
-    let filter = { email: participant.email };
-    let update = participant;
-    const newParticipant = await Participant.findOneAndUpdate(filter, update, {
-        new: true,
-        upsert: true,
-    });
-    if (!newParticipant) {
-        throw new ErrorWithStatusCode("Error while upserting participant", 500);
-    }
-    return newParticipant;
+  let filter = { email: participant.email };
+  let update = participant;
+  const newParticipant = await Participant.findOneAndUpdate(filter, update, {
+    new: true,
+    upsert: true,
+  });
+  if (!newParticipant) {
+    throw new ErrorWithStatusCode("Error while upserting participant", 500);
+  }
+  return newParticipant;
 }
 
 export async function dbUpdateUserByEmail(
-    update: Partial<ParticipantType>,
-    email: string
+  update: Partial<ParticipantType>,
+  email: string
 ) {
-    let filter = { email: email };
-    const updatedParticipant = await Participant.updateOne(filter, update);
-    if (updatedParticipant.matchedCount === 0) {
-        throw new ErrorWithStatusCode("participant doesnt exist", 404);
-    }
-    return updatedParticipant;
+  let filter = { email: email };
+  const updatedParticipant = await Participant.updateOne(filter, update);
+  if (updatedParticipant.matchedCount === 0) {
+    throw new ErrorWithStatusCode("participant doesnt exist", 404);
+  }
+  return updatedParticipant;
 }
