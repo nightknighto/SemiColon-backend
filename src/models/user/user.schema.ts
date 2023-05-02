@@ -3,7 +3,6 @@ import UserType from '../../types/user';
 
 export const userSchema = new mongoose.Schema<UserType>(
 	{
-		id: mongoose.Types.ObjectId,
 		username: {
 			type: String,
 			required: true,
@@ -20,7 +19,7 @@ export const userSchema = new mongoose.Schema<UserType>(
 		role: {
 			type: String,
 			required: true,
-			enum: ['admin', 'hr', 'developer', 'member', 'guest'],
+			enum: ['admin', 'hr', 'member'],
 		},
 		active: {
 			type: Boolean,
