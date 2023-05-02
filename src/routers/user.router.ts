@@ -8,13 +8,18 @@ import {
 	activateUser,
 	deactivateUser,
 } from '../controllers/user.controller';
+import {
+	mwValidateId,
+	mwValidatePhone,
+	mwValidateUserData,
+} from '../middlewares/userDataValidator';
 
 const userRouter = Router();
 
-userRouter.get('/:phone', getUserByPhone);
-userRouter.post('/', addNewUser);
-userRouter.patch('/update/:id', updateUser);
-userRouter.patch('/activate/:id', activateUser);
-userRouter.patch('/deactivate/:id', deactivateUser);
-userRouter.delete('/:id', deleteUser)
+userRouter.get('/:phone', mwValidatePhone, getUserByPhone);
+userRouter.post('/', mwValidateUserData, addNewUser);
+userRouter.patch('/update/:id', mwValidateId, mwValidateUserData, updateUser);
+userRouter.patch('/activate/:id', mwValidateId, activateUser);
+userRouter.patch('/deactivate/:id', mwValidateId, deactivateUser);
+userRouter.delete('/:id', mwValidateId, deleteUser);
 export default userRouter;
