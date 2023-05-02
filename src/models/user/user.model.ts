@@ -1,30 +1,85 @@
 import UserType from '../../types/user';
+import ErrorWithStatusCode from '../../utils/classes/ErrorWithStatusCode';
 import User from './user.schema';
 
 export async function dbGetUserById(id: string) {
-	return await User.findById(id);
+	const result = await User.findById(id);
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
 }
 
 export async function dbGetUserByPhone(phone: string) {
-	return await User.findOne({ phone });
+	const result = await User.findOne({ phone });
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
 }
 
 export async function dbAddNewUser(user: UserType) {
-	return await User.create(user);
+	const userToAdd = new User(user);
+
+	// Validate user
+	try {
+		await userToAdd.validate();
+	} catch (error: any) {
+		throw new ErrorWithStatusCode(error.message, 400);
+	}
+
+	// Check for duplication error
+	try {
+		return await userToAdd.save();
+	} catch (error: any) {
+		if ((error.code = 11000)) {
+			throw new ErrorWithStatusCode(error.message, 400);
+		}
+		throw error;
+	}
 }
 
 export async function dbUpdateUserById(id: string, user: UserType) {
-	return await User.findByIdAndUpdate(id, user);
+	const result = await User.findByIdAndUpdate(id, user);
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
 }
 
 export async function dbDeleteUserById(id: string) {
-	return await User.findByIdAndDelete(id);
+	const result = await User.findByIdAndDelete(id);
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
 }
 
 export async function dbActivateUserById(id: string) {
-	return await User.findByIdAndUpdate(id, { active: true });
+	const result = await User.findByIdAndUpdate(
+		id,
+		{ active: true },
+		{ new: true }
+	);
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
 }
 
 export async function dbDeactivateUserById(id: string) {
-	return await User.findByIdAndUpdate(id, { active: false });
+	const result = await User.findByIdAndUpdate(
+		id,
+		{ active: false },
+		{ new: true }
+	);
+	if (!result) {
+		throw new ErrorWithStatusCode('User not found', 404);
+	}
+	return result;
+}
+
+// ⚠️ ⚠️ ⚠️ Dangerous function, only for testing purposes ⚠️ ⚠️ ⚠️
+export async function dbDeleteAllUsers() {
+	return await User.deleteMany({});
 }
