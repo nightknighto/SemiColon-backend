@@ -1,22 +1,19 @@
-import {Mongoose} from 'mongoose';
+import { Mongoose } from "mongoose";
 
 export interface participant {
     _id: Mongoose.types.ObjectId;
     name: string;
     email: string;
     phone: string;
+    collegeId: string;
+    year: string;
     firstPreference: string;
+    firstPrefReason: string;
+    firstPrefKnowledge: string;
     secondPreference: string;
-    status: string;
-    emailed: boolean;
+    secondPrefReason: string;
+    pastExperience: string;
+    acceptanceSatus: string;
+    emailedStatus: boolean;
 }
 
-export interface updateParticipant {
-    name?: string;
-    email?: string;
-    phone?: string;
-    firstPreference?: string;
-    secondPreference?: string;
-    status?: string;
-    emailed?: boolean;
-}

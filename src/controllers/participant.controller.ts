@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { participant as ParticipantType, updateParticipant as updatedParticipantType } from '../types/participant';
+import { participant as ParticipantType } from '../types/participant';
 
 import {dbGetAllParticipants, dbAddParticipant, dbUpsertParticipant, dbDeleteParticipantByEmail, dbUpdateUserByEmail} from '../models/participant/participant.model';
 import ErrorWithStatusCode from '../util/classes/ErrorWithStatusCode';
@@ -35,7 +35,7 @@ export async function deleteParticipantByEmail(req: Request, res: Response) {
 
 export async function updateParticipant(req: Request, res: Response) {
     try {
-        const {update, email} : {update: updatedParticipantType, email: string} = req.body;
+        const {update, email} : {update: Partial<ParticipantType>, email: string} = req.body;
         const updatedParticipant = await dbUpdateUserByEmail(update, email);
         res.status(200).json({status: "success", data: updatedParticipant});
     } catch (error: ErrorWithStatusCode|any) {

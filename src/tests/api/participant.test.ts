@@ -2,22 +2,20 @@ import superTest from "supertest";
 import { Types } from "mongoose";
 
 import { connectMONGODB, disconnectMONGODB } from "../../services/mongodb";
-import { participant as ParticipantType, updateParticipant } from "../../types/participant";
+import { participant as ParticipantType } from "../../types/participant";
 import api from "../../api";
 import { dbAddParticipant, dbDeleteParticipantByEmail } from "../../models/participant/participant.model";
 import configs from "../../config/config";
 
 beforeAll(async () => {
     await connectMONGODB();
-    // console.log("DB TEST URL",configs.DB_URL);
 });
-
 afterAll(async () => {
     await disconnectMONGODB();
 });
 describe("GET /participant endpoint", () => {
     beforeAll(async () => {
-        const participant1 : updateParticipant = {
+        const participant1 : Partial<ParticipantType> = {
             name: "Test_participant1",
             phone: "01111211111",
             email: "testuser1@gmail.com",
@@ -40,7 +38,7 @@ describe("GET /participant endpoint", () => {
 
 describe("POST /participant endpoint", () => {
     test("Add a new participants", async () => {
-        const participant2 : updateParticipant = {
+        const participant2 : Partial<ParticipantType> = {
             name: "Test_participant2",
             phone: "01111111111",
             email: "testuser2@gmail.com",
@@ -54,7 +52,7 @@ describe("POST /participant endpoint", () => {
     });
 
     test("Add an already added participant", async () => {
-        const participant2 : updateParticipant = {
+        const participant2 : Partial<ParticipantType> = {
             name: "Test_participant33",
             phone: "01111111111",
             email: "testuser2@gmail.com",
@@ -75,7 +73,7 @@ describe("POST /participant endpoint", () => {
 
 describe("PATCH /participant endpoint", () => {
     beforeAll(async () => {
-        const participant2 : updateParticipant = {
+        const participant2 : Partial<ParticipantType> = {
             name: "Test_participant3",
             phone: "01111111411",
             email: "testuser3@gmail.com",
@@ -109,7 +107,7 @@ describe("PATCH /participant endpoint", () => {
 
 describe("DELETE /participant endpoint", () => {
     beforeAll(async () => {
-        const participant4 : updateParticipant = {
+        const participant4 : Partial<ParticipantType> = {
             name: "Test_participant4",
             phone: "01111111411",
             email: "testuser4@gmail.com",

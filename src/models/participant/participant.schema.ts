@@ -27,17 +27,48 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             required: true,
             enum: ["webDev", "webDev2", "WebDev3"],
         },
-        status: {
+        firstPrefReason: {
             type: String,
             required: true,
-            default: "pending",
-            enum: ["accepted", "rejected", "pending"],
         },
-        emailed: {
-            type: Boolean,
+        firstPrefKnowledge: {
+            type: String,
             required: true,
-            default: false,
-        }
+        },
+        secondPrefReason: {
+            type: String,
+            required: true,
+        },
+        pastExperience: {
+            type: String,
+            required: true,
+            collegeId: {
+                type: String,
+                required: true,
+            },
+            year: {
+                type: String,
+                required: true,
+                enum: [
+                    "Freshman",
+                    "Sophomore",
+                    "Junior",
+                    "Senior 1",
+                    "Senior 2",
+                ],
+            },
+            acceptanceSatus: {
+                type: String,
+                required: true,
+                default: "pending",
+                enum: ["accepted", "rejected", "pending"],
+            },
+            emailedStatus: {
+                type: Boolean,
+                required: true,
+                default: false,
+            },
+        },
     },
     { timestamps: true }
 );

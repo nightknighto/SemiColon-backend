@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
-import {
-    participant as ParticipantType,
-    updateParticipant as updateParticipantType,
-} from "../../types/participant";
+import { participant as ParticipantType } from "../../types/participant";
 import Participant from "./participant.schema";
 import ErrorWithStatusCode from "../../util/classes/ErrorWithStatusCode";
 
@@ -16,23 +13,20 @@ export async function dbGetAllParticipants() {
     }
     return participants;
 }
-export async function dbAddParticipant(participant: ParticipantType|updateParticipantType) {
-    const newParticipant = new Participant (participant);
+export async function dbAddParticipant(participant: Partial<ParticipantType>) {
+    const newParticipant = new Participant(participant);
     if (!newParticipant) {
         throw new ErrorWithStatusCode("Error while adding participant", 500);
     }
-    
+
     return await newParticipant.save();
 }
 
 export async function dbDeleteParticipantByEmail(email: string) {
-    let filter = {email:email};
+    let filter = { email: email };
     const deletedParticipant = await Participant.deleteOne(filter);
     if (deletedParticipant.deletedCount === 0) {
-        throw new ErrorWithStatusCode(
-            "Participant doesn't exist",
-            404
-        );
+        throw new ErrorWithStatusCode("Participant doesn't exist", 404);
     }
     return deletedParticipant;
 }
@@ -50,7 +44,7 @@ export async function dbUpsertParticipant(participant: ParticipantType) {
 }
 
 export async function dbUpdateUserByEmail(
-    update: updateParticipantType,
+    update: Partial<ParticipantType>,
     email: string
 ) {
     let filter = { email: email };
