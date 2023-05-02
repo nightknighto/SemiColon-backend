@@ -1,13 +1,15 @@
-export default function validateUser(user: any): void | never {
+import UserType from '../../types/user';
+
+export default function validateUser(user: unknown): void | never {
 	if (!user) throw new Error('user is not provided');
-	validateUsername(user.username);
-	validatePhone(user.phone);
-	validateRole(user.role);
-	validatePassword(user.password);
-	validateActive(user.active);
+	validateUsername((user as UserType).username);
+	validatePhone((user as UserType).phone);
+	validateRole((user as UserType).role);
+	validatePassword((user as UserType).password);
+	validateActive((user as UserType).active);
 }
 
-export function validatePhone(phone: any): void | never {
+export function validatePhone(phone: unknown): void | never {
 	if (!phone) {
 		throw new Error('phone is required');
 	} else if (typeof phone !== 'string') {
@@ -19,7 +21,7 @@ export function validatePhone(phone: any): void | never {
 	}
 }
 
-export function validateUsername(username: any) {
+export function validateUsername(username: unknown) {
 	if (!username) {
 		throw new Error('username is required');
 	} else if (typeof username !== 'string') {
@@ -27,7 +29,7 @@ export function validateUsername(username: any) {
 	}
 }
 
-export function validateRole(role: any) {
+export function validateRole(role: unknown) {
 	if (!role) {
 		throw new Error('role is required');
 	} else if (typeof role !== 'string') {
@@ -37,13 +39,13 @@ export function validateRole(role: any) {
 	}
 }
 
-export function validatePassword(password: any) {
+export function validatePassword(password: unknown) {
 	if (password && typeof password !== 'string') {
 		throw new Error('password field is invalid (must be string)');
 	}
 }
 
-export function validateActive(active: any) {
+export function validateActive(active: unknown) {
 	if (active && typeof active !== 'boolean') {
 		throw new Error('active field is invalid (must be boolean)');
 	}

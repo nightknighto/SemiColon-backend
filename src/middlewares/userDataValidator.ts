@@ -4,15 +4,19 @@ import validateUser, {
 	validatePhone,
 } from '../utils/data-validation/user.validator';
 
-export function mwValidateUserData(req: Request, res: Response, next: Function) {
+export function mwValidateUserData(
+	req: Request,
+	res: Response,
+	next: Function
+) {
 	try {
 		const user = req.body;
 		validateUser(user); // throws error if invalid
 		next();
-	} catch (error: any) {
+	} catch (error: unknown) {
 		res.status(400).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -22,10 +26,10 @@ export function mwValidateId(req: Request, res: Response, next: Function) {
 		const { id } = req.params;
 		validateId(id); // throws error if invalid
 		next();
-	} catch (error: any) {
+	} catch (error: unknown) {
 		res.status(400).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -35,10 +39,10 @@ export function mwValidatePhone(req: Request, res: Response, next: Function) {
 		const { phone } = req.params;
 		validatePhone(phone); // throws error if invalid
 		next();
-	} catch (error: any) {
+	} catch (error: unknown) {
 		res.status(400).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }

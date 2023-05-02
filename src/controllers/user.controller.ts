@@ -9,6 +9,7 @@ import {
 	dbActivateUserById,
 	dbDeactivateUserById,
 } from '../models/user/user.model';
+import ErrorWithStatusCode from '../utils/classes/ErrorWithStatusCode';
 
 export async function getUserById(req: Request, res: Response) {
 	const { id } = req.params;
@@ -18,10 +19,10 @@ export async function getUserById(req: Request, res: Response) {
 			status: 'success',
 			data: user,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as ErrorWithStatusCode).message,
 		});
 	}
 }
@@ -34,10 +35,10 @@ export async function getUserByPhone(req: Request, res: Response) {
 			status: 'success',
 			data: user,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -50,10 +51,10 @@ export async function addNewUser(req: Request, res: Response) {
 			status: 'success',
 			data: newUser,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -67,10 +68,10 @@ export async function updateUser(req: Request, res: Response) {
 			status: 'success',
 			data: updatedUser,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -83,10 +84,10 @@ export async function deleteUser(req: Request, res: Response) {
 			status: 'success',
 			data: deletedUser,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -99,10 +100,10 @@ export async function activateUser(req: Request, res: Response) {
 			status: 'success',
 			data: activatedUser,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
@@ -115,10 +116,10 @@ export async function deactivateUser(req: Request, res: Response) {
 			status: 'success',
 			data: deactivatedUser,
 		});
-	} catch (error: any) {
-		res.status(error.statusCode || 500).json({
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
 			status: 'failure',
-			data: error.message,
+			data: (error as Error).message,
 		});
 	}
 }
