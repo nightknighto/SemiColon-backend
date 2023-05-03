@@ -17,7 +17,7 @@ export function ValidateCollegeId(collegeId: string): boolean {
         throw new ErrorWithStatusCode("College ID is required", 400);
     } else if (!collegeId.match(/^\d{2}[a-zA-Z0-9]?\d{4}$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid College ID: College ID must be 7 digits long with a number or lettter in the 3rd digit",
+            "Invalid College ID: College ID must be 7 digits long with a number or letter in the 3rd digit",
             400
         );
     }
