@@ -10,6 +10,7 @@ import {
 	dbDeactivateUserById,
 } from '../models/user/user.model';
 import ErrorWithStatusCode from '../utils/classes/ErrorWithStatusCode';
+import { hashPassword } from '../utils/authentication/password.utils';
 
 export async function getUserById(req: Request, res: Response) {
 	const { id } = req.params;
@@ -45,6 +46,7 @@ export async function getUserByPhone(req: Request, res: Response) {
 
 export async function addNewUser(req: Request, res: Response) {
 	const user = req.body;
+	user.password = await hashPassword(user.password); // encrypt password
 	try {
 		const newUser = await dbAddNewUser(user);
 		res.status(201).json({
