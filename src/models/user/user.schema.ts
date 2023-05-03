@@ -15,6 +15,7 @@ export const userSchema = new mongoose.Schema<UserType>(
 		},
 		password: {
 			type: String,
+			required: true,
 		},
 		role: {
 			type: String,

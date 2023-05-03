@@ -116,7 +116,7 @@ describe('POST /user endpoint', () => {
 		const response = await superTest(api)
 			.post('/user')
 			.send(userWithMissingPassword);
-		expect(response.statusCode).toBe(201);
+		expect(response.statusCode).toBe(400);
 	});
 
 	test('Add a user with missing role', async () => {
@@ -165,7 +165,6 @@ describe('POST /user endpoint', () => {
 
 	afterAll(async () => {
 		await dbDeleteUserById(id1.toString());
-		await dbDeleteUserById(id2.toString());
 		await dbDeleteUserById(id3.toString());
 		await dbDeleteUserById(id4.toString());
 	});
@@ -226,7 +225,6 @@ describe('DELETE /user endpoint', () => {
 	});
 
 	test('Delete a user by id that does not exist', async () => {
-		// when this happens the server send 200 with data: null
 		const response = await superTest(api).delete(`/user/${id2.toString()}`);
 		expect(response.statusCode).toBe(404);
 	});

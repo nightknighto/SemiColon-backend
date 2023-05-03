@@ -40,7 +40,9 @@ export function validateRole(role: unknown) {
 }
 
 export function validatePassword(password: unknown) {
-	if (password && typeof password !== 'string') {
+	if (!password) {
+		throw new Error('password is required');
+	} else if (typeof password !== 'string') {
 		throw new Error('password field is invalid (must be string)');
 	}
 }
