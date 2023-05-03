@@ -18,6 +18,7 @@ jobs:
 
     env:
       TEST_DB_URL: ${{ secrets.TEST_DB_URL }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
     strategy:
       matrix:
