@@ -1,5 +1,6 @@
 {
   "name": "nodejs-ts-start",
+  "proxy": "http://localhost:5173",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
