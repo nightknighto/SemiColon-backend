@@ -8,6 +8,7 @@ import {
 import { dbGetUserById, dbGetUserByPhone } from '../models/user/user.model';
 import { verifyPassword } from '../utils/authentication/password.utils';
 import userType from '../types/user.d';
+import UserType from '../types/user.d';
 
 declare global {
 	namespace Express {
@@ -24,22 +25,16 @@ const localVerify: VerifyFunction = async (
 		options?: IVerifyOptions
 	) => void
 ) => {
+	let user: UserType;
 	try {
-		// validation done in a middleware
-		const user = await dbGetUserByPhone(phone);
-		if (!user) {
-			// user not found
-			return done(null, false);
-		}
+		user = await dbGetUserByPhone(phone);
 		const validPassword = await verifyPassword(password, user.password);
 		if (!validPassword) {
-			// password is not valid
 			return done(null, false);
 		}
-		// user found and password is valid
 		return done(null, user);
 	} catch (error: unknown) {
-		done(error);
+		done(null, false);
 	}
 };
 
