@@ -9,8 +9,8 @@
     "build": "tsc",
     "dev-windows": "set NODE_ENV=development && nodemon src/server.ts",
     "dev-linux": "NODE_ENV=development && nodemon src/server.ts",
-    "test": "jest --watchAll --verbose",
-    "test:ci": "jest"
+    "test": "jest --verbose --runInBand",
+    "test:watch": "npm run test -- --watchAll"
   },
   "author": "",
   "license": "ISC",
