@@ -1,4 +1,4 @@
 export default interface Configs {
-	PORT?: string;
-	DB_URL?: string;
+  PORT?: string;
+  DB_URL?: string;
 }

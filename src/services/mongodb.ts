@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import configs from '../config/config';
+import configs from "../config/config";
 
 export async function connectMONGODB() {
 	try {
