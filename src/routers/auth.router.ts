@@ -1,5 +1,6 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import passport from 'passport';
+import { failedLogin, successfulLogin } from '../controllers/auth.controller';
 const authRouter = Router();
 
 authRouter.post(
@@ -10,16 +11,8 @@ authRouter.post(
 	})
 );
 
-authRouter.post('/login/success', (req: Request, res: Response) => {
-	console.log(req.session?.cookie)
-	res.status(200).json({ status: 'success', data: 'Successful login' });
-});
+authRouter.route('/login/success').get(successfulLogin).post(successfulLogin);
 
-authRouter.post('/login/failure', (req: Request, res: Response) => {
-	res.status(401).json({
-		status: 'failure',
-		data: 'Invalid phone number or password',
-	});
-});
+authRouter.route('/login/failure').get(failedLogin).post(failedLogin);
 
 export default authRouter;
