@@ -12,7 +12,8 @@ on:
 
 jobs:
   build:
-
+    name: Code Testing
+    
     runs-on: ubuntu-latest
 
     env:
