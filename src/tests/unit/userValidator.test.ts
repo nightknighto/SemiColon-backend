@@ -82,7 +82,7 @@ describe('test validate password', () => {
 	});
 
 	test('password is not provided', () => {
-		expect(() => validatePassword(undefined)).not.toThrowError();
+		expect(() => validatePassword(undefined)).toThrowError();
 	});
 });
 
