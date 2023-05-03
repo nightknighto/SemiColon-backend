@@ -1,4 +1,5 @@
 import UserType from '../../types/user';
+import { hashPassword } from '../../utils/authentication/password.utils';
 import ErrorWithStatusCode from '../../utils/classes/ErrorWithStatusCode';
 import User from './user.schema';
 
@@ -19,6 +20,7 @@ export async function dbGetUserByPhone(phone: string) {
 }
 
 export async function dbAddNewUser(user: UserType) {
+	user.password = await hashPassword(user.password); // encrypt password
 	const userToAdd = new User(user);
 
 	// Validate user
