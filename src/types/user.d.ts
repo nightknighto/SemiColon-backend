@@ -4,7 +4,7 @@ import { Mongoose } from 'mongoose';
 export default interface UserType {
 	_id?: Mongoose.Types.ObjectId;
 	username: string;
-	password?: string;
+	password: string;
 	phone: string;
 	role: string;
 	active?: boolean;
