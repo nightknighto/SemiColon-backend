@@ -1,10 +1,10 @@
-import express from 'express';
+import express from "express";
 
-import globalRouter from './routers/global.router';
+import globalRouter from "./routers/global.router";
 
 const api = express();
 
 api.use(express.json());
-api.use('/', globalRouter);
+api.use("/", globalRouter);
 
 export default api;
