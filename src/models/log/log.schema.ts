@@ -7,6 +7,10 @@ const LogSchema = new mongoose.Schema({
 		ref: 'User',
 		required: true,
 	},
+	adminPhone: {
+		type: String,
+		required: true,
+	},
 	participantId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Participant',

@@ -4,7 +4,7 @@ import { getAllLogs, getLogsByAdminId, getLogsByParticipantId } from '../control
 const logRouter = Router();
 
 logRouter.get('/', getAllLogs);
-logRouter.get('/admin/:id', getLogsByAdminId);
+logRouter.get('/admin/:phone', getLogsByAdminId);
 logRouter.get('/participant/:id', getLogsByParticipantId)
 
 export default logRouter;
