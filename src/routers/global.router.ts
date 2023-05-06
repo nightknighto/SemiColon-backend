@@ -11,4 +11,8 @@ globalRouter.use("/participants", participantRouter);
 globalRouter.use('/user', userRouter);
 globalRouter.use('/auth', authRouter);
 
+globalRouter.get("/", (req, res) => {
+    res.send("Server Running!");
+});
+
 export default globalRouter;
