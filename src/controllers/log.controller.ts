@@ -52,3 +52,19 @@ export async function getLogsByParticipantId(req: Request, res: Response) {
 		});
 	}
 }
+
+export async function getLogsByAdminPhone(req: Request, res: Response) {
+	try {
+		const adminPhone = req.params.phone;
+		const logs = await dbGetLogsByAdminId(adminPhone);
+		res.status(200).json({
+			status: 'success',
+			data: logs,
+		});
+	} catch (error: unknown) {
+		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
+			status: 'failure',
+			message: (error as Error).message,
+		});
+	}
+}
