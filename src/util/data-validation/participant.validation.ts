@@ -1,5 +1,6 @@
 import ErrorWithStatusCode from "../classes/ErrorWithStatusCode";
 import { participant as ParticipantType } from "../../types/participant";
+import { PreferencesEnum } from "../../models/participant/participant.schema";
 
 export function ValidateName(name: string): boolean {
     if (!name) {
@@ -57,12 +58,12 @@ export function ValidateYear(year: string): boolean {
     }
     return true;
 }
-export function ValidatePreference(preference: string, order: string): boolean {
+export function ValidatePreference(preference: PreferencesEnum, order: string): boolean {
     if (!preference) {
         throw new ErrorWithStatusCode(`${order} Preference is required`, 400);
-    } else if (!preference.match(/^(webDev1|webDev2|webDev3)$/)) {
+    } else if (!Object.values(PreferencesEnum).includes(preference)) {
         throw new ErrorWithStatusCode(
-            `Invalid ${order} Preference: Preference must be one of webDev1, webDev2 or webDev3`,
+            `Invalid ${order} Preference: Preference must be one of ${[...Object.values(PreferencesEnum)]}}`,
             400
         );
     }
@@ -94,7 +95,7 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
         ValidatePhone(participant.phone) &&
         ValidateCollegeId(participant.collegeId) &&
         ValidateYear(participant.year) &&
-        ValidatePreference(participant.firstPreference, "first") &&
-        ValidatePreference(participant.secondPreference, "second")
+        ValidatePreference(participant.firstPreference as PreferencesEnum, "first") &&
+        ValidatePreference(participant.secondPreference as PreferencesEnum, "second")
     );
 }
