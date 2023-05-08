@@ -10,9 +10,26 @@ import {
 	dbDeleteUserById,
 } from '../../models/user/user.model';
 
+let loginCookie: string[];
+
 beforeAll(async () => {
+	const user = {
+		username: 'Test_user',
+		password: 'Test_password',
+		phone: '01450000000',
+		role: 'admin',
+		active: true,
+	};
 	await connectMONGODB();
-});
+	await dbAddNewUser(user);
+	const response = await superTest(api)
+		.post('/auth/login')
+		.send({ phone: '01450000000', password: 'Test_password' });
+	const cookies = response.headers['set-cookie'];
+	if (cookies) {
+		loginCookie = cookies;
+	}
+}, 10000);
 
 afterAll(async () => {
 	await dbDeleteAllUsers();
@@ -47,6 +64,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(validUserWithAllFields);
 		expect(response.statusCode).toBe(201);
 	});
@@ -61,6 +79,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithInvalidPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -75,7 +94,8 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.send(userWithDuplicatedPhone);
+			.send(userWithDuplicatedPhone)
+			.set('Cookie', loginCookie);
 		expect(response.statusCode).toBe(400);
 	});
 
@@ -88,6 +108,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithMissingPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -101,6 +122,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithMissingUsername);
 		expect(response.statusCode).toBe(400);
 	});
@@ -115,6 +137,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithMissingPassword);
 		expect(response.statusCode).toBe(400);
 	});
@@ -128,6 +151,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithMissingRole);
 		expect(response.statusCode).toBe(400);
 	});
@@ -142,23 +166,24 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
+			.set('Cookie', loginCookie)
 			.send(userWithMissingActive);
 		expect(response.body.data.active).toBe(false); // default value
 		expect(response.statusCode).toBe(201);
 	});
 
 	test('Activate inactive user', async () => {
-		const response = await superTest(api).patch(
-			`/user/activate/${id3.toString()}`
-		);
+		const response = await superTest(api)
+			.patch(`/user/activate/${id3.toString()}`)
+			.set('Cookie', loginCookie);
 		expect(response.body.data.active).toBe(true);
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Deactivate active user', async () => {
-		const response = await superTest(api).patch(
-			`/user/deactivate/${id3.toString()}`
-		);
+		const response = await superTest(api)
+			.patch(`/user/deactivate/${id3.toString()}`)
+			.set('Cookie', loginCookie);
 		expect(response.body.data.active).toBe(false);
 		expect(response.statusCode).toBe(200);
 	});
@@ -188,12 +213,16 @@ describe('GET /user endpoint', () => {
 	});
 
 	test('Get a user by phone', async () => {
-		const response = await superTest(api).get(`/user/${phone}`);
+		const response = await superTest(api)
+			.get(`/user/${phone}`)
+			.set('Cookie', loginCookie);
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Get a user by phone that does not exist', async () => {
-		const response = await superTest(api).get(`/user/${nonExistingPhone}`);
+		const response = await superTest(api)
+			.get(`/user/${nonExistingPhone}`)
+			.set('Cookie', loginCookie);
 		expect(response.statusCode).toBe(404);
 	});
 
@@ -220,12 +249,16 @@ describe('DELETE /user endpoint', () => {
 
 	test('Delete a user by id', async () => {
 		// when this happens the server send 200 with data: deleteUser
-		const response = await superTest(api).delete(`/user/${id1.toString()}`);
+		const response = await superTest(api)
+			.delete(`/user/${id1.toString()}`)
+			.set('Cookie', loginCookie);
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Delete a user by id that does not exist', async () => {
-		const response = await superTest(api).delete(`/user/${id2.toString()}`);
+		const response = await superTest(api)
+			.delete(`/user/${id2.toString()}`)
+			.set('Cookie', loginCookie);
 		expect(response.statusCode).toBe(404);
 	});
 });
