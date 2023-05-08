@@ -10,13 +10,20 @@ import {
 	dbDeleteUserById,
 } from '../../models/user/user.model';
 
+function generatePhone() {
+	let phone = '01';
+	let random9Digits = Math.floor(Math.random() * 1000000000);
+	phone += random9Digits.toString().padStart(9, '0');
+	return phone;
+}
+
 let loginCookie: string[];
 
 beforeAll(async () => {
 	const user = {
 		username: 'Test_user',
 		password: 'Test_password',
-		phone: '01450000000',
+		phone: generatePhone(),
 		role: 'admin',
 		active: true,
 	};
@@ -24,7 +31,7 @@ beforeAll(async () => {
 	await dbAddNewUser(user);
 	const response = await superTest(api)
 		.post('/auth/login')
-		.send({ phone: '01450000000', password: 'Test_password' });
+		.send({ phone: user.phone, password: 'Test_password' });
 	const cookies = response.headers['set-cookie'];
 	if (cookies) {
 		loginCookie = cookies;
@@ -41,13 +48,13 @@ describe('POST /user endpoint', () => {
 	let id2 = new Types.ObjectId();
 	let id3 = new Types.ObjectId();
 	let id4 = new Types.ObjectId();
-
+	let duplicatedPhone = generatePhone();
 	beforeAll(async () => {
 		const test_duplicated_phone: UserType = {
 			_id: id4,
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01100000000',
+			phone: duplicatedPhone,
 			role: 'admin',
 		};
 		await dbAddNewUser(test_duplicated_phone);
@@ -58,7 +65,7 @@ describe('POST /user endpoint', () => {
 			_id: id1,
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01000000000',
+			phone: generatePhone(),
 			role: 'admin',
 			active: true,
 		};
@@ -88,7 +95,7 @@ describe('POST /user endpoint', () => {
 		const userWithDuplicatedPhone: UserType = {
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01100000000',
+			phone: duplicatedPhone,
 			role: 'admin',
 			active: true,
 		};
@@ -116,7 +123,7 @@ describe('POST /user endpoint', () => {
 	test('Add a user with missing username', async () => {
 		const userWithMissingUsername = {
 			password: 'Test_password',
-			phone: '01222200000',
+			phone: generatePhone(),
 			role: 'admin',
 			active: true,
 		};
@@ -131,7 +138,7 @@ describe('POST /user endpoint', () => {
 		const userWithMissingPassword = {
 			_id: id2,
 			username: 'Test_user',
-			phone: '01222200002',
+			phone: generatePhone(),
 			role: 'admin',
 			active: true,
 		};
@@ -146,7 +153,7 @@ describe('POST /user endpoint', () => {
 		const userWithMissingRole = {
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01222200088',
+			phone: generatePhone(),
 			active: true,
 		};
 		const response = await superTest(api)
@@ -161,7 +168,7 @@ describe('POST /user endpoint', () => {
 			_id: id3,
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01222200098',
+			phone: generatePhone(),
 			role: 'admin',
 		};
 		const response = await superTest(api)
@@ -197,8 +204,8 @@ describe('POST /user endpoint', () => {
 
 describe('GET /user endpoint', () => {
 	let id1 = new Types.ObjectId();
-	let phone = '01999999000'; // to have access inside the test
-	let nonExistingPhone = '01222200000';
+	let phone = generatePhone(); // to have access inside the test
+	let nonExistingPhone = generatePhone();
 
 	beforeAll(async () => {
 		const userToGetByPhone: UserType = {
@@ -240,7 +247,7 @@ describe('DELETE /user endpoint', () => {
 			_id: id1,
 			username: 'Test_user',
 			password: 'Test_password',
-			phone: '01111111111',
+			phone: generatePhone(),
 			role: 'admin',
 			active: true,
 		};
