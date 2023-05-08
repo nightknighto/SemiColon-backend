@@ -30,7 +30,7 @@ beforeAll(async () => {
 }, 10000);
 
 afterAll(async () => {
-	await dbDeleteAllUsers();
+	// await dbDeleteAllUsers();
 	await disconnectMONGODB();
 });
 
@@ -41,12 +41,13 @@ describe('GET /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser1@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'c-prog',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
+			year: 'Freshman',
 		};
 		await dbAddParticipant(participant1);
 	});
@@ -73,10 +74,10 @@ describe('POST /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser2@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'arm',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
@@ -94,10 +95,10 @@ describe('POST /participant endpoint', () => {
 			phone: '01111211111',
 			email: 'testuser2@gmail.com',
 			collegeId: '1801298',
-			firstPreference: 'webDev2',
+			firstPreference: 'desktop',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev3',
+			secondPreference: 'arm',
 			secondPrefReason: 'I like it',
 			pastExperience: 'N/A',
 			year: 'Freshman',
@@ -118,10 +119,10 @@ describe('PATCH /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser3@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'avr',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'arm',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
@@ -170,10 +171,10 @@ describe('DELETE /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser4@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'arm',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
