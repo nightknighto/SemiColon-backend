@@ -27,7 +27,7 @@ export async function addParticipant(req: Request, res: Response) {
     try {
         const { participant }: { participant: ParticipantType } = req.body;
         const newParticipant = await dbUpsertParticipant(participant);
-        res.status(200).json({ status: "success", data: newParticipant });
+        res.status(200).json({ status: "success" });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({
             status: "failure",
@@ -55,6 +55,25 @@ export async function deleteParticipantByEmail(req: Request, res: Response) {
     }
 }
 
+export async function deleteParticipantByPhone(req: Request, res: Response) {
+    try {
+        const { phone } = req.body;
+        const deletedParticipant = await dbDeleteParticipant({phone});
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "delete",
+            participantId: deletedParticipant._id as string,
+        });
+        res.status(200).json({ status: "success", data: deletedParticipant });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
 export async function updateParticipantByPhone(req: Request, res: Response) {
     try {
         const {
@@ -62,6 +81,12 @@ export async function updateParticipantByPhone(req: Request, res: Response) {
             phone,
         }: { update: Partial<ParticipantType>; phone: string } = req.body;
         const updatedParticipant = await dbUpdateUser(update, {phone});
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string
+        });
         res.status(200).json({ status: "success", data: updatedParticipant });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({
@@ -77,6 +102,12 @@ export async function acceptParticipantByPhone(req: Request, res: Response){
             phone,
         }: { phone: string } = req.body;
         const updatedParticipant = await dbUpdateUser({acceptanceStatus: "accepted"}, {phone});
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id  as string,
+        });
         res.status(200).json({ status: "success", data: updatedParticipant });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({
@@ -92,6 +123,12 @@ export async function rejectParticipantByPhone(req: Request, res: Response){
             phone,
         }: { phone: string } = req.body;
         const updatedParticipant = await dbUpdateUser({acceptanceStatus: "rejected"}, {phone});
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string,
+        });
         res.status(200).json({ status: "success", data: updatedParticipant });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({
@@ -108,6 +145,12 @@ export async function emailParticipantByPhone(req: Request, res: Response){
         }: { phone: string } = req.body;
         //TODO: send email using nodemailer here
         const updatedParticipant = await dbUpdateUser({acceptanceStatus: "emailed"}, {phone});
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string,
+        });
         res.status(200).json({ status: "success", data: updatedParticipant });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({

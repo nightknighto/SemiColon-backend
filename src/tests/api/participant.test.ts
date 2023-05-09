@@ -53,7 +53,7 @@ describe('GET /participant endpoint', () => {
 	});
 
 	afterAll(async () => {
-		await dbDeleteParticipant({email: 'testuser1@gmail.com'});
+		await dbDeleteParticipant({phone: '01111111111'});
 	});
 
 	test('Get all participants', async () => {
@@ -137,7 +137,7 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				filter: {email: 'testuser665@gmail.com'},
+				phone: "01111111112",
 				update: { acceptanceStatus: 'accepted' },
 			});
 		expect(response.statusCode).toBe(404);
@@ -147,8 +147,8 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				filter: {email: 'testuser3@gmail.com'},
-				update: { acceptanceStatus: 'accepted' },
+				phone: "01111111111" ,
+				update: {acceptanceStatus: 'accepted'},
 			});
 		expect(response.statusCode).toBe(200);
 	});
@@ -157,8 +157,8 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				filter: {email: 'testuser3@gmail.com'},
-				update: { emailedStatus: true },
+				phone: "01111111111",
+				update: {emailedStatus: true},
 			});
 		expect(response.statusCode).toBe(200);
 	});
@@ -186,14 +186,14 @@ describe('DELETE /participant endpoint', () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({filter: { email: 'testuser65434@gmail.com'} });
+			.send({ phone: "01111111112"} );
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({ filter: {email: 'testuser4@gmail.com'} });
+			.send({ phone: "01111111111"  });
 		expect(response.statusCode).toBe(200);
 	});
 });

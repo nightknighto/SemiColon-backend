@@ -48,8 +48,8 @@ export async function dbUpdateUser(
     update: Partial<ParticipantType>,
     filter: UpdateParticipant
 ) {
-    const updatedParticipant = await Participant.updateOne(filter, update);
-    if (updatedParticipant.matchedCount === 0) {
+    const updatedParticipant = await Participant.findOneAndUpdate(filter, update ,{new: true});
+    if (!updatedParticipant) {
         throw new ErrorWithStatusCode("participant does not exist", 404);
     }
     return updatedParticipant;

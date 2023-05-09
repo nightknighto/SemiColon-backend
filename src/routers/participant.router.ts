@@ -3,6 +3,7 @@ import {
     acceptParticipantByPhone,
     addParticipant,
     deleteParticipantByEmail,
+    deleteParticipantByPhone,
     emailParticipantByPhone,
     getAllParticipants,
     rejectParticipantByPhone,
@@ -31,7 +32,7 @@ participantRouter.delete(
     "/delete",
     isLoggedIn,
     giveAccessTo("admin"),
-    deleteParticipantByEmail
+    deleteParticipantByPhone
 );
 participantRouter.post(
     "/accept",
