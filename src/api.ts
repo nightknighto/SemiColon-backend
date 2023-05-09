@@ -14,7 +14,7 @@ api.use(cookieSession);
 api.use(passport.initialize());
 api.use(passport.session());
 api.use(cors);
-api.use("/doc", serve, setup(swaggerDoc));
+api.use("/doc", serve, setup(swaggerDoc, {swaggerUrl: process.env.PORT}));
 api.use("/", globalRouter);
 
 export default api;
