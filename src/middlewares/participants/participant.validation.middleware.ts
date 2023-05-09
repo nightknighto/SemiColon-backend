@@ -1,8 +1,9 @@
 import { NextFunction } from "express";
 import { Request, Response } from "express";
 import { participant as ParticipantType } from "../../types/participant";
-import ErrorWithStatusCode from "../../util/classes/ErrorWithStatusCode";
-import { ValidateParticipant } from "../../util/data-validation/participant.validation";
+import ErrorWithStatusCode from "../../utils/classes/ErrorWithStatusCode";
+import { trimObject } from "../../utils/data-validation/object.trim";
+import { ValidateParticipant } from "../../utils/data-validation/participant.validation";
 
 export async function mwValidateParticipant(
     req: Request,
@@ -10,6 +11,7 @@ export async function mwValidateParticipant(
     next: NextFunction
 ) {
     const { participant }: { participant: ParticipantType } = req.body;
+    trimObject(participant);
     try {
         ValidateParticipant(participant);
         next();

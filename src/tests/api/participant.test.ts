@@ -4,7 +4,7 @@ import { participant as ParticipantType } from '../../types/participant';
 import api from '../../api';
 import {
 	dbAddParticipant,
-	dbDeleteParticipantByEmail,
+	dbDeleteParticipant,
 } from '../../models/participant/participant.model';
 import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
 
@@ -30,7 +30,7 @@ beforeAll(async () => {
 }, 10000);
 
 afterAll(async () => {
-	await dbDeleteAllUsers();
+	// await dbDeleteAllUsers();
 	await disconnectMONGODB();
 });
 
@@ -41,18 +41,19 @@ describe('GET /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser1@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'c-prog',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
+			year: 'Freshman',
 		};
 		await dbAddParticipant(participant1);
 	});
 
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser1@gmail.com');
+		await dbDeleteParticipant({phone: '01111111111'});
 	});
 
 	test('Get all participants', async () => {
@@ -65,7 +66,7 @@ describe('GET /participant endpoint', () => {
 
 describe('POST /participant endpoint', () => {
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser2@gmail.com');
+		await dbDeleteParticipant({email: 'testuser2@gmail.com'});
 	});
 	test('Add a new participant with valid data', async () => {
 		const participant2: Partial<ParticipantType> = {
@@ -73,10 +74,10 @@ describe('POST /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser2@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'arm',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
@@ -91,13 +92,13 @@ describe('POST /participant endpoint', () => {
 	test('Add an already added participant with valid data', async () => {
 		const participant2: Partial<ParticipantType> = {
 			name: 'Test participant two',
-			phone: '01111211111',
+			phone: '01111111111',
 			email: 'testuser2@gmail.com',
 			collegeId: '1801298',
-			firstPreference: 'webDev2',
+			firstPreference: 'desktop',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev3',
+			secondPreference: 'arm',
 			secondPrefReason: 'I like it',
 			pastExperience: 'N/A',
 			year: 'Freshman',
@@ -107,7 +108,41 @@ describe('POST /participant endpoint', () => {
 			.set('Cookie', loginCookie)
 			.send({ participant: participant2 });
 		expect(response.statusCode).toBe(200);
-		expect(response.body.data.name).toBe('Test participant two');
+		expect(response.body.status).toBe('success');
+	});
+
+	test('Add a new participant with only the required fields', async () => {
+		const participant: Partial<ParticipantType> = {
+			name: 'Test participant three',
+			phone: '01111111113',
+			email: 'testuser3@gmail.com',
+			collegeId: '1601334',
+			firstPreference: 'arm',
+			firstPrefKnowledge: 'beginner',
+			secondPreference: 'avr',
+			year: 'Freshman',
+		};
+		const response = await superTest(api)
+			.post('/participants/add')
+			.send({ participant: participant })
+			.set('Cookie', loginCookie);
+		expect(response.statusCode).toBe(200);
+	});
+
+	test('Add a new participant with missing required fields', async () => {
+		const participant: Partial<ParticipantType> = {
+			name: 'Test participant three',
+			phone: '01111111113',
+			email: 'testuser3@gmail.com',
+			collegeId: '1601334',
+			firstPrefKnowledge: 'beginner',
+			year: 'Freshman',
+		};
+		const response = await superTest(api)
+			.post('/participants/add')
+			.send({ participant: participant })
+			.set('Cookie', loginCookie);
+		expect(response.statusCode).toBe(400);
 	});
 });
 
@@ -118,10 +153,10 @@ describe('PATCH /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser3@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'avr',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'arm',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
@@ -129,14 +164,14 @@ describe('PATCH /participant endpoint', () => {
 		await dbAddParticipant(participant3);
 	});
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser3@gmail.com');
+		await dbDeleteParticipant({email: 'testuser3@gmail.com'});
 	});
 	test('Update a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser665@gmail.com',
+				phone: "01111111112",
 				update: { acceptanceStatus: 'accepted' },
 			});
 		expect(response.statusCode).toBe(404);
@@ -146,8 +181,8 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser3@gmail.com',
-				update: { acceptanceStatus: 'accepted' },
+				phone: "01111111111" ,
+				update: {acceptanceStatus: 'accepted'},
 			});
 		expect(response.statusCode).toBe(200);
 	});
@@ -156,8 +191,8 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser3@gmail.com',
-				update: { emailedStatus: true },
+				phone: "01111111111",
+				update: {emailedStatus: true},
 			});
 		expect(response.statusCode).toBe(200);
 	});
@@ -170,10 +205,10 @@ describe('DELETE /participant endpoint', () => {
 			phone: '01111111111',
 			email: 'testuser4@gmail.com',
 			collegeId: '1601234',
-			firstPreference: 'webDev1',
+			firstPreference: 'arm',
 			firstPrefKnowledge: 'beginner',
 			firstPrefReason: 'I like it',
-			secondPreference: 'webDev2',
+			secondPreference: 'avr',
 			secondPrefReason: 'I like it',
 			pastExperience: 'I have experience',
 			year: 'Freshman',
@@ -185,14 +220,14 @@ describe('DELETE /participant endpoint', () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({ email: 'testuser65434@gmail.com' });
+			.send({ phone: "01111111112"} );
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({ email: 'testuser4@gmail.com' });
+			.send({ phone: "01111111111"  });
 		expect(response.statusCode).toBe(200);
 	});
 });
