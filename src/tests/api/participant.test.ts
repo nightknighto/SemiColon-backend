@@ -4,7 +4,7 @@ import { participant as ParticipantType } from '../../types/participant';
 import api from '../../api';
 import {
 	dbAddParticipant,
-	dbDeleteParticipantByEmail,
+	dbDeleteParticipant,
 } from '../../models/participant/participant.model';
 import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
 
@@ -53,7 +53,7 @@ describe('GET /participant endpoint', () => {
 	});
 
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser1@gmail.com');
+		await dbDeleteParticipant({email: 'testuser1@gmail.com'});
 	});
 
 	test('Get all participants', async () => {
@@ -66,7 +66,7 @@ describe('GET /participant endpoint', () => {
 
 describe('POST /participant endpoint', () => {
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser2@gmail.com');
+		await dbDeleteParticipant({email: 'testuser2@gmail.com'});
 	});
 	test('Add a new participant with valid data', async () => {
 		const participant2: Partial<ParticipantType> = {
@@ -130,14 +130,14 @@ describe('PATCH /participant endpoint', () => {
 		await dbAddParticipant(participant3);
 	});
 	afterAll(async () => {
-		await dbDeleteParticipantByEmail('testuser3@gmail.com');
+		await dbDeleteParticipant({email: 'testuser3@gmail.com'});
 	});
 	test('Update a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser665@gmail.com',
+				filter: {email: 'testuser665@gmail.com'},
 				update: { acceptanceStatus: 'accepted' },
 			});
 		expect(response.statusCode).toBe(404);
@@ -147,7 +147,7 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser3@gmail.com',
+				filter: {email: 'testuser3@gmail.com'},
 				update: { acceptanceStatus: 'accepted' },
 			});
 		expect(response.statusCode).toBe(200);
@@ -157,7 +157,7 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Cookie', loginCookie)
 			.send({
-				email: 'testuser3@gmail.com',
+				filter: {email: 'testuser3@gmail.com'},
 				update: { emailedStatus: true },
 			});
 		expect(response.statusCode).toBe(200);
@@ -186,14 +186,14 @@ describe('DELETE /participant endpoint', () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({ email: 'testuser65434@gmail.com' });
+			.send({filter: { email: 'testuser65434@gmail.com'} });
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Cookie', loginCookie)
-			.send({ email: 'testuser4@gmail.com' });
+			.send({ filter: {email: 'testuser4@gmail.com'} });
 		expect(response.statusCode).toBe(200);
 	});
 });

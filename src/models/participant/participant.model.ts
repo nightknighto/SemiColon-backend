@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType } from "../../types/participant";
+import { participant as ParticipantType, UpdateParticipant } from "../../types/participant";
 import Participant from "./participant.schema";
 import ErrorWithStatusCode from "../../utils/classes/ErrorWithStatusCode";
 
@@ -23,8 +23,7 @@ export async function dbAddParticipant(participant: Partial<ParticipantType>) {
     return await newParticipant.save();
 }
 
-export async function dbDeleteParticipantByEmail(email: string) {
-    let filter = { email: email };
+export async function dbDeleteParticipant(filter: UpdateParticipant) {
     const deletedParticipant = await Participant.findOneAndDelete(filter);
     if (!deletedParticipant) {
         throw new ErrorWithStatusCode("Participant doesn't exist", 404);
@@ -33,7 +32,7 @@ export async function dbDeleteParticipantByEmail(email: string) {
 }
 
 export async function dbUpsertParticipant(participant: ParticipantType) {
-    let filter = { email: participant.email };
+    let filter = { phone: participant.phone };
     let update = participant;
     const newParticipant = await Participant.findOneAndUpdate(filter, update, {
         new: true,
@@ -45,11 +44,10 @@ export async function dbUpsertParticipant(participant: ParticipantType) {
     return newParticipant;
 }
 
-export async function dbUpdateUserByEmail(
+export async function dbUpdateUser(
     update: Partial<ParticipantType>,
-    email: string
+    filter: UpdateParticipant
 ) {
-    let filter = { email: email };
     const updatedParticipant = await Participant.updateOne(filter, update);
     if (updatedParticipant.matchedCount === 0) {
         throw new ErrorWithStatusCode("participant does not exist", 404);
