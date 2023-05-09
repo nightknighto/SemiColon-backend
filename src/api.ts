@@ -5,7 +5,7 @@ import { serve, setup } from "swagger-ui-express";
 import globalRouter from "./routers/global.router";
 import "./services/passport";
 import cors from "./middlewares/security/cors.middleware";
-const swaggerDoc = require("./swagger_output.json");
+import swaggerDoc from "./swagger_output.json";
 
 const api = express();
 
