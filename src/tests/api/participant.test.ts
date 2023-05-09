@@ -92,7 +92,7 @@ describe('POST /participant endpoint', () => {
 	test('Add an already added participant with valid data', async () => {
 		const participant2: Partial<ParticipantType> = {
 			name: 'Test participant two',
-			phone: '01111211111',
+			phone: '01111111111',
 			email: 'testuser2@gmail.com',
 			collegeId: '1801298',
 			firstPreference: 'desktop',
@@ -109,6 +109,40 @@ describe('POST /participant endpoint', () => {
 			.send({ participant: participant2 });
 		expect(response.statusCode).toBe(200);
 		expect(response.body.status).toBe('success');
+	});
+
+	test('Add a new participant with only the required fields', async () => {
+		const participant: Partial<ParticipantType> = {
+			name: 'Test participant three',
+			phone: '01111111113',
+			email: 'testuser3@gmail.com',
+			collegeId: '1601334',
+			firstPreference: 'arm',
+			firstPrefKnowledge: 'beginner',
+			secondPreference: 'avr',
+			year: 'Freshman',
+		};
+		const response = await superTest(api)
+			.post('/participants/add')
+			.send({ participant: participant })
+			.set('Cookie', loginCookie);
+		expect(response.statusCode).toBe(200);
+	});
+
+	test('Add a new participant with missing required fields', async () => {
+		const participant: Partial<ParticipantType> = {
+			name: 'Test participant three',
+			phone: '01111111113',
+			email: 'testuser3@gmail.com',
+			collegeId: '1601334',
+			firstPrefKnowledge: 'beginner',
+			year: 'Freshman',
+		};
+		const response = await superTest(api)
+			.post('/participants/add')
+			.send({ participant: participant })
+			.set('Cookie', loginCookie);
+		expect(response.statusCode).toBe(400);
 	});
 });
 
