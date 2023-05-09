@@ -5,8 +5,8 @@ import {
     dbGetAllParticipants,
     dbAddParticipant,
     dbUpsertParticipant,
-    dbDeleteParticipantByEmail,
-    dbUpdateUserByEmail,
+    dbDeleteParticipant,
+    dbUpdateUser,
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
@@ -39,7 +39,7 @@ export async function addParticipant(req: Request, res: Response) {
 export async function deleteParticipantByEmail(req: Request, res: Response) {
     try {
         const { email } = req.body;
-        const deletedParticipant = await dbDeleteParticipantByEmail(email);
+        const deletedParticipant = await dbDeleteParticipant({email});
         await dbAddNewLog({
             adminPhone: req.user?.phone as string,
             adminId: req.user?._id as string,
@@ -55,13 +55,59 @@ export async function deleteParticipantByEmail(req: Request, res: Response) {
     }
 }
 
-export async function updateParticipant(req: Request, res: Response) {
+export async function updateParticipantByPhone(req: Request, res: Response) {
     try {
         const {
             update,
-            email,
-        }: { update: Partial<ParticipantType>; email: string } = req.body;
-        const updatedParticipant = await dbUpdateUserByEmail(update, email);
+            phone,
+        }: { update: Partial<ParticipantType>; phone: string } = req.body;
+        const updatedParticipant = await dbUpdateUser(update, {phone});
+        res.status(200).json({ status: "success", data: updatedParticipant });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
+export async function acceptParticipantByPhone(req: Request, res: Response){
+    try {
+        const {
+            phone,
+        }: { phone: string } = req.body;
+        const updatedParticipant = await dbUpdateUser({acceptanceStatus: "accepted"}, {phone});
+        res.status(200).json({ status: "success", data: updatedParticipant });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
+export async function rejectParticipantByPhone(req: Request, res: Response){
+    try {
+        const {
+            phone,
+        }: { phone: string } = req.body;
+        const updatedParticipant = await dbUpdateUser({acceptanceStatus: "rejected"}, {phone});
+        res.status(200).json({ status: "success", data: updatedParticipant });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
+export async function emailParticipantByPhone(req: Request, res: Response){
+    try {
+        const {
+            phone,
+        }: { phone: string } = req.body;
+        //TODO: send email using nodemailer here
+        const updatedParticipant = await dbUpdateUser({acceptanceStatus: "emailed"}, {phone});
         res.status(200).json({ status: "success", data: updatedParticipant });
     } catch (error: ErrorWithStatusCode | any) {
         res.status(error.statusCode || 500).json({
