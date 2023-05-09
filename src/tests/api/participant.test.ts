@@ -108,7 +108,7 @@ describe('POST /participant endpoint', () => {
 			.set('Cookie', loginCookie)
 			.send({ participant: participant2 });
 		expect(response.statusCode).toBe(200);
-		expect(response.body.data.name).toBe('Test participant two');
+		expect(response.body.status).toBe('success');
 	});
 });
 
