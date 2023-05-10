@@ -13,6 +13,10 @@ const doc = {
       name: "Auth",
       description: "Authentication Endpoints",
     },
+    {
+      name: "Participants",
+      description: "Participants Endpoints",
+    },
   ],
   definitions: {
     User: {

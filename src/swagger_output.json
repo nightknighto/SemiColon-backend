@@ -13,6 +13,10 @@
     {
       "name": "Auth",
       "description": "Authentication Endpoints"
+    },
+    {
+      "name": "Participants",
+      "description": "Participants Endpoints"
     }
   ],
   "paths": {
@@ -245,7 +249,10 @@
     },
     "/participants/getAll": {
       "get": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get all participants from database",
         "parameters": [],
         "responses": {
           "200": {
@@ -259,7 +266,10 @@
     },
     "/participants/add": {
       "post": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get add a participant to database",
         "parameters": [],
         "responses": {
           "200": {
@@ -287,7 +297,10 @@
     },
     "/participants/update": {
       "patch": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to update a participant in database",
         "parameters": [],
         "responses": {
           "200": {
@@ -318,7 +331,10 @@
     },
     "/participants/delete": {
       "delete": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get delete a participant from database",
         "parameters": [],
         "responses": {
           "200": {
@@ -346,7 +362,10 @@
     },
     "/participants/accept": {
       "post": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get accept a participant from database",
         "parameters": [],
         "responses": {
           "200": {
@@ -374,7 +393,10 @@
     },
     "/participants/reject": {
       "post": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get reject a participant from database",
         "parameters": [],
         "responses": {
           "200": {
@@ -402,7 +424,10 @@
     },
     "/participants/email": {
       "post": {
-        "description": "",
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get send an email to a participant from database",
         "parameters": [],
         "responses": {
           "200": {
