@@ -6,7 +6,7 @@
   "scripts": {
     "deploy-windows": "set NODE_ENV=production && node build/server.js",
     "deploy-linux": "NODE_ENV=production && node build/server.js",
-    "build": "tsc",
+    "build": "npm run swagger-autogen && tsc",
     "dev-windows": "set NODE_ENV=development && nodemon src/server.ts",
     "dev-linux": "NODE_ENV=development && nodemon src/server.ts",
     "test": "jest --verbose --runInBand",
