@@ -17,6 +17,10 @@ const doc = {
       name: "Participants",
       description: "Participants Endpoints",
     },
+    {
+      name: "Log",
+      description: "Log Endpoints",
+    },
   ],
   definitions: {
     User: {
@@ -40,6 +44,12 @@ const doc = {
       $year: "Junior",
       $acceptanceStatus: "accepted",
       $emailedStatus: "true",
+    },
+    Log: {
+      $adminId: "",
+      $adminPhone: "01xxxxxxxxx",
+      $participantId: "",
+      $action: "add",
     },
   },
   host: process.env.PORT,

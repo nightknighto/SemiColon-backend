@@ -17,6 +17,10 @@
     {
       "name": "Participants",
       "description": "Participants Endpoints"
+    },
+    {
+      "name": "Log",
+      "description": "Log Endpoints"
     }
   ],
   "paths": {
@@ -455,7 +459,10 @@
     },
     "/log/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs by all admins",
         "parameters": [],
         "responses": {
           "200": {
@@ -469,7 +476,10 @@
     },
     "/log/admin/{phone}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs by an admin using their phone",
         "parameters": [
           {
             "name": "phone",
@@ -492,7 +502,10 @@
     },
     "/log/participant/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs applied on a participant",
         "parameters": [
           {
             "name": "id",
@@ -618,6 +631,33 @@
           "year",
           "acceptanceStatus",
           "emailedStatus"
+        ]
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "example": ""
+          },
+          "adminPhone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "participantId": {
+            "type": "string",
+            "example": ""
+          },
+          "action": {
+            "type": "string",
+            "example": "add"
+          }
+        },
+        "required": [
+          "adminId",
+          "adminPhone",
+          "participantId",
+          "action"
         ]
       }
     }
