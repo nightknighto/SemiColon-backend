@@ -5,74 +5,23 @@
     "version": "1.0.0",
     "description": ""
   },
+  "tags": [
+    {
+      "name": "User",
+      "description": "User Endpoints"
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication Endpoints"
+    }
+  ],
   "paths": {
-    "/login": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/login/success": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/login/failure": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/user/{phone}": {
       "get": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get a specific user by phone number",
         "parameters": [
           {
             "name": "phone",
@@ -98,7 +47,10 @@
     },
     "/user/": {
       "post": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get add a new user",
         "parameters": [],
         "responses": {
           "201": {
@@ -115,7 +67,10 @@
     },
     "/user/update/{id}": {
       "patch": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update a user using his ID",
         "parameters": [
           {
             "name": "id",
@@ -141,7 +96,10 @@
     },
     "/user/activate/{id}": {
       "patch": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to activate a specific user using his ID",
         "parameters": [
           {
             "name": "id",
@@ -167,7 +125,10 @@
     },
     "/user/deactivate/{id}": {
       "patch": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to deactivate a specific user using his ID",
         "parameters": [
           {
             "name": "id",
@@ -193,7 +154,10 @@
     },
     "/user/{id}": {
       "delete": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to delete a specific user",
         "parameters": [
           {
             "name": "id",
@@ -508,366 +472,113 @@
           }
         }
       }
-    },
-    "/admin/{phone}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "phone",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Ahmed Atwa"
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/participant/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
+          "phone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/getAll": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+          "password": {
+            "type": "string",
+            "example": "********"
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/add": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+          "role": {
+            "type": "string",
+            "example": "admin"
           },
-          "500": {
-            "description": "Internal Server Error"
+          "active": {
+            "type": "string",
+            "example": "true"
           }
         },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "participant": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/update": {
-      "patch": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+        "required": [
+          "username",
+          "phone",
+          "password",
+          "role",
+          "active"
+        ]
+      },
+      "Participant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Omar Fahmy"
           },
-          "500": {
-            "description": "Internal Server Error"
+          "email": {
+            "type": "string",
+            "example": "Omar_Fahmy@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "firstPreference": {
+            "type": "string",
+            "example": "Web Development (ReactJS)"
+          },
+          "secondPreference": {
+            "type": "string",
+            "example": "Web Development (NodeJS)"
+          },
+          "firstPrefReason": {
+            "type": "string",
+            "example": ""
+          },
+          "firstPrefKnowledge": {
+            "type": "string",
+            "example": ""
+          },
+          "secondPrefReason": {
+            "type": "string",
+            "example": ""
+          },
+          "pastExperience": {
+            "type": "string",
+            "example": ""
+          },
+          "collegeId": {
+            "type": "string",
+            "example": "18xxxxx"
+          },
+          "year": {
+            "type": "string",
+            "example": "Junior"
+          },
+          "acceptanceStatus": {
+            "type": "string",
+            "example": "accepted"
+          },
+          "emailedStatus": {
+            "type": "string",
+            "example": "true"
           }
         },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "update": {
-                    "example": "any"
-                  },
-                  "phone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/delete": {
-      "delete": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/accept": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reject": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/email": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/{phone}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "phone",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/update/{id}": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/activate/{id}": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/deactivate/{id}": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/{id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "firstPreference",
+          "secondPreference",
+          "firstPrefReason",
+          "firstPrefKnowledge",
+          "secondPrefReason",
+          "pastExperience",
+          "collegeId",
+          "year",
+          "acceptanceStatus",
+          "emailedStatus"
+        ]
       }
     }
   }
