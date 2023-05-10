@@ -8,7 +8,13 @@ authRouter.post(
   passport.authenticate("local", {
     successRedirect: "/auth/login/success",
     failureRedirect: "/auth/login/failure",
-  })
+  }),
+  () => {
+    /**
+     * #swagger.tags = ['Auth']
+     * #swagger.description = 'Endpoint to authenticate All logins login'
+     */
+  }
 );
 
 authRouter.route("/login/success").get(successfulLogin).post(successfulLogin);

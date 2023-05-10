@@ -183,14 +183,20 @@
     },
     "/auth/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate All logins login",
         "parameters": [],
         "responses": {}
       }
     },
     "/auth/login/success": {
       "get": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate successful login",
         "parameters": [],
         "responses": {
           "200": {
@@ -199,7 +205,10 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate successful login",
         "parameters": [],
         "responses": {
           "200": {
@@ -210,7 +219,10 @@
     },
     "/auth/login/failure": {
       "get": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate failed login",
         "parameters": [],
         "responses": {
           "401": {
@@ -219,7 +231,10 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate failed login",
         "parameters": [],
         "responses": {
           "401": {
