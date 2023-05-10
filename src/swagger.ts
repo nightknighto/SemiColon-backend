@@ -7,7 +7,7 @@ const doc = {
   host: process.env.PORT,
 };
 
-const outputFile = "./build/swagger_output.json";
+const outputFile = "./swagger_output.json";
 const endpointsFiles = ["./api.ts"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
