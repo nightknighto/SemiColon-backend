@@ -16,12 +16,13 @@ export function ValidateName(name: string): boolean {
 export function ValidateCollegeId(collegeId: string): boolean {
     if (!collegeId) {
         throw new ErrorWithStatusCode("College ID is required", 400);
-    } else if (!collegeId.match(/^\d{2}[a-zA-Z0-9]?\d{4}$/)) {
-        throw new ErrorWithStatusCode(
-            "Invalid College ID: College ID must be 7 digits long with a number or letter in the 3rd digit",
-            400
-        );
     }
+    //  else if (!collegeId.match(/^\d{2}[a-zA-Z0-9]?\d{4}$/)) {
+    //     throw new ErrorWithStatusCode(
+    //         "Invalid College ID: College ID must be 7 digits long with a number or letter in the 3rd digit",
+    //         400
+    //     );
+    // } // removed to allow students from other colleges to participate
     return true;
 }
 export function ValidatePhone(phoneNumber: string): boolean {
