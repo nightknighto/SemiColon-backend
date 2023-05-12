@@ -1,0 +1,665 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Semicolon API",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "User Endpoints"
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication Endpoints"
+    },
+    {
+      "name": "Participants",
+      "description": "Participants Endpoints"
+    },
+    {
+      "name": "Log",
+      "description": "Log Endpoints"
+    }
+  ],
+  "paths": {
+    "/user/{phone}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get a specific user by phone number",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get add a new user",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/update/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update a user using his ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/activate/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to activate a specific user using his ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/deactivate/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to deactivate a specific user using his ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to delete a specific user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate All logins login",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/auth/login/success": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate successful login",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate successful login",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/login/failure": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate failed login",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to authenticate failed login",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/participants/getAll": {
+      "get": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get all participants from database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/participants/add": {
+      "post": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get add a participant to database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "participant": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/participants/update": {
+      "patch": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to update a participant in database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "update": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/participants/delete": {
+      "delete": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get delete a participant from database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/participants/accept": {
+      "post": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get accept a participant from database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/participants/reject": {
+      "post": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get reject a participant from database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/participants/email": {
+      "post": {
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to get send an email to a participant from database",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/log/": {
+      "get": {
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs by all admins",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/log/admin/{phone}": {
+      "get": {
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs by an admin using their phone",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/log/participant/{id}": {
+      "get": {
+        "tags": [
+          "Log"
+        ],
+        "description": "Endpoint to get all logs applied on a participant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Ahmed Atwa"
+          },
+          "phone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "password": {
+            "type": "string",
+            "example": "********"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "active": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "username",
+          "phone",
+          "password",
+          "role",
+          "active"
+        ]
+      },
+      "Participant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Omar Fahmy"
+          },
+          "email": {
+            "type": "string",
+            "example": "Omar_Fahmy@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "firstPreference": {
+            "type": "string",
+            "example": "Web Development (ReactJS)"
+          },
+          "secondPreference": {
+            "type": "string",
+            "example": "Web Development (NodeJS)"
+          },
+          "firstPrefReason": {
+            "type": "string",
+            "example": ""
+          },
+          "firstPrefKnowledge": {
+            "type": "string",
+            "example": ""
+          },
+          "secondPrefReason": {
+            "type": "string",
+            "example": ""
+          },
+          "pastExperience": {
+            "type": "string",
+            "example": ""
+          },
+          "collegeId": {
+            "type": "string",
+            "example": "18xxxxx"
+          },
+          "year": {
+            "type": "string",
+            "example": "Junior"
+          },
+          "acceptanceStatus": {
+            "type": "string",
+            "example": "accepted"
+          },
+          "emailedStatus": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "firstPreference",
+          "secondPreference",
+          "firstPrefReason",
+          "firstPrefKnowledge",
+          "secondPrefReason",
+          "pastExperience",
+          "collegeId",
+          "year",
+          "acceptanceStatus",
+          "emailedStatus"
+        ]
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "example": ""
+          },
+          "adminPhone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "participantId": {
+            "type": "string",
+            "example": ""
+          },
+          "action": {
+            "type": "string",
+            "example": "add"
+          }
+        },
+        "required": [
+          "adminId",
+          "adminPhone",
+          "participantId",
+          "action"
+        ]
+      }
+    }
+  }
+}
