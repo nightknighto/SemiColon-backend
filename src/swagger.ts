@@ -59,3 +59,4 @@ const outputFile = "./swagger_output.json";
 const endpointsFiles = ["./api.ts"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
+//https://blog.logrocket.com/documenting-express-js-api-swagger/
