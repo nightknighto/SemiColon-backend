@@ -63,7 +63,6 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         },
         collegeId: {
             type: String,
-            required: true,
             trim: true,
         },
         year: {
