@@ -5,6 +5,11 @@
     "version": "1.0.0",
     "description": ""
   },
+  "servers": [
+    {
+      "url": "https://semicolon-registration-backend.onrender.com/"
+    }
+  ],
   "tags": [
     {
       "name": "User",
@@ -265,7 +270,8 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": []
       }
     },
     "/participants/add": {

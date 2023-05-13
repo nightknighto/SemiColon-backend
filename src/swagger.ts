@@ -52,7 +52,11 @@ const doc = {
       $action: "add",
     },
   },
-  host: process.env.PORT,
+  servers: [
+    {
+      url: "https://semicolon-registration-backend.onrender.com/",
+    },
+  ],
 };
 
 const outputFile = "./swagger_output.json";
@@ -60,3 +64,4 @@ const endpointsFiles = ["./api.ts"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
 //https://blog.logrocket.com/documenting-express-js-api-swagger/
+//https://github.com/davibaltar/example-swagger-autogen-with-router/tree/main
