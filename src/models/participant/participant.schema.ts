@@ -20,16 +20,19 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         name: {
             type: String,
             required: true,
+            trim: true,
         },
         email: {
             type: String,
             required: true,
             match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            trim: true,
         },
         phone: {
             type: String,
             required: true,
             match: /^01\d{9}$/,
+            trim: true,
         },
         firstPreference: {
             type: String,
@@ -43,23 +46,24 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         },
         firstPrefReason: {
             type: String,
-            required: true,
+            trim: true,
         },
         firstPrefKnowledge: {
             type: String,
             required: true,
+            trim: true,
         },
         secondPrefReason: {
             type: String,
-            required: true,
+            trim: true,
         },
         pastExperience: {
             type: String,
-            required: true,
+            trim: true,
         },
         collegeId: {
             type: String,
-            required: true,
+            trim: true,
         },
         year: {
             type: String,
