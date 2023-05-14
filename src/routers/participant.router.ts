@@ -17,39 +17,27 @@ const participantRouter = Router();
 
 participantRouter.get(
     "/getAll",
-    isLoggedIn,
-    giveAccessTo("member"),
     getAllParticipants
 );
 participantRouter.post("/add", mwValidateParticipant, addParticipant);
 participantRouter.patch(
     "/update",
-    isLoggedIn,
-    giveAccessTo("hr"),
     updateParticipantByPhone
 );
 participantRouter.delete(
     "/delete",
-    isLoggedIn,
-    giveAccessTo("admin"),
     deleteParticipantByPhone
 );
 participantRouter.post(
     "/accept",
-    isLoggedIn,
-    giveAccessTo("admin"),
     acceptParticipantByPhone
 );
 participantRouter.post(
     "/reject",
-    isLoggedIn,
-    giveAccessTo("admin"),
     rejectParticipantByPhone
 );
 participantRouter.post(
     "/email",
-    isLoggedIn,
-    giveAccessTo("admin"),
     emailParticipantByPhone
 );
 export default participantRouter;
