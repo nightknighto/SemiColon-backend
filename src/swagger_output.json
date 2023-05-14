@@ -5,6 +5,11 @@
     "version": "1.0.0",
     "description": ""
   },
+  "servers": [
+    {
+      "url": "https://semicolon-registration-backend.onrender.com/"
+    }
+  ],
   "tags": [
     {
       "name": "User",
@@ -258,14 +263,7 @@
         ],
         "description": "Endpoint to get all participants from database",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/participants/add": {
