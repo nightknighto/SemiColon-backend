@@ -8,8 +8,8 @@ import { Request } from 'express';
 */
 const allowlist = [
 	'http://127.0.0.1:5500',
-	'https://deadreyo.github.io/SemiColon-dashboard-frontend/',
-	'https://asusemicolon.tech/',
+	'https://deadreyo.github.io/SemiColon-dashboard-frontend',
+	'https://asusemicolon.tech',
 ];
 let corsOptionsDelegate = function (req: Request, callback: Function) {
 	let corsOptions: CorsOptions = { credentials: true };
