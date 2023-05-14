@@ -15,7 +15,6 @@ export async function getAllParticipants(req: Request, res: Response) {
   /**
    * #swagger.tags = ['Participants']
    * #swagger.description = 'Endpoint to get all participants from database'
-   * }]
    */
   try {
     const participants = await dbGetAllParticipants();
