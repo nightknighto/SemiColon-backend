@@ -17,8 +17,8 @@ const participantRouter = Router();
 
 participantRouter.get(
     "/getAll",
-    isLoggedIn,
-    giveAccessTo("member"),
+    // isLoggedIn,
+    // giveAccessTo("member"),
     getAllParticipants
 );
 participantRouter.post("/add", mwValidateParticipant, addParticipant);
