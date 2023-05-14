@@ -6,8 +6,7 @@ import cors from "cors";
 	being made by scripts running in the browser.
 */
 const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
+  origin: "*",
 };
 
 export default cors(corsOptions);

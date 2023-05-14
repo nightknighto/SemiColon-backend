@@ -18,7 +18,7 @@ globalRouter.use("/log", logRouter);
 globalRouter.use(
   "/",
   serve,
-  setup(swaggerDoc, { swaggerUrl: "http://localhost:9100", explorer: true })
+  setup(swaggerDoc, { swaggerUrl: process.env.PORT, explorer: true })
 );
 
 export default globalRouter;
