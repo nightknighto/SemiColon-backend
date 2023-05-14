@@ -93,7 +93,7 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
         ValidateName(participant.name) &&
         ValidateEmail(participant.email) &&
         ValidatePhone(participant.phone) &&
-        ValidateCollegeId(participant.collegeId) &&
+        // ValidateCollegeId(participant.collegeId) &&
         ValidateYear(participant.year) &&
         ValidatePreference(
             participant.firstPreference as PreferencesEnum,
