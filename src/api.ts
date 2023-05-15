@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import cookieSession from './middlewares/security/cookie-session';
+import cookieSession from './services/cookie-session';
 
 import globalRouter from './routers/global.router';
 import './services/passport';
