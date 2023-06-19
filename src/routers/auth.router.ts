@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Login, Register } from "../controllers/auth.controller";
-import { mwValidateUserData } from "../middlewares/userDataValidator";
+import { mwValidateLoginData, mwValidateUserData } from "../middlewares/userDataValidator";
 const authRouter = Router();
 
 authRouter.post(
@@ -12,6 +12,7 @@ authRouter.post(
 		 */
 		next();
 	},
+	mwValidateLoginData,
 	Login
 );
 

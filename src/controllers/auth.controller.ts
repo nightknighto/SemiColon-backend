@@ -5,7 +5,6 @@ import { verifyPassword } from "../utils/authentication/password.utils";
 import { issueToken } from "../utils/authentication/jwt";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 
-
 export async function Login(req: Request, res: Response) {
 	const { phone, password } = req.body;
 	try {
@@ -26,7 +25,7 @@ export async function Login(req: Request, res: Response) {
 		const token = `Bearer ${issueToken(user)}`;
 		return res.status(200).json({
 			status: "success",
-			data: token,
+			data: { token, user },
 		});
 	} catch (err: unknown) {
 		return res.status((err as ErrorWithStatusCode).statusCode).json({
@@ -43,7 +42,7 @@ export async function Register(req: Request, res: Response) {
 		const token = `Bearer ${issueToken(newUser)}`;
 		res.status(201).json({
 			status: "success",
-			data: token,
+			data: { token, user: newUser },
 		});
 	} catch (error: unknown) {
 		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
