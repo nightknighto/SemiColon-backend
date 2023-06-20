@@ -2,11 +2,11 @@ import { Router } from "express";
 import {
   addNewUser,
   deleteUser,
-  getUserById,
   getUserByPhone,
   updateUser,
   activateUser,
   deactivateUser,
+  getAllUsers,
 } from "../controllers/user.controller";
 import {
   mwValidateId,
@@ -19,11 +19,17 @@ import isLoggedIn from "../middlewares/authentication/login.middleware";
 const userRouter = Router();
 
 userRouter.get(
-  "/:phone",
+  "/phone/:phone",
   isLoggedIn,
   giveAccessTo("admin"),
   mwValidatePhone,
   getUserByPhone
+);
+userRouter.get(
+  "/getAll",
+  isLoggedIn,
+  giveAccessTo("admin"),
+  getAllUsers
 );
 userRouter.post("/", giveAccessTo("admin"), mwValidateUserData, addNewUser);
 userRouter.patch(

@@ -11,6 +11,10 @@ export async function dbGetUserById(id: string) {
 	return result;
 }
 
+export async function dbGetAllUsers() {
+	return await User.find();
+}
+
 export async function dbGetUserByPhone(phone: string) {
 	const result = await User.findOne({ phone });
 	if (!result) {
