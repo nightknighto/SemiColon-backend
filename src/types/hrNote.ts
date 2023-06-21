@@ -10,9 +10,11 @@ export const criteria = {
     ProblemSolving: 'Problem Solving',
     EagerToLearn: 'Eager To Learn',
 } ;
-export interface InterviewerNote {
-    [key in criteria]: {
-        rating: 1|2|3|4|5;
+
+
+export type InterviewerNote = {
+    [key in keyof typeof criteria as string]: {
+        rating: 1 | 2 | 3 | 4 | 5;
         note: string;
     }
 }
