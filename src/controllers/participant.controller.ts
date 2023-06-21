@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { InterviewerNote, participant as ParticipantType } from "../types/participant";
+import {  participant as ParticipantType } from "../types/participant";
+import { InterviewerNote } from "../types/interviewer";
 
 import {
   dbGetAllParticipants,
@@ -10,7 +11,6 @@ import {
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
-import { sendMail } from "../services/node-mailer";
 
 async function waitMail(ms: number) {
   return new Promise((resolve) => {
@@ -206,9 +206,8 @@ export async function addParticipantNotes(req: Request, res: Response){
    */
   try {
     const { phone, notes }: { phone: string, notes: InterviewerNote } = req.body;
-    let strNote = JSON.stringify(notes);
     const updatedParticipant = await dbUpdateUser(
-      { InterviewerNote: strNote },
+      { InterviewerNote: notes },
       { phone }
     );
     await dbAddNewLog({
