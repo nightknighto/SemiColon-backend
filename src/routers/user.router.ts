@@ -31,7 +31,7 @@ userRouter.get(
   giveAccessTo("admin"),
   getAllUsers
 );
-userRouter.post("/", giveAccessTo("admin"), mwValidateUserData, addNewUser);
+userRouter.post("/", isLoggedIn, giveAccessTo("admin"), mwValidateUserData, addNewUser);
 userRouter.patch(
   "/update/:id",
   isLoggedIn,
@@ -54,5 +54,5 @@ userRouter.patch(
   mwValidateId,
   deactivateUser
 );
-userRouter.delete("/:id", giveAccessTo("admin"), mwValidateId, deleteUser);
+userRouter.delete("/:id", isLoggedIn, giveAccessTo("admin"), mwValidateId, deleteUser);
 export default userRouter;
