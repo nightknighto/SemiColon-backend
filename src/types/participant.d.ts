@@ -1,5 +1,5 @@
 import { Mongoose } from "mongoose";
-
+import { InterviewerNote } from "./interviewerNote";
 export interface participant {
     _id: Mongoose.types.ObjectId;
     name: string;
@@ -14,13 +14,10 @@ export interface participant {
     secondPrefReason: string;
     pastExperience: string;
     acceptanceStatus: string;
-    InterviewerNote: string;
+    InterviewerNote: InterviewerNote;
 }
 
-export interface InterviewerNote {
-    rating: 1|2|3|4|5;
-    note: string;
-}
+
 // this type mean only one field of the above type can be used as a filter to update at a time
 type UpdateParticipant = {
     [K in keyof participant]?: participant[K];
