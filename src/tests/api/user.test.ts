@@ -58,7 +58,6 @@ describe('POST /user endpoint', () => {
 	});
 
 	test('Add a valid user', async () => {
-		console.log(`jwt token is ${jwtToken} in first test`)
 		const validUserWithAllFields: UserType = {
 			_id: id1,
 			username: 'Test_user',
@@ -71,7 +70,6 @@ describe('POST /user endpoint', () => {
 			.post('/user')
 			.set('Authorization', jwtToken)
 			.send(validUserWithAllFields);
-		console.log(`response data is ${JSON.stringify(response.body)} in first test}`)
 		expect(response.statusCode).toBe(201);
 	});
 
