@@ -49,8 +49,8 @@ participantRouter.post(
 );
 participantRouter.post(
     "/interview/note",
-   isLoggedIn,
-   giveAccessTo("admin"),
+//    isLoggedIn,
+//    giveAccessTo("admin"),
    addParticipantNotes
 );
 

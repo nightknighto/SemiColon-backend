@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType  } from "../../types/participant";
-import { criteria, InterviewerNote } from "../../types/interviewer";
+import { participant as ParticipantType } from "../../types/participant";
+import { criteria, InterviewerNote } from "../../types/hrNote";
 
 export enum PreferencesEnum {
     C_PROG = "c-prog",
@@ -13,7 +13,7 @@ export enum PreferencesEnum {
     PYTHON = "python",
     DIGITAL_DESIGN = "digital",
     FLUTTER = "flutter",
-    DESKTOP = "desktop"
+    DESKTOP = "desktop",
 }
 function createInterviewerNoteSchema(criteria: string[]) {
     const schema: any = {};
@@ -22,17 +22,19 @@ function createInterviewerNoteSchema(criteria: string[]) {
             rating: {
                 type: Number,
                 enum: [1, 2, 3, 4, 5],
-                required: true
+                required: true,
             },
             note: {
                 type: String,
-                required: true
-            }
+                required: true,
+            },
         };
     }
     return new mongoose.Schema(schema);
 }
-const InterviewerNoteSchema = createInterviewerNoteSchema(Object.values(criteria));
+const InterviewerNoteSchema = createInterviewerNoteSchema(
+    Object.values(criteria)
+);
 
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
@@ -93,12 +95,19 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             type: String,
             required: true,
             default: "pending",
-            enum: ["pending", "accepted", "rejected", "emailed",  "scheduled", "secondPreference"],
+            enum: [
+                "pending",
+                "accepted",
+                "rejected",
+                "emailed",
+                "scheduled",
+                "secondPreference",
+            ],
         },
         InterviewerNote: {
             type: InterviewerNoteSchema,
             trim: true,
-        }
+        },
     },
     { timestamps: true }
 );
