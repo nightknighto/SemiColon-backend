@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType , InterviewerNote } from "../../types/participant";
+import { participant as ParticipantType  } from "../../types/participant";
+import { criteria, InterviewerNote } from "../../types/interviewer";
 
 export enum PreferencesEnum {
     C_PROG = "c-prog",
@@ -14,6 +15,24 @@ export enum PreferencesEnum {
     FLUTTER = "flutter",
     DESKTOP = "desktop"
 }
+function createInterviewerNoteSchema(criteria: string[]) {
+    const schema: any = {};
+    for (const criterion of criteria) {
+        schema[criterion] = {
+            rating: {
+                type: Number,
+                enum: [1, 2, 3, 4, 5],
+                required: true
+            },
+            note: {
+                type: String,
+                required: true
+            }
+        };
+    }
+    return new mongoose.Schema(schema);
+}
+const InterviewerNoteSchema = createInterviewerNoteSchema(Object.values(criteria));
 
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
@@ -77,9 +96,8 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             enum: ["pending", "accepted", "rejected", "emailed",  "scheduled", "secondPreference"],
         },
         InterviewerNote: {
-            type: String,
+            type: InterviewerNoteSchema,
             trim: true,
-            default: "",
         }
     },
     { timestamps: true }
