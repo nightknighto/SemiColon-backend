@@ -199,6 +199,50 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
   }
 }
 
+function filterByPreferences(preferences: string[], participants: ParticipantType[]){
+   return participants.filter(participant => preferences.includes(participant.firstPreference));
+}
+
+
+export async function bulkEmailParticipants(req: Request, res: Response) {
+  /**
+   * #swagger.tags = ['Participants']
+   * #swagger.description = 'Endpoint to get send an email to all participants from database'
+   */
+  try {
+    const participants = await dbGetAllParticipants();
+    let filteredParticipants = participants.filter(participant => participant.firstPreference !== "digital");
+    //filteredParticipants.forEach(async (participant: ParticipantType) => {
+      // TODO:: Filteration by prefefrence 
+      // TODO:: 
+
+    for (const participant of filteredParticipants) {
+      if(participant.acceptanceStatus !== "emailed"){
+        let extenstion = "";
+        if(participant.firstPreference === "c-prog"){
+          extenstion = `<p>The C/Embedded C workshop will start at the beginning of July.</p>`
+        }else if(participant.firstPreference === "fullstack"){
+          extenstion = `<p>The Full-stack workshop will start at the beginning of July.</p>`
+        }else{
+          extenstion = `<p>The ${participant.firstPreference} workshop will start at the beginning of August.</p>`
+        }
+        const emailBody: string =`<html><p>Dear Applicant,</p><div style='width:50%'><p>We would like to extend our appreciation for your interest in applying to Semicolon workshops Program.We are glad to inform you that after reviewing your application, you have passed the filtration phase with the pool of selected applicants who fit our workshop criteria. You will receive another email soon to schedule an interview within the next week.</p>${extenstion}<p>Best wishes,<br>SemiColon team</p></div></html>`
+        await sendMail(participant.email, "SemiColon Workshops", emailBody);
+        await waitMail(5000)
+        console.log("email sent to ", participant.email)
+        await dbUpdateUser({ acceptanceStatus: "emailed" }, { phone: participant.phone });
+        console.log("updated participant ", participant.email)
+      }
+    };
+    res.status(200).json({ status: "success"});
+  } catch (error: ErrorWithStatusCode | any) {
+    res.status(error.statusCode || 500).json({
+      status: "failure",
+      data: error.message,
+    });
+  }
+}
+
 export async function addParticipantNotes(req: Request, res: Response){
   /**
    * #swagger.tags = ['Participants']
