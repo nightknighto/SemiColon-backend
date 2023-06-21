@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType } from "../../types/participant";
+import { participant as ParticipantType , InterviewerNote } from "../../types/participant";
 
 export enum PreferencesEnum {
     C_PROG = "c-prog",
@@ -74,13 +74,13 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             type: String,
             required: true,
             default: "pending",
-            enum: ["accepted", "rejected", "pending"],
+            enum: ["pending", "accepted", "rejected", "emailed",  "scheduled", "secondPreference"],
         },
-        emailedStatus: {
-            type: Boolean,
-            required: true,
-            default: false,
-        },
+        InterviewerNote: {
+            type: String,
+            trim: true,
+            default: "",
+        }
     },
     { timestamps: true }
 );

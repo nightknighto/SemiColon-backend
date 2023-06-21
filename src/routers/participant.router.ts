@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     acceptParticipantByPhone,
     addParticipant,
+    addParticipantNotes,
     deleteParticipantByEmail,
     deleteParticipantByPhone,
     emailParticipantByPhone,
@@ -47,9 +48,10 @@ participantRouter.post(
     rejectParticipantByPhone
 );
 participantRouter.post(
-    "/email",
-    isLoggedIn,
-    giveAccessTo("admin"),
-    emailParticipantByPhone
+    "/interview/note",
+   isLoggedIn,
+   giveAccessTo("admin"),
+   addParticipantNotes
 );
+
 export default participantRouter;

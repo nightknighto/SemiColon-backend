@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { participant as ParticipantType } from "../types/participant";
+import { InterviewerNote, participant as ParticipantType } from "../types/participant";
 
 import {
   dbGetAllParticipants,
@@ -10,6 +10,13 @@ import {
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
+import { sendMail } from "../services/node-mailer";
+
+async function waitMail(ms: number) {
+  return new Promise((resolve) => {
+    resolve(setTimeout(() => {}, ms));
+  });
+}
 
 export async function getAllParticipants(req: Request, res: Response) {
   /**
@@ -172,6 +179,7 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
   try {
     const { phone }: { phone: string } = req.body;
     //TODO: send email using nodemailer here
+
     const updatedParticipant = await dbUpdateUser(
       { acceptanceStatus: "emailed" },
       { phone }
@@ -189,4 +197,32 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
       data: error.message,
     });
   }
+}
+
+export async function addParticipantNotes(req: Request, res: Response){
+  /**
+   * #swagger.tags = ['Participants']
+   * #swagger.description = 'Endpoint to add notes to a participant'
+   */
+  try {
+    const { phone, notes }: { phone: string, notes: InterviewerNote } = req.body;
+    let strNote = JSON.stringify(notes);
+    const updatedParticipant = await dbUpdateUser(
+      { InterviewerNote: strNote },
+      { phone }
+    );
+    await dbAddNewLog({
+      adminPhone: req.user?.phone as string,
+      adminId: req.user?._id as string,
+      action: "update",
+      participantId: updatedParticipant._id as string,
+    });
+    res.status(200).json({ status: "success", data: updatedParticipant });
+  } catch (error: ErrorWithStatusCode | any) {
+    res.status(error.statusCode || 500).json({
+      status: "failure",
+      data: error.message,
+    });
+  }
+
 }
