@@ -8,7 +8,7 @@ import {
 } from '../../models/participant/participant.model';
 import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
 
-let loginCookie: string[];
+let jwtToken: string;
 
 beforeAll(async () => {
 	const user = {
@@ -23,11 +23,8 @@ beforeAll(async () => {
 	const response = await superTest(api)
 		.post('/auth/login')
 		.send({ phone: '01000000000', password: 'Test_password' });
-	const cookies = response.headers['set-cookie'];
-	if (cookies) {
-		loginCookie = cookies;
-	}
-}, 10000);
+	jwtToken = response.body.data.token;
+});
 
 afterAll(async () => {
 	// await dbDeleteAllUsers();
@@ -59,7 +56,7 @@ describe('GET /participant endpoint', () => {
 	test('Get all participants', async () => {
 		const response = await superTest(api)
 			.get('/participants/getAll')
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 });
@@ -85,7 +82,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant2 })
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 
@@ -105,7 +102,7 @@ describe('POST /participant endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/participants/add')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({ participant: participant2 });
 		expect(response.statusCode).toBe(200);
 		expect(response.body.status).toBe('success');
@@ -125,7 +122,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant })
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 
@@ -141,7 +138,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant })
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken);
 		expect(response.statusCode).toBe(400);
 	});
 });
@@ -169,7 +166,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({
 				phone: "01111111112",
 				update: { acceptanceStatus: 'accepted' },
@@ -179,7 +176,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a existing participant status ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({
 				phone: "01111111111" ,
 				update: {acceptanceStatus: 'accepted'},
@@ -189,7 +186,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a existing participant emailed status ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({
 				phone: "01111111111",
 				update: {emailedStatus: true},
@@ -219,14 +216,14 @@ describe('DELETE /participant endpoint', () => {
 	test('Delete a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({ phone: "01111111112"} );
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send({ phone: "01111111111"  });
 		expect(response.statusCode).toBe(200);
 	});

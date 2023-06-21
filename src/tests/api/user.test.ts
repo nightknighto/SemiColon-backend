@@ -17,7 +17,7 @@ function generatePhone() {
 	return phone;
 }
 
-let loginCookie: string[];
+let jwtToken: string;
 
 beforeAll(async () => {
 	const user = {
@@ -32,11 +32,8 @@ beforeAll(async () => {
 	const response = await superTest(api)
 		.post('/auth/login')
 		.send({ phone: user.phone, password: 'Test_password' });
-	const cookies = response.headers['set-cookie'];
-	if (cookies) {
-		loginCookie = cookies;
-	}
-}, 10000);
+	jwtToken = response.body.data.token;
+});
 
 afterAll(async () => {
 	await dbDeleteAllUsers();
@@ -61,6 +58,7 @@ describe('POST /user endpoint', () => {
 	});
 
 	test('Add a valid user', async () => {
+		console.log(`jwt token is ${jwtToken} in first test`)
 		const validUserWithAllFields: UserType = {
 			_id: id1,
 			username: 'Test_user',
@@ -71,8 +69,9 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(validUserWithAllFields);
+		console.log(`response data is ${JSON.stringify(response.body)} in first test}`)
 		expect(response.statusCode).toBe(201);
 	});
 
@@ -86,7 +85,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithInvalidPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -102,7 +101,7 @@ describe('POST /user endpoint', () => {
 		const response = await superTest(api)
 			.post('/user')
 			.send(userWithDuplicatedPhone)
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken)
 		expect(response.statusCode).toBe(400);
 	});
 
@@ -115,7 +114,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithMissingPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -129,7 +128,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithMissingUsername);
 		expect(response.statusCode).toBe(400);
 	});
@@ -144,7 +143,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithMissingPassword);
 		expect(response.statusCode).toBe(400);
 	});
@@ -158,7 +157,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithMissingRole);
 		expect(response.statusCode).toBe(400);
 	});
@@ -173,7 +172,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Cookie', loginCookie)
+			.set('Authorization', jwtToken)
 			.send(userWithMissingActive);
 		expect(response.body.data.active).toBe(false); // default value
 		expect(response.statusCode).toBe(201);
@@ -182,7 +181,7 @@ describe('POST /user endpoint', () => {
 	test('Activate inactive user', async () => {
 		const response = await superTest(api)
 			.patch(`/user/activate/${id3.toString()}`)
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken)
 		expect(response.body.data.active).toBe(true);
 		expect(response.statusCode).toBe(200);
 	});
@@ -190,7 +189,7 @@ describe('POST /user endpoint', () => {
 	test('Deactivate active user', async () => {
 		const response = await superTest(api)
 			.patch(`/user/deactivate/${id3.toString()}`)
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken)
 		expect(response.body.data.active).toBe(false);
 		expect(response.statusCode).toBe(200);
 	});
@@ -221,15 +220,15 @@ describe('GET /user endpoint', () => {
 
 	test('Get a user by phone', async () => {
 		const response = await superTest(api)
-			.get(`/user/${phone}`)
-			.set('Cookie', loginCookie);
+			.get(`/user/phone/${phone}`)
+			.set('Authorization', jwtToken)
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Get a user by phone that does not exist', async () => {
 		const response = await superTest(api)
-			.get(`/user/${nonExistingPhone}`)
-			.set('Cookie', loginCookie);
+			.get(`/user/phone/${nonExistingPhone}`)
+			.set('Authorization', jwtToken)
 		expect(response.statusCode).toBe(404);
 	});
 
@@ -258,14 +257,14 @@ describe('DELETE /user endpoint', () => {
 		// when this happens the server send 200 with data: deleteUser
 		const response = await superTest(api)
 			.delete(`/user/${id1.toString()}`)
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken)
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Delete a user by id that does not exist', async () => {
 		const response = await superTest(api)
 			.delete(`/user/${id2.toString()}`)
-			.set('Cookie', loginCookie);
+			.set('Authorization', jwtToken)
 		expect(response.statusCode).toBe(404);
 	});
 });
