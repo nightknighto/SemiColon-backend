@@ -27,7 +27,7 @@ export async function Login(req: Request, res: Response) {
 		});
 	}
 
-	const token = `Bearer ${issueToken(user)}`;
+	const token = issueToken(user);
 	return res.status(200).json({
 		status: "success",
 		data: { token, username: user.username, role: user.role },
