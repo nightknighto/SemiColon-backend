@@ -31,7 +31,6 @@ describe('Auth API', () => {
 		const response = await superTest(api)
 			.post('/auth/login')
 			.send({ phone, password })
-			.redirects(1);
 		expect(response.status).toBe(200);
 	});
 
@@ -39,7 +38,6 @@ describe('Auth API', () => {
 		const response = await superTest(api)
 			.post('/auth/login')
 			.send({ phone, password: 'wrong' })
-			.redirects(1);
 		expect(response.status).toBe(401);
 	});
 
@@ -47,7 +45,7 @@ describe('Auth API', () => {
 		const response = await superTest(api)
 			.post('/auth/login')
 			.send({ phone: '01444444244', password })
-			.redirects(1);
+		console.log(response.body);
 		expect(response.status).toBe(401);
 	});
 });

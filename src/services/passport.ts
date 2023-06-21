@@ -1,59 +1,30 @@
-import passport from 'passport';
-import {
-	IVerifyOptions,
-	Strategy as LocalStrategy,
-	VerifyFunction,
-} from 'passport-local';
-
-import { dbGetUserById, dbGetUserByPhone } from '../models/user/user.model';
-import { verifyPassword } from '../utils/authentication/password.utils';
-import userType from '../types/user.d';
-import UserType from '../types/user.d';
+import passport from "passport";
+import { Strategy as JWTStrategy, StrategyOptions, VerifyCallback, ExtractJwt } from "passport-jwt";
+import { dbGetUserById, dbGetUserByPhone } from "../models/user/user.model";
+import configs from "../config/config";
+import UserType from "../types/user";
 
 declare global {
 	namespace Express {
-		interface User extends userType {}
+		interface User extends UserType {}
 	}
 }
 
-const localVerify: VerifyFunction = async (
-	phone: string,
-	password: string,
-	done: (
-		error: any,
-		user?: Express.User | false,
-		options?: IVerifyOptions
-	) => void
-) => {
+const options: StrategyOptions = {
+	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+	secretOrKey: configs.SESSION_SECRET,
+	ignoreExpiration: false,
+	algorithms: ["HS256"],
+};
+
+const JWTVerify: VerifyCallback = async (payload, done) => {
 	let user: UserType;
 	try {
-		user = await dbGetUserByPhone(phone);
-		const validPassword = await verifyPassword(password, user.password);
-		if (!validPassword) {
-			return done(null, false);
-		}
+		user = await dbGetUserById(payload.sub);
 		return done(null, user);
 	} catch (error: unknown) {
-		done(null, false);
+		return done(error);
 	}
 };
 
-passport.use(
-	new LocalStrategy(
-		{ usernameField: 'phone', passwordField: 'password' },
-		localVerify
-	)
-);
-
-passport.serializeUser((user: Express.User, done) => {
-	done(null, user._id);
-});
-
-passport.deserializeUser(async (id: string, done) => {
-	try {
-		const user = await dbGetUserById(id);
-		done(null, user);
-	} catch (error: unknown) {
-		done(error);
-	}
-});
+passport.use(new JWTStrategy(options, JWTVerify));
