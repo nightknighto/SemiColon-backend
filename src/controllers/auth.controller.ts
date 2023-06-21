@@ -7,32 +7,31 @@ import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 
 export async function Login(req: Request, res: Response) {
 	const { phone, password } = req.body;
+	let user: UserType = {} as UserType;
+
 	try {
-		const user: UserType = await dbGetUserByPhone(phone);
-		if (!user) {
+		user = await dbGetUserByPhone(phone);
+	} catch (err: unknown) {
+		if ((err as ErrorWithStatusCode).statusCode === 404)
 			return res.status(401).json({
 				status: "failure",
 				data: "Incorrect phone number",
 			});
-		}
-		const valid = await verifyPassword(password, user.password);
-		if (!valid) {
-			return res.status(401).json({
-				status: "failure",
-				data: "Incorrect password",
-			});
-		}
-		const token = `Bearer ${issueToken(user)}`;
-		return res.status(200).json({
-			status: "success",
-			data: { token, username: user.username, role: user.role },
-		});
-	} catch (err: unknown) {
-		return res.status((err as ErrorWithStatusCode).statusCode).json({
+	}
+
+	const valid = await verifyPassword(password, user.password);
+	if (!valid) {
+		return res.status(401).json({
 			status: "failure",
-			data: (err as Error).message,
+			data: "Incorrect password",
 		});
 	}
+
+	const token = `Bearer ${issueToken(user)}`;
+	return res.status(200).json({
+		status: "success",
+		data: { token, username: user.username, role: user.role },
+	});
 }
 
 export async function Register(req: Request, res: Response) {
