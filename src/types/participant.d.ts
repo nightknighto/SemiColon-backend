@@ -1,4 +1,5 @@
 import { Mongoose } from "mongoose";
+import { StatusEnum } from "../models/participant/participant.schema";
 
 export interface participant {
     _id: Mongoose.types.ObjectId;
@@ -13,7 +14,7 @@ export interface participant {
     secondPreference: string;
     secondPrefReason: string;
     pastExperience: string;
-    acceptanceStatus: string;
+    acceptanceStatus: StatusEnum;
     emailedStatus: boolean;
 }
 // this type mean only one field of the above type can be used as a filter to update at a time
