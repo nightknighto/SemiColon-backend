@@ -3,6 +3,7 @@ import {
     acceptParticipantByPhone,
     addParticipant,
     addParticipantNotes,
+    bulkEmailParticipants,
     deleteParticipantByEmail,
     deleteParticipantByPhone,
     emailParticipantByPhone,
@@ -46,6 +47,12 @@ participantRouter.post(
     isLoggedIn,
     giveAccessTo("admin"),
     rejectParticipantByPhone
+);
+participantRouter.post(
+    "/email",
+//    isLoggedIn,
+//    giveAccessTo("admin"),
+   bulkEmailParticipants
 );
 participantRouter.post(
     "/interview/note",
