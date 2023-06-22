@@ -10,6 +10,7 @@ import {
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
+import { StatusEnum } from "../models/participant/participant.schema";
 
 export async function getAllParticipants(req: Request, res: Response) {
   /**
@@ -120,7 +121,7 @@ export async function acceptParticipantByPhone(req: Request, res: Response) {
   try {
     const { phone }: { phone: string } = req.body;
     const updatedParticipant = await dbUpdateUser(
-      { acceptanceStatus: "accepted" },
+      { acceptanceStatus: StatusEnum.ACCEPTED },
       { phone }
     );
     await dbAddNewLog({
@@ -146,7 +147,7 @@ export async function rejectParticipantByPhone(req: Request, res: Response) {
   try {
     const { phone }: { phone: string } = req.body;
     const updatedParticipant = await dbUpdateUser(
-      { acceptanceStatus: "rejected" },
+      { acceptanceStatus: StatusEnum.REJECTED },
       { phone }
     );
     await dbAddNewLog({
@@ -173,7 +174,7 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
     const { phone }: { phone: string } = req.body;
     //TODO: send email using nodemailer here
     const updatedParticipant = await dbUpdateUser(
-      { acceptanceStatus: "emailed" },
+      { acceptanceStatus: StatusEnum.EMAILED },
       { phone }
     );
     await dbAddNewLog({
@@ -183,6 +184,32 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
       participantId: updatedParticipant._id as string,
     });
     res.status(200).json({ status: "success", data: updatedParticipant });
+  } catch (error: ErrorWithStatusCode | any) {
+    res.status(error.statusCode || 500).json({
+      status: "failure",
+      data: error.message,
+    });
+  }
+}
+
+export async function updateParticipantStatus(req: Request, res: Response) {
+  /**
+   * #swagger.tags = ['Participants']
+   * #swagger.description = 'Endpoint to update a participant's status'
+   */
+  try {
+    const { status, phone }: { status: StatusEnum, phone: string } = req.body;
+    const updatedParticipant = await dbUpdateUser(
+      { acceptanceStatus: status },
+      { phone }
+    );
+    await dbAddNewLog({
+      adminPhone: req.user?.phone as string,
+      adminId: req.user?._id as string,
+      action: "update",
+      participantId: updatedParticipant._id as string,
+    });
+    res.status(200).json({ status: "success", data: { status: updatedParticipant.acceptanceStatus } });
   } catch (error: ErrorWithStatusCode | any) {
     res.status(error.statusCode || 500).json({
       status: "failure",

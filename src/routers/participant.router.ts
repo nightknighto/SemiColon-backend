@@ -8,8 +8,9 @@ import {
     getAllParticipants,
     rejectParticipantByPhone,
     updateParticipantByPhone,
+    updateParticipantStatus,
 } from "../controllers/participant.controller";
-import { mwValidateParticipant } from "../middlewares/participants/participant.validation.middleware";
+import { mwValidateParticipant, mwValidateStatus } from "../middlewares/participants/participant.validation.middleware";
 import isLoggedIn from "../middlewares/authentication/login.middleware";
 import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware";
 
@@ -34,22 +35,29 @@ participantRouter.delete(
     giveAccessTo("admin"),
     deleteParticipantByPhone
 );
-participantRouter.post(
+participantRouter.post( //reduntant
     "/accept",
     isLoggedIn,
     giveAccessTo("admin"),
     acceptParticipantByPhone
 );
-participantRouter.post(
+participantRouter.post( //reduntant
     "/reject",
     isLoggedIn,
     giveAccessTo("admin"),
     rejectParticipantByPhone
 );
-participantRouter.post(
+participantRouter.post( //reduntant
     "/email",
     isLoggedIn,
     giveAccessTo("admin"),
     emailParticipantByPhone
 );
+participantRouter.patch(
+    "/status",
+    isLoggedIn,
+    giveAccessTo("hr"),
+    mwValidateStatus,
+    updateParticipantStatus
+)
 export default participantRouter;
