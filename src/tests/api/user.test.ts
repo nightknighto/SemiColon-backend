@@ -68,7 +68,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(validUserWithAllFields);
 		expect(response.statusCode).toBe(201);
 	});
@@ -83,7 +83,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithInvalidPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -99,7 +99,7 @@ describe('POST /user endpoint', () => {
 		const response = await superTest(api)
 			.post('/user')
 			.send(userWithDuplicatedPhone)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.statusCode).toBe(400);
 	});
 
@@ -112,7 +112,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithMissingPhone);
 		expect(response.statusCode).toBe(400);
 	});
@@ -126,7 +126,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithMissingUsername);
 		expect(response.statusCode).toBe(400);
 	});
@@ -141,7 +141,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithMissingPassword);
 		expect(response.statusCode).toBe(400);
 	});
@@ -155,7 +155,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithMissingRole);
 		expect(response.statusCode).toBe(400);
 	});
@@ -170,7 +170,7 @@ describe('POST /user endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/user')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send(userWithMissingActive);
 		expect(response.body.data.active).toBe(false); // default value
 		expect(response.statusCode).toBe(201);
@@ -179,7 +179,7 @@ describe('POST /user endpoint', () => {
 	test('Activate inactive user', async () => {
 		const response = await superTest(api)
 			.patch(`/user/activate/${id3.toString()}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.body.data.active).toBe(true);
 		expect(response.statusCode).toBe(200);
 	});
@@ -187,7 +187,7 @@ describe('POST /user endpoint', () => {
 	test('Deactivate active user', async () => {
 		const response = await superTest(api)
 			.patch(`/user/deactivate/${id3.toString()}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.body.data.active).toBe(false);
 		expect(response.statusCode).toBe(200);
 	});
@@ -219,14 +219,14 @@ describe('GET /user endpoint', () => {
 	test('Get a user by phone', async () => {
 		const response = await superTest(api)
 			.get(`/user/phone/${phone}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Get a user by phone that does not exist', async () => {
 		const response = await superTest(api)
 			.get(`/user/phone/${nonExistingPhone}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.statusCode).toBe(404);
 	});
 
@@ -255,14 +255,14 @@ describe('DELETE /user endpoint', () => {
 		// when this happens the server send 200 with data: deleteUser
 		const response = await superTest(api)
 			.delete(`/user/${id1.toString()}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.statusCode).toBe(200);
 	});
 
 	test('Delete a user by id that does not exist', async () => {
 		const response = await superTest(api)
 			.delete(`/user/${id2.toString()}`)
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 		expect(response.statusCode).toBe(404);
 	});
 });

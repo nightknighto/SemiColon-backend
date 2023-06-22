@@ -56,7 +56,7 @@ describe('GET /participant endpoint', () => {
 	test('Get all participants', async () => {
 		const response = await superTest(api)
 			.get('/participants/getAll')
-			.set('Authorization', jwtToken);
+			.set('Authorization', "Bearer "+jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 });
@@ -82,7 +82,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant2 })
-			.set('Authorization', jwtToken);
+			.set('Authorization', "Bearer "+jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 
@@ -102,7 +102,7 @@ describe('POST /participant endpoint', () => {
 		};
 		const response = await superTest(api)
 			.post('/participants/add')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({ participant: participant2 });
 		expect(response.statusCode).toBe(200);
 		expect(response.body.status).toBe('success');
@@ -122,7 +122,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant })
-			.set('Authorization', jwtToken);
+			.set('Authorization', "Bearer "+jwtToken);
 		expect(response.statusCode).toBe(200);
 	});
 
@@ -138,7 +138,7 @@ describe('POST /participant endpoint', () => {
 		const response = await superTest(api)
 			.post('/participants/add')
 			.send({ participant: participant })
-			.set('Authorization', jwtToken);
+			.set('Authorization', "Bearer "+jwtToken);
 		expect(response.statusCode).toBe(400);
 	});
 });
@@ -166,7 +166,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({
 				phone: "01111111112",
 				update: { acceptanceStatus: 'accepted' },
@@ -176,7 +176,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a existing participant status ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({
 				phone: "01111111111" ,
 				update: {acceptanceStatus: 'accepted'},
@@ -186,7 +186,7 @@ describe('PATCH /participant endpoint', () => {
 	test('Update a existing participant emailed status ', async () => {
 		const response = await superTest(api)
 			.patch('/participants/update')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({
 				phone: "01111111111",
 				update: {emailedStatus: true},
@@ -216,14 +216,14 @@ describe('DELETE /participant endpoint', () => {
 	test('Delete a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({ phone: "01111111112"} );
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
-			.set('Authorization', jwtToken)
+			.set('Authorization', "Bearer "+jwtToken)
 			.send({ phone: "01111111111"  });
 		expect(response.statusCode).toBe(200);
 	});
