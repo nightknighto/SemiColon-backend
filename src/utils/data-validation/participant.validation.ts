@@ -1,6 +1,6 @@
 import ErrorWithStatusCode from "../classes/ErrorWithStatusCode";
 import { participant as ParticipantType } from "../../types/participant";
-import { PreferencesEnum } from "../../models/participant/participant.schema";
+import { PreferencesEnum, StatusEnum } from "../../models/participant/participant.schema";
 
 export function ValidateName(name: string): boolean {
     if (!name) {
@@ -54,6 +54,17 @@ export function ValidateYear(year: string): boolean {
     } else if (!year.match(/^(Freshman|Sophomore|Junior|Senior 1|Senior 2)$/)) {
         throw new ErrorWithStatusCode(
             "Invalid Year: Year must be one of Freshman, Sophomore, Junior, Senior 1, Senior 2",
+            400
+        );
+    }
+    return true;
+}
+export function ValidateStatus(status: string): boolean {
+    if (!status) {
+        throw new ErrorWithStatusCode("Status is required", 400);
+    } else if (!(Object.values(StatusEnum).includes(status as StatusEnum))) {
+        throw new ErrorWithStatusCode(
+            `Invalid Status: Status must be one of ${Object.values(StatusEnum).join(", ")}`,
             400
         );
     }

@@ -1,4 +1,5 @@
 import { Mongoose } from "mongoose";
+import { StatusEnum } from "../models/participant/participant.schema";
 
 
 
@@ -16,7 +17,7 @@ export interface participant {
     secondPreference: PreferencesEnum;
     secondPrefReason: string;
     pastExperience: string;
-    acceptanceStatus: string;
+    acceptanceStatus: StatusEnum;
     InterviewerNote: string;
 }
 

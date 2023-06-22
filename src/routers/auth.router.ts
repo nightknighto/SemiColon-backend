@@ -1,25 +1,32 @@
 import { Router } from "express";
-import passport from "passport";
-import { failedLogin, successfulLogin } from "../controllers/auth.controller";
+import { Login, Register } from "../controllers/auth.controller";
+import { mwValidateLoginData, mwValidateUserData } from "../middlewares/userDataValidator";
 const authRouter = Router();
 
 authRouter.post(
-  "/login",
-  (req, res, next) => {
-    /**
-     * #swagger.tags = ['Auth']
-     * #swagger.description = 'Endpoint to authenticate All logins login'
-     */
-    next();
-  },
-  passport.authenticate("local", {
-    successRedirect: "/auth/login/success",
-    failureRedirect: "/auth/login/failure",
-  })
+	"/login",
+	(req, res, next) => {
+		/**
+		 * #swagger.tags = ['Auth']
+		 * #swagger.description = 'Endpoint to authenticate All logins login'
+		 */
+		next();
+	},
+	mwValidateLoginData,
+	Login
 );
 
-authRouter.route("/login/success").get(successfulLogin).post(successfulLogin);
-
-authRouter.route("/login/failure").get(failedLogin).post(failedLogin);
+authRouter.post(
+	"/register",
+	(req, res, next) => {
+		/**
+		 * #swagger.tags = ['Auth']
+		 * #swagger.description = 'Endpoint to authenticate All logins login'
+		 */
+		next();
+	},
+	mwValidateUserData,
+	Register
+);
 
 export default authRouter;

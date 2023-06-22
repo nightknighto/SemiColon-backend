@@ -10,55 +10,63 @@ import {
     getAllParticipants,
     rejectParticipantByPhone,
     updateParticipantByPhone,
+    updateParticipantStatus,
 } from "../controllers/participant.controller";
-import { mwValidateParticipant } from "../middlewares/participants/participant.validation.middleware";
+import { mwValidateParticipant, mwValidateStatus } from "../middlewares/participants/participant.validation.middleware";
 import isLoggedIn from "../middlewares/authentication/login.middleware";
 import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware";
 
 const participantRouter = Router();
 
-participantRouter.get(
+participantRouter
+.get(
     "/getAll",
-    // isLoggedIn,
-    // giveAccessTo("member"),
+    isLoggedIn,
+    giveAccessTo("member"),
     getAllParticipants
-);
-participantRouter.post("/add", mwValidateParticipant, addParticipant);
-participantRouter.patch(
+)
+.post("/add", mwValidateParticipant, addParticipant)
+.patch(
     "/update",
     isLoggedIn,
     giveAccessTo("hr"),
     updateParticipantByPhone
-);
-participantRouter.delete(
+)
+.delete(
     "/delete",
     isLoggedIn,
     giveAccessTo("admin"),
     deleteParticipantByPhone
-);
-participantRouter.post(
+)
+.post( //reduntant
     "/accept",
     isLoggedIn,
     giveAccessTo("admin"),
     acceptParticipantByPhone
-);
-participantRouter.post(
+)
+.post( //reduntant
     "/reject",
     isLoggedIn,
     giveAccessTo("admin"),
     rejectParticipantByPhone
-);
-participantRouter.post(
+)
+.post( //reduntant
     "/email",
 //    isLoggedIn,
 //    giveAccessTo("admin"),
    bulkEmailParticipants
-);
-participantRouter.post(
+)
+.post(
     "/interview/note",
    isLoggedIn,
-   giveAccessTo("admin"),
+   giveAccessTo("hr"),
    addParticipantNotes
-);
-
+)
+.patch(
+    "/status",
+    isLoggedIn,
+    giveAccessTo("hr"),
+    mwValidateStatus,
+    updateParticipantStatus
+)
 export default participantRouter;

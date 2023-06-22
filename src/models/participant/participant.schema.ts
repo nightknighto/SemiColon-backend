@@ -17,6 +17,17 @@ export enum PreferencesEnum {
     FLUTTER = "flutter",
     DESKTOP = "desktop"
 }
+
+export enum StatusEnum {
+    ACCEPTED = "accepted",
+    REJECTED = "rejected",
+    PENDING = "pending",
+    EMAILED = "emailed",
+    FILTERED = "filtered",
+    SCHEDULED = "scheduled",
+    SECONDPREF = "secondpref",
+}
+
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
         name: {
@@ -75,15 +86,8 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         acceptanceStatus: {
             type: String,
             required: true,
-            default: "pending",
-            enum: [
-                "pending",
-                "accepted",
-                "rejected",
-                "emailed",
-                "scheduled",
-                "secondPreference",
-            ],
+            default: StatusEnum.PENDING,
+            enum: Object.values(StatusEnum),
         },
         InterviewerNote: {
             type: String,
