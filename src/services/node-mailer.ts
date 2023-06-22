@@ -1,7 +1,8 @@
 import {createTransport, Transporter} from 'nodemailer';
-let transporter: Transporter;
+import { email } from '../types/email';
+export let transporter: Transporter;
 
-// if(process.env.NODE_ENV === 'production'){
+if(process.env.NODE_ENV === 'production'){
     transporter = createTransport({
         host: 'smtp.gmail.com',
         service: 'gmail',
@@ -12,15 +13,15 @@ let transporter: Transporter;
             pass: process.env.PROD_MAIL_APP_PASSWORD
         },
     });
-// }else{
-//     transporter = createTransport({
-//         host: 'localhost',
-//         port: 1025
-//     });
-// }
+}else{
+    transporter = createTransport({
+        host: 'localhost',
+        port: 1025
+    });
+}
 
 
-async function sendMail(to: string, subject: string, html: string){
+export async function sendMail(to: string, subject: string, html: string){
     //TODO: The From must be the same as the user in the transporter
     let info = await transporter.sendMail({
         from: '"Semicolon HR" <hr.semicolon.asu@gmail.com>',
@@ -30,5 +31,10 @@ async function sendMail(to: string, subject: string, html: string){
       });
 }
 
+export async function sendBulkEmail(emails: email[]): Promise<void>{
+    for (const email of emails) {
+      await sendMail(email.to, email.subject, email.html);
+    }
+  }
+
 export default transporter;
-export {transporter, sendMail};
