@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType, UpdateParticipant } from "../../types/participant";
+import {
+    participant as ParticipantType,
+    UpdateParticipant,
+} from "../../types/participant";
 import Participant from "./participant.schema";
 import ErrorWithStatusCode from "../../utils/classes/ErrorWithStatusCode";
 
@@ -48,7 +51,11 @@ export async function dbUpdateUser(
     update: Partial<ParticipantType>,
     filter: UpdateParticipant
 ) {
-    const updatedParticipant = await Participant.findOneAndUpdate(filter, update ,{new: true});
+    const updatedParticipant = await Participant.findOneAndUpdate(
+        filter,
+        update,
+        { new: true }
+    );
     if (!updatedParticipant) {
         throw new ErrorWithStatusCode("participant does not exist", 404);
     }

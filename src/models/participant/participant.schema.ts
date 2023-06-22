@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
-import { participant as ParticipantType , InterviewerNote } from "../../types/participant";
-
+import {
+    participant as ParticipantType,
+    InterviewerNote,
+    
+} from "../../types/participant";
 export enum PreferencesEnum {
     C_PROG = "c-prog",
     AVR = "avr",
@@ -14,7 +17,6 @@ export enum PreferencesEnum {
     FLUTTER = "flutter",
     DESKTOP = "desktop"
 }
-
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
         name: {
@@ -74,13 +76,20 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             type: String,
             required: true,
             default: "pending",
-            enum: ["pending", "accepted", "rejected", "emailed",  "scheduled", "secondPreference"],
+            enum: [
+                "pending",
+                "accepted",
+                "rejected",
+                "emailed",
+                "scheduled",
+                "secondPreference",
+            ],
         },
         InterviewerNote: {
             type: String,
             trim: true,
             default: "",
-        }
+        },
     },
     { timestamps: true }
 );

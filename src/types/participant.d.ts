@@ -1,5 +1,8 @@
 import { Mongoose } from "mongoose";
 
+
+
+export type Preference =  PreferencesEnum;
 export interface participant {
     _id: Mongoose.types.ObjectId;
     name: string;
@@ -7,10 +10,10 @@ export interface participant {
     phone: string;
     collegeId: string;
     year: string;
-    firstPreference: string;
+    firstPreference: PreferencesEnum;
     firstPrefReason: string;
     firstPrefKnowledge: string;
-    secondPreference: string;
+    secondPreference: PreferencesEnum;
     secondPrefReason: string;
     pastExperience: string;
     acceptanceStatus: string;
