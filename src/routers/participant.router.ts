@@ -53,7 +53,13 @@ participantRouter.post(
 //    isLoggedIn,
 //    giveAccessTo("admin"),
    bulkEmailParticipants
-);
+)
+.post(
+    "/status",
+    isLoggedIn,
+    giveAccessTo("admin"),
+    // changeStatusByPhone
+)
 participantRouter.post(
     "/interview/note",
    isLoggedIn,

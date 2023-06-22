@@ -16,6 +16,7 @@ import { dbAddNewLog } from "../models/log/log.model";
 import { sendBulkEmail, sendMail } from "../services/node-mailer";
 import mailGen from "../utils/constructors/email.constructors";
 import { email } from "../types/email";
+import { PreferencesEnum } from "../models/participant/participant.schema";
 // import { Preference } from "../models/participant/participant.schema";
 
 async function waitMail(ms: number) {
@@ -301,6 +302,32 @@ export async function addParticipantNotes(req: Request, res: Response) {
         let strNote = JSON.stringify(notes);
         const updatedParticipant = await dbUpdateUser(
             { InterviewerNote: strNote },
+            { phone }
+        );
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string,
+        });
+        res.status(200).json({ status: "success", data: updatedParticipant });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
+export async function changeStatusByPhone(req:Request, res:Response){
+    /**
+     * #swagger.tags = ['Participants']
+     * #swagger.description = 'Endpoint to change a participant status by phone number'
+     */
+    try {
+        const { phone, status }: { phone: string; status: PreferencesEnum } = req.body;
+        const updatedParticipant = await dbUpdateUser(
+            { acceptanceStatus: status },
             { phone }
         );
         await dbAddNewLog({
