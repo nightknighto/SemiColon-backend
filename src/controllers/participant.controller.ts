@@ -6,7 +6,7 @@ import {
   dbAddParticipant,
   dbUpsertParticipant,
   dbDeleteParticipant,
-  dbUpdateUser,
+  dbUpdateParticipant,
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
@@ -97,7 +97,7 @@ export async function updateParticipantByPhone(req: Request, res: Response) {
       update,
       phone,
     }: { update: Partial<ParticipantType>; phone: string } = req.body;
-    const updatedParticipant = await dbUpdateUser(update, { phone });
+    const updatedParticipant = await dbUpdateParticipant(update, { phone });
     await dbAddNewLog({
       adminPhone: req.user?.phone as string,
       adminId: req.user?._id as string,
@@ -120,7 +120,7 @@ export async function acceptParticipantByPhone(req: Request, res: Response) {
    */
   try {
     const { phone }: { phone: string } = req.body;
-    const updatedParticipant = await dbUpdateUser(
+    const updatedParticipant = await dbUpdateParticipant(
       { acceptanceStatus: StatusEnum.ACCEPTED },
       { phone }
     );
@@ -146,7 +146,7 @@ export async function rejectParticipantByPhone(req: Request, res: Response) {
    */
   try {
     const { phone }: { phone: string } = req.body;
-    const updatedParticipant = await dbUpdateUser(
+    const updatedParticipant = await dbUpdateParticipant(
       { acceptanceStatus: StatusEnum.REJECTED },
       { phone }
     );
@@ -173,7 +173,7 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
   try {
     const { phone }: { phone: string } = req.body;
     //TODO: send email using nodemailer here
-    const updatedParticipant = await dbUpdateUser(
+    const updatedParticipant = await dbUpdateParticipant(
       { acceptanceStatus: StatusEnum.EMAILED },
       { phone }
     );
@@ -199,7 +199,7 @@ export async function updateParticipantStatus(req: Request, res: Response) {
    */
   try {
     const { status, phone }: { status: StatusEnum, phone: string } = req.body;
-    const updatedParticipant = await dbUpdateUser(
+    const updatedParticipant = await dbUpdateParticipant(
       { acceptanceStatus: status },
       { phone }
     );
