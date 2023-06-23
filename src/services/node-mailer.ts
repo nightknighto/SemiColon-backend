@@ -38,9 +38,10 @@ export async function sendBulkEmail(emails: Email[]): Promise<void> {
     type EmailTypeToStatusType = {
         [key in EmailTypeEnum]: StatusEnum;
     };
+    //TODO:: fix initial duplicates problem
     const EmailTypeToStatus: EmailTypeToStatusType = {
-        [EmailTypeEnum.INITIAL]: StatusEnum.EMAILED,
-        [EmailTypeEnum.INTERVIEW]: StatusEnum.SCHEDULED,
+        [EmailTypeEnum.INITIAL]: StatusEnum.PENDING,
+        [EmailTypeEnum.INTERVIEW]: StatusEnum.EMAILED,
         [EmailTypeEnum.ACCEPTANCE]: StatusEnum.ACCEPTED,
         [EmailTypeEnum.REJECTION]: StatusEnum.REJECTED,
     };

@@ -103,7 +103,7 @@ function ConstructBulkInitialEmails(participants: ParticipantType[]): Email[] {
 function ConstructBulkInterviewEmail(participants: ParticipantType[]): Email[] {
     participants = participants.filter((participant) => {
         return (
-            participant.acceptanceStatus !== StatusEnum.SCHEDULED &&
+            participant.acceptanceStatus !== StatusEnum.EMAILED &&
             participant.acceptanceStatus !== StatusEnum.REJECTED &&
             participant.acceptanceStatus !== StatusEnum.FILTERED &&
             participant.acceptanceStatus !== StatusEnum.ACCEPTED
