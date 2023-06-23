@@ -3,7 +3,6 @@ import { StatusEnum } from "../models/participant/participant.schema";
 
 
 
-export type Preference =  PreferencesEnum;
 export interface participant {
     _id: Mongoose.types.ObjectId;
     name: string;

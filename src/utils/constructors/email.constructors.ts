@@ -5,6 +5,13 @@ import {
 import { Email, EmailBodyOptions } from "../../types/email";
 import { participant as ParticipantType } from "../../types/participant";
 
+export enum EmailTypeEnum {
+    INITIAL = "initial",
+    INTERVIEW = "interview",
+    ACCEPTANCE = "acceptance",
+    REJECTION = "rejection",
+}
+
 const emailBodyOptions: EmailBodyOptions = {
     [PreferencesEnum.C_PROG]: {
         title: "C/Embedded C",
@@ -87,6 +94,7 @@ function ConstructBulkInitialEmails(participants: ParticipantType[]): Email[] {
             subject: "Semicolon Workshop Application",
             html: emailBody,
             phone: participant.phone,
+            type: EmailTypeEnum.INITIAL,
         };
         emails.push(email);
     }
@@ -112,6 +120,7 @@ function ConstructBulkInterviewEmail(participants: ParticipantType[]): Email[] {
             subject: "Semicolon Workshop Interview",
             html: emailBody,
             phone: participant.phone,
+            type: EmailTypeEnum.INTERVIEW,
         };
         emails.push(email);
     }
@@ -135,6 +144,7 @@ function ConstructBulkAcceptanceEmail(
             subject: "Semicolon Workshop Interview",
             html: emailBody,
             phone: participant.phone,
+            type: EmailTypeEnum.ACCEPTANCE,
         };
         emails.push(email);
     }
@@ -156,6 +166,7 @@ function ConstructBulkRejectionEmail(participants: ParticipantType[]): Email[] {
             subject: "Semicolon Workshop Interview",
             html: emailBody,
             phone: participant.phone,
+            type: EmailTypeEnum.REJECTION,
         };
         emails.push(email);
     }

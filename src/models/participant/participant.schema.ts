@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import {
     participant as ParticipantType,
     InterviewerNote,
-    
 } from "../../types/participant";
 export enum PreferencesEnum {
     C_PROG = "c-prog",
@@ -15,7 +14,7 @@ export enum PreferencesEnum {
     PYTHON = "python",
     DIGITAL_DESIGN = "digital",
     FLUTTER = "flutter",
-    DESKTOP = "desktop"
+    DESKTOP = "desktop",
 }
 
 export enum StatusEnum {
