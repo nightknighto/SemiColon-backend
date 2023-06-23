@@ -1,5 +1,5 @@
 import { createTransport, Transporter } from "nodemailer";
-import { dbUpdateUser } from "../models/participant/participant.model";
+import { dbUpdateParticipant } from "../models/participant/participant.model";
 import { StatusEnum } from "../models/participant/participant.schema";
 import { Email } from "../types/email";
 import { EmailTypeEnum } from "../utils/constructors/email.constructors";
@@ -48,7 +48,7 @@ export async function sendBulkEmail(emails: Email[]): Promise<void> {
     // TODO:: change status according to email type
     for (const email of emails) {
         await sendMail(email.to, email.subject, email.html);
-        await dbUpdateUser(
+        await dbUpdateParticipant(
             {
                 acceptanceStatus:
                     EmailTypeToStatus[email.type as EmailTypeEnum],

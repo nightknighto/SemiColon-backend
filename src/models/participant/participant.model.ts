@@ -47,14 +47,14 @@ export async function dbUpsertParticipant(participant: ParticipantType) {
     return newParticipant;
 }
 
-export async function dbUpdateUser(
+export async function dbUpdateParticipant(
     update: Partial<ParticipantType>,
     filter: UpdateParticipant
 ) {
     const updatedParticipant = await Participant.findOneAndUpdate(
         filter,
         update,
-        { new: true }
+        { new: true, runValidators: true }
     );
     if (!updatedParticipant) {
         throw new ErrorWithStatusCode("participant does not exist", 404);
