@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     acceptParticipantByPhone,
     addParticipant,
+    bulkEmailParticipants,
     deleteParticipantByEmail,
     deleteParticipantByPhone,
     emailParticipantByPhone,
@@ -16,44 +17,51 @@ import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware"
 
 const participantRouter = Router();
 
-participantRouter.get(
+participantRouter
+.get(
     "/getAll",
     isLoggedIn,
     giveAccessTo("member"),
     getAllParticipants
-);
-participantRouter.post("/add", mwValidateParticipant, addParticipant);
-participantRouter.patch(
+)
+.post("/add", mwValidateParticipant, addParticipant)
+.patch(
     "/update",
     isLoggedIn,
     giveAccessTo("hr"),
     updateParticipantByPhone
-);
-participantRouter.delete(
+)
+.delete(
     "/delete",
     isLoggedIn,
     giveAccessTo("admin"),
     deleteParticipantByPhone
-);
-participantRouter.post( //reduntant
+)
+.post( //reduntant
     "/accept",
     isLoggedIn,
     giveAccessTo("admin"),
     acceptParticipantByPhone
-);
-participantRouter.post( //reduntant
+)
+.post( //reduntant
     "/reject",
     isLoggedIn,
     giveAccessTo("admin"),
     rejectParticipantByPhone
-);
-participantRouter.post( //reduntant
+)
+.post( //reduntant
     "/email",
-    isLoggedIn,
-    giveAccessTo("admin"),
-    emailParticipantByPhone
-);
-participantRouter.patch(
+//    isLoggedIn,
+//    giveAccessTo("admin"),
+   bulkEmailParticipants
+)
+// .post(
+//     "/interview/note",
+//    isLoggedIn,
+//    giveAccessTo("hr"),
+//    addParticipantNotes
+// )
+.patch(
     "/status",
     isLoggedIn,
     giveAccessTo("hr"),
