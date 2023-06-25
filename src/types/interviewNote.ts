@@ -13,7 +13,7 @@ export enum CriteriaEnum {
     EAGER_TO_LEARN = "Eager To Learn",
 }
 
-type InterviewNotes = Partial<
+export type InterviewNotes = Partial<
     Record<
         CriteriaEnum,
         {

@@ -1,8 +1,6 @@
 import { Mongoose } from "mongoose";
 import { StatusEnum } from "../models/participant/participant.schema";
-import { InterviewerObject } from "./interviewerNotes";
-
-
+import { InterviewerObject } from "./interviewNote";
 
 export interface participant {
     _id: Mongoose.types.ObjectId;
