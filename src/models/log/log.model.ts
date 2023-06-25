@@ -1,28 +1,44 @@
-import LogType from '../../types/log';
-import Log from './log.schema';
+import { UserLogType, ParticipantLogType } from "../../types/log";
+import { UserLog, ParticipantLog } from "./log.schema";
 
-export async function dbAddNewLog(log: LogType) {
-	await Log.create(log);
+export async function dbAddNewUserLog(log: UserLogType) {
+	await UserLog.create(log);
 }
 
-export async function dbGetAllLogs() {
-	return await Log.find({}).populate('adminId').populate('participantId');
+export async function dbAddNewParticipantLog(log: ParticipantLogType) {
+	await ParticipantLog.create(log);
+}
+
+export async function dbGetAllParticipantLogs() {
+	return await ParticipantLog.find({}).populate("initiatorId").populate("targetId");
+}
+
+export async function dbGetAllUserLogs() {
+	return await UserLog.find({}).populate("initiator").populate("target");
 }
 
 export async function dbGetLogsByAdminId(adminId: string) {
-	return await Log.find({ adminId: adminId })
-		.populate('adminId')
-		.populate('participantId');
+	const userLogs = await UserLog.find({ initiatorId: adminId }).populate("initiator").populate("target");
+	const participantLogs = await ParticipantLog.find({ initiatorId: adminId })
+		.populate("initiator")
+		.populate("target");
+	return {
+		userLogs: userLogs,
+		participantLogs: participantLogs,
+	};
 }
 
 export async function dbGetLogsByAdminPhone(adminPhone: string) {
-	return await Log.find({ adminPhone: adminPhone })
-		.populate('adminId')
-		.populate('participantId');
+	const userLogs = await UserLog.find({ initiatorPhone: adminPhone }).populate("initiator").populate("target");
+	const participantLogs = await ParticipantLog.find({ initiatorPhone: adminPhone })
+		.populate("initiator")
+		.populate("target");
+	return {
+		userLogs: userLogs,
+		participantLogs: participantLogs,
+	};
 }
 
 export async function dbGetLogsByParticipantId(participantId: string) {
-	return await Log.find({ participantId: participantId })
-		.populate('adminId')
-		.populate('participantId');
+	return await ParticipantLog.find({ targetId: participantId }).populate("initiator").populate("target");
 }
