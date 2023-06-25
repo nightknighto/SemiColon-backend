@@ -1,8 +1,6 @@
-import mongoose from "mongoose";
-import {
-    participant as ParticipantType,
-    InterviewerNote,
-} from "../../types/participant";
+import mongoose, { Schema } from "mongoose";
+import { participant as ParticipantType } from "../../types/participant";
+import { CriteriaEnum, InterviewerObject } from "../../types/interviewerNotes";
 export enum PreferencesEnum {
     C_PROG = "c-prog",
     AVR = "avr",
@@ -26,6 +24,45 @@ export enum StatusEnum {
     SCHEDULED = "scheduled",
     SECONDPREF = "secondpref",
 }
+
+//TODO:: participant last updated status
+// TODO:: populate interviewerId
+
+// TODO:: fix interview notes schema and add populate interviewerId
+function createInterviewerNoteSchema(criteria: string[]) {
+    const criteriaSchema: any = {};
+    for (const criterion of criteria) {
+        criteriaSchema[criterion] = {
+            rating: {
+                type: Number,
+                enum: [1, 2, 3, 4, 5],
+                required: true,
+            },
+            note: {
+                type: String,
+                required: true,
+            },
+        };
+    }
+    const interviewerObjectSchema = {
+        interviewNotes: criteriaSchema,
+        interviewerId: {
+            type: Schema.Types.ObjectId,
+            ref: "Interviewer",
+            required: true,
+        },
+        date: {
+            type: Date,
+            required: true,
+            default: Date.now,
+        }
+    }
+    return new mongoose.Schema<InterviewerObject>(interviewerObjectSchema);
+}
+
+const interviewerNotesSchema = createInterviewerNoteSchema(
+    Object.values(CriteriaEnum)
+)
 
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
@@ -89,9 +126,8 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
             enum: Object.values(StatusEnum),
         },
         InterviewerNote: {
-            type: String,
+            type: interviewerNotesSchema,
             trim: true,
-            default: "",
         },
     },
     { timestamps: true }
