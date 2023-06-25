@@ -46,7 +46,7 @@ export async function dbAddNewUser(user: UserType) {
 }
 
 export async function dbUpdateUserById(id: string, user: UserType) {
-	const result = await User.findByIdAndUpdate(id, user);
+	const result = await User.findByIdAndUpdate(id, user, {new: true});
 	if (!result) {
 		throw new ErrorWithStatusCode('User not found', 404);
 	}
