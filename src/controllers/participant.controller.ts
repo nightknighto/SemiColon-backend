@@ -276,11 +276,11 @@ export async function addNoteToParticipant(req: Request, res: Response) {
         const { note, phone }: { note: InterviewNotes; phone: string } =
             req.body;
 
-            const interviewNoteObj: InterviewerObject = {
-                interviewNotes: note,
-                interviewerId: req.user?._id,
-                date: new Date(),
-            }
+        const interviewNoteObj: InterviewerObject = {
+            interviewNotes: note,
+            interviewerId: req.user?._id,
+            date: new Date(),
+        };
         const updatedParticipant = await dbUpdateParticipant(
             { InterviewerNote: interviewNoteObj },
             { phone }
@@ -292,10 +292,16 @@ export async function addNoteToParticipant(req: Request, res: Response) {
             participantId: updatedParticipant._id as string,
         });
         res.status(200).json({ status: "success", data: updatedParticipant });
-    } catch (error: ErrorWithStatusCode | any) {
-        res.status(error.statusCode || 500).json({
+    } catch (error) {
+        console.log((error as Error).name);
+        let errorStatusCode = (error as ErrorWithStatusCode).statusCode
+            ? (error as ErrorWithStatusCode).statusCode
+            : (error as Error).name === "CastError"
+            ? 400
+            : 500;
+        res.status(errorStatusCode).json({
             status: "failure",
-            data: error.message,
+            data: (error as Error).message,
         });
     }
 }
