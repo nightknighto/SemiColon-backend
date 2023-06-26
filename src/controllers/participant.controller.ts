@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { InterviewerNote, participant as ParticipantType } from "../types/participant";
+import { participant as ParticipantType } from "../types/participant";
 
 import {
 	dbGetParticipantByPhone,
@@ -16,6 +16,7 @@ import { Email } from "../types/email";
 // import { Preference } from "../models/participant/participant.schema";
 import { StatusEnum } from "../models/participant/participant.schema";
 import { diffObjects } from "../utils/diffing/objectDiff.util";
+import { InterviewerObject, InterviewNotes } from "../types/interviewNote";
 
 //------------------------CRUD------------------------//
 export async function getAllParticipants(req: Request, res: Response) {

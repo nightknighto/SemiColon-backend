@@ -3,7 +3,10 @@ import Participant from "./participant.schema";
 import ErrorWithStatusCode from "../../utils/classes/ErrorWithStatusCode";
 
 export async function dbGetAllParticipants() {
-	const participants = await Participant.find();
+	const participants = await Participant.find().populate({
+		path: "InterviewerNote.interviewerId",
+		select: "_id phone username role",
+	});
 	if (!participants) {
 		throw new ErrorWithStatusCode("Error while getting all participants", 500);
 	}
