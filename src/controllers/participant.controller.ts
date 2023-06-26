@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
-import {
-    InterviewerNote,
-    participant as ParticipantType,
-} from "../types/participant";
+import { participant as ParticipantType } from "../types/participant";
 
 import {
-  dbGetAllParticipants,
-  dbAddParticipant,
-  dbUpsertParticipant,
-  dbDeleteParticipant,
-  dbUpdateParticipant,
+    dbGetAllParticipants,
+    dbAddParticipant,
+    dbUpsertParticipant,
+    dbDeleteParticipant,
+    dbUpdateParticipant,
 } from "../models/participant/participant.model";
 import ErrorWithStatusCode from "../utils/classes/ErrorWithStatusCode";
 import { dbAddNewLog } from "../models/log/log.model";
@@ -20,6 +17,7 @@ import mailGen, {
 import { Email } from "../types/email";
 // import { Preference } from "../models/participant/participant.schema";
 import { StatusEnum } from "../models/participant/participant.schema";
+import { InterviewerObject, InterviewNotes } from "../types/interviewNote";
 
 //------------------------CRUD------------------------//
 export async function getAllParticipants(req: Request, res: Response) {
@@ -238,27 +236,72 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
 //------------------Status------------------//
 
 export async function updateParticipantStatus(req: Request, res: Response) {
-  /**
-   * #swagger.tags = ['Participants']
-   * #swagger.description = 'Endpoint to update a participant's status'
-   */
-  try {
-    const { status, phone }: { status: StatusEnum, phone: string } = req.body;
-    const updatedParticipant = await dbUpdateParticipant(
-      { acceptanceStatus: status },
-      { phone }
-    );
-    await dbAddNewLog({
-      adminPhone: req.user?.phone as string,
-      adminId: req.user?._id as string,
-      action: "update",
-      participantId: updatedParticipant._id as string,
-    });
-    res.status(200).json({ status: "success", data: { status: updatedParticipant.acceptanceStatus } });
-  } catch (error: ErrorWithStatusCode | any) {
-    res.status(error.statusCode || 500).json({
-      status: "failure",
-      data: error.message,
-    });
-  }
+    /**
+     * #swagger.tags = ['Participants']
+     * #swagger.description = 'Endpoint to update a participant's status'
+     */
+    try {
+        const { status, phone }: { status: StatusEnum; phone: string } =
+            req.body;
+        const updatedParticipant = await dbUpdateParticipant(
+            { acceptanceStatus: status },
+            { phone }
+        );
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string,
+        });
+        res.status(200).json({
+            status: "success",
+            data: { status: updatedParticipant.acceptanceStatus },
+        });
+    } catch (error: ErrorWithStatusCode | any) {
+        res.status(error.statusCode || 500).json({
+            status: "failure",
+            data: error.message,
+        });
+    }
+}
+
+//------------------Notes------------------//
+
+export async function addNoteToParticipant(req: Request, res: Response) {
+    /**
+     * #swagger.tags = ['Participants']
+     * #swagger.description = 'Endpoint to add a note to a participant in database'
+     */
+    try {
+        const { note, phone }: { note: InterviewNotes; phone: string } =
+            req.body;
+
+        const interviewNoteObj: InterviewerObject = {
+            interviewNotes: note,
+            interviewerId: req.user?._id,
+            date: new Date(),
+        };
+        const updatedParticipant = await dbUpdateParticipant(
+            { InterviewerNote: interviewNoteObj },
+            { phone }
+        );
+        await dbAddNewLog({
+            adminPhone: req.user?.phone as string,
+            adminId: req.user?._id as string,
+            action: "update",
+            participantId: updatedParticipant._id as string,
+        });
+        res.status(200).json({ status: "success", data: updatedParticipant });
+    } catch (error) {
+        console.log((error as Error).name);
+        let errorStatusCode = (error as ErrorWithStatusCode).statusCode
+            ? (error as ErrorWithStatusCode).statusCode
+            : (error as Error).name === "CastError"
+            ? 400
+            : 500;
+        res.status(errorStatusCode).json({
+            status: "failure",
+            data: (error as Error).message,
+        });
+    }
 }

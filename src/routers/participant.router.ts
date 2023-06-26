@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     acceptParticipantByPhone,
+    addNoteToParticipant,
     addParticipant,
     bulkEmailParticipants,
     deleteParticipantByEmail,
@@ -37,30 +38,18 @@ participantRouter
     giveAccessTo("admin"),
     deleteParticipantByPhone
 )
-.post( //reduntant
-    "/accept",
-    isLoggedIn,
-    giveAccessTo("admin"),
-    acceptParticipantByPhone
-)
-.post( //reduntant
-    "/reject",
-    isLoggedIn,
-    giveAccessTo("admin"),
-    rejectParticipantByPhone
-)
-.post( //reduntant
+.post( 
     "/email",
-//    isLoggedIn,
-//    giveAccessTo("admin"),
+   isLoggedIn,
+   giveAccessTo("admin"),
    bulkEmailParticipants
 )
-// .post(
-//     "/interview/note",
-//    isLoggedIn,
-//    giveAccessTo("hr"),
-//    addParticipantNotes
-// )
+.patch(
+    "/interview/note",
+   isLoggedIn,
+   giveAccessTo("hr"),
+   addNoteToParticipant
+)
 .patch(
     "/status",
     isLoggedIn,
