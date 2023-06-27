@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { participant as ParticipantType } from "../types/participant";
-
+import mongoose from "mongoose";
 import {
 	dbGetParticipantByPhone,
 	dbGetAllParticipants,
@@ -15,8 +15,8 @@ import mailGen, { EmailTypeEnum } from "../utils/constructors/email.constructors
 import { Email } from "../types/email";
 // import { Preference } from "../models/participant/participant.schema";
 import { StatusEnum } from "../models/participant/participant.schema";
-import { diffObjects } from "../utils/diffing/objectDiff.util";
 import { InterviewerObject, InterviewNotes } from "../types/interviewNote";
+import { getChanges } from "../utils/diffing/getChanges.util";
 
 //------------------------CRUD------------------------//
 export async function getAllParticipants(req: Request, res: Response) {
@@ -53,20 +53,29 @@ export async function addParticipant(req: Request, res: Response) {
 }
 
 export async function deleteParticipantByEmail(req: Request, res: Response) {
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { email } = req.body;
-		const deletedParticipant = await dbDeleteParticipant({ email });
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "delete",
-			target: deletedParticipant._id as string,
-		});
+		const deletedParticipant = await dbDeleteParticipant({ email }, session);
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "delete",
+				target: deletedParticipant._id as string,
+			},
+			session
+		);
+		await session.commitTransaction();
 		res.status(200).json({ status: "success", data: deletedParticipant });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -75,20 +84,29 @@ export async function deleteParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get delete a participant from database'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { phone } = req.body;
-		const deletedParticipant = await dbDeleteParticipant({ phone });
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "delete",
-			target: deletedParticipant._id as string,
-		});
+		const deletedParticipant = await dbDeleteParticipant({ phone }, session);
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "delete",
+				target: deletedParticipant._id as string,
+			},
+			session
+		);
+		await session.commitTransaction();
 		res.status(200).json({ status: "success", data: deletedParticipant });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -97,24 +115,32 @@ export async function updateParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to update a participant in database'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { update, phone }: { update: Partial<ParticipantType>; phone: string } = req.body;
-		const originalParticipant = await dbGetParticipantByPhone(phone);
-		const updatedParticipant = await dbUpdateParticipant(update, { phone });
-		const diff = diffObjects(originalParticipant, updatedParticipant);
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "update",
-			target: updatedParticipant._id as string,
-			previousState: diff.OLD as Partial<ParticipantType>,
-			newState: diff.NEW as Partial<ParticipantType>,
-		});
-		res.status(200).json({ status: "success", data: updatedParticipant });
+		const originalParticipant = await dbUpdateParticipant(update, { phone }, session);
+		const diff = getChanges(update, originalParticipant);
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -154,24 +180,39 @@ export async function acceptParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get accept a participant from database'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { phone }: { phone: string } = req.body;
-		const originalParticipant = await dbGetParticipantByPhone(phone);
-		const updatedParticipant = await dbUpdateParticipant({ acceptanceStatus: StatusEnum.ACCEPTED }, { phone });
-		const diff = diffObjects(originalParticipant, updatedParticipant);
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "update",
-			target: updatedParticipant._id as string,
-			previousState: diff.OLD as Partial<ParticipantType>,
-			newState: diff.NEW as Partial<ParticipantType>,
-		});
-		res.status(200).json({ status: "success", data: updatedParticipant });
+		const originalParticipant = await dbUpdateParticipant(
+			{ acceptanceStatus: StatusEnum.ACCEPTED },
+			{ phone },
+			session
+		);
+		const diff = {
+			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
+			NEW: { acceptanceStatus: StatusEnum.ACCEPTED },
+		};
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -180,24 +221,39 @@ export async function rejectParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get reject a participant from database'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { phone }: { phone: string } = req.body;
-		const originalParticipant = await dbGetParticipantByPhone(phone);
-		const updatedParticipant = await dbUpdateParticipant({ acceptanceStatus: StatusEnum.REJECTED }, { phone });
-		const diff = diffObjects(originalParticipant, updatedParticipant);
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "update",
-			target: updatedParticipant._id as string,
-			previousState: diff.OLD as Partial<ParticipantType>,
-			newState: diff.NEW as Partial<ParticipantType>,
-		});
-		res.status(200).json({ status: "success", data: updatedParticipant });
+		const originalParticipant = await dbUpdateParticipant(
+			{ acceptanceStatus: StatusEnum.REJECTED },
+			{ phone },
+			session
+		);
+		const diff = {
+			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
+			NEW: { acceptanceStatus: StatusEnum.REJECTED },
+		};
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -206,25 +262,40 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get send an email to a participant from database'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { phone }: { phone: string } = req.body;
 		//TODO: send email using nodemailer here
-		const originalParticipant = await dbGetParticipantByPhone(phone);
-		const updatedParticipant = await dbUpdateParticipant({ acceptanceStatus: StatusEnum.EMAILED }, { phone });
-		const diff = diffObjects(originalParticipant, updatedParticipant);
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "update",
-			target: updatedParticipant._id as string,
-			previousState: diff.OLD as Partial<ParticipantType>,
-			newState: diff.NEW as Partial<ParticipantType>,
-		});
-		res.status(200).json({ status: "success", data: updatedParticipant });
+		const originalParticipant = await dbUpdateParticipant(
+			{ acceptanceStatus: StatusEnum.EMAILED },
+			{ phone },
+			session
+		);
+		const diff = {
+			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
+			NEW: { acceptanceStatus: StatusEnum.EMAILED },
+		};
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
 
@@ -235,23 +306,34 @@ export async function updateParticipantStatus(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to update a participant's status'
 	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
 		const { status, phone }: { status: StatusEnum; phone: string } = req.body;
-		const originalParticipant = await dbGetParticipantByPhone(phone);
-		const updatedParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { phone });
-		const diff = diffObjects(originalParticipant, updatedParticipant);
-		await dbAddNewParticipantLog({
-			initiator: req.user?._id as string,
-			action: "update",
-			target: updatedParticipant._id as string,
-			previousState: diff.OLD as Partial<ParticipantType>,
-			newState: diff.NEW as Partial<ParticipantType>,
-		});
-		res.status(200).json({ status: "success", data: { status: updatedParticipant.acceptanceStatus } });
+		const originalParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { phone }, session);
+		const diff = {
+			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
+			NEW: { acceptanceStatus: status },
+		};
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
 	} catch (error: ErrorWithStatusCode | any) {
+		await session.abortTransaction();
 		res.status(error.statusCode || 500).json({
 			status: "failure",
 			data: error.message,
 		});
+	} finally {
+		session.endSession();
 	}
 }
