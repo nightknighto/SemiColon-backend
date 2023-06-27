@@ -337,3 +337,51 @@ export async function updateParticipantStatus(req: Request, res: Response) {
 		session.endSession();
 	}
 }
+
+export async function addNoteToParticipant(req: Request, res: Response) {
+	/**
+	 * #swagger.tags = ['Participants']
+	 * #swagger.description = 'Endpoint to add a note to a participant in database'
+	 */
+	const session = await mongoose.startSession();
+	session.startTransaction();
+	try {
+		const { note, phone }: { note: InterviewNotes; phone: string } = req.body;
+		const interviewNoteObj: InterviewerObject = {
+			interviewNotes: note,
+			interviewerId: req.user?._id,
+			date: new Date(),
+		};
+		const originalParticipant = await dbUpdateParticipant({ InterviewerNote: interviewNoteObj }, { phone });
+		const diff = {
+			OLD: { InterviewerNote: originalParticipant.InterviewerNote },
+			NEW: { InterviewerNote: interviewNoteObj },
+		};
+		await dbAddNewParticipantLog(
+			{
+				initiator: req.user?._id as string,
+				action: "update",
+				target: originalParticipant._id as string,
+				previousState: diff.OLD as Partial<ParticipantType>,
+				newState: diff.NEW as Partial<ParticipantType>,
+			},
+			session
+		);
+		await session.commitTransaction();
+		res.status(200).json({ status: "success", data: diff });
+	} catch (error) {
+		await session.abortTransaction();
+		console.log((error as Error).name);
+		let errorStatusCode = (error as ErrorWithStatusCode).statusCode
+			? (error as ErrorWithStatusCode).statusCode
+			: (error as Error).name === "CastError"
+			? 400
+			: 500;
+		res.status(errorStatusCode).json({
+			status: "failure",
+			data: (error as Error).message,
+		});
+	} finally {
+		session.endSession();
+	}
+}
