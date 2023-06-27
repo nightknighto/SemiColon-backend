@@ -221,7 +221,7 @@ export async function deactivateUser(req: Request, res: Response) {
 	const { id } = req.params;
 	try {
 		const deactivatedUser = await dbDeactivateUserById(id, session);
-		dbAddNewUserLog(
+		await dbAddNewUserLog(
 			{
 				initiator: req.user?._id as string,
 				target: deactivatedUser._id as string,
