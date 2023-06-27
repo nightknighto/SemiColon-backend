@@ -1,28 +1,52 @@
-import mongoose from 'mongoose';
-import LogType from '../../types/log';
-
-const LogSchema = new mongoose.Schema({
-	adminId: {
+import mongoose from "mongoose";
+import { UserLogType, ParticipantLogType } from "../../types/log";
+const ParticipantLogSchema = new mongoose.Schema({
+	initiator: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User',
+		ref: "User",
 		required: true,
 	},
-	adminPhone: {
-		type: String,
-		required: true,
-	},
-	participantId: {
+	target: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Participant',
-		required: true,
+		ref: "Participant",
+		required: false,
 	},
 	action: {
 		type: String,
 		required: true,
-		enum: ['add', 'update', 'delete', 'approve', 'reject'],
+		enum: ["add", "update", "delete", "approve", "reject"],
+	},
+	previousState: {
+		type: Object,
+	},
+	newState: {
+		type: Object,
 	},
 });
 
-const Log = mongoose.model<LogType>('Log', LogSchema);
+const UserLogSchema = new mongoose.Schema({
+	initiator: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		required: true,
+	},
+	target: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		required: false,
+	},
+	action: {
+		type: String,
+		required: true,
+		enum: ["add", "update", "delete", "activate", "deactivate"],
+	},
+	previousState: {
+		type: Object,
+	},
+	newState: {
+		type: Object,
+	},
+});
 
-export default Log;
+export const UserLog = mongoose.model<UserLogType>("UserLog", UserLogSchema);
+export const ParticipantLog = mongoose.model<ParticipantLogType>("ParticipantLog", ParticipantLogSchema);

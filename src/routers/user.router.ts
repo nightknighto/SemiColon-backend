@@ -37,7 +37,6 @@ userRouter.patch(
   isLoggedIn,
   giveAccessTo("admin"),
   mwValidateId,
-  mwValidateUserData,
   updateUser
 );
 userRouter.patch(
