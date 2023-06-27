@@ -11,7 +11,7 @@ export async function dbAddNewParticipantLog(log: ParticipantLogType, session?: 
 }
 
 export async function dbGetAllParticipantLogs(session?: mongoose.ClientSession) {
-	return await ParticipantLog.find({}, {}, { session }).populate("initiatorId").populate("targetId");
+	return await ParticipantLog.find({}, {}, { session }).populate("initiator").populate("target");
 }
 
 export async function dbGetAllUserLogs(session?: mongoose.ClientSession) {
