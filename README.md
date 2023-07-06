@@ -64,6 +64,7 @@ This system is built using MERN stack and some other technologies, the complete 
 
 -   Node.js
 -   Express.js
+-   TypeScript
 -   MongoDB
 -   Passport.js
 -   JWT
