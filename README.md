@@ -1,3 +1,7 @@
+# SemiColon Backend
+
+### This backend project is a feature intensive registration management system made to manage the participants admission for any event of any organization through the various features available in it and can be used through the provided API reference below
+
 ## Modules
 
 ### Participants
