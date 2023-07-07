@@ -4,6 +4,9 @@ const doc = {
   info: {
     title: "Semicolon API",
   },
+  basePath: "/",
+  consumes: ['application/json'],
+  produces: ['application/json'],
   tags: [
     {
       name: "User",
@@ -22,6 +25,14 @@ const doc = {
       description: "Log Endpoints",
     },
   ],
+  securityDefinitions: {
+    apiKeyAuth: {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'token',
+      description: 'user must be logged in'
+    }
+  },
   definitions: {
     User: {
       $username: "Ahmed Atwa",

@@ -24,6 +24,15 @@ export async function getAllParticipants(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get all participants from database'
 	 */
+
+	/**
+	 * #swagger.parameters['obj'] = {
+	 * 		in: 'header',
+	 * 		description: 'User information',
+	 * 		required: true,
+	 * 		schema: {$ref: "#/definitions/User"}
+	 * }
+	 */
 	try {
 		const participants = await dbGetAllParticipants();
 		res.status(200).json({ status: "success", data: participants });
