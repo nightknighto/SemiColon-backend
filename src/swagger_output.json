@@ -86,7 +86,19 @@
         "description": "Endpoint to get all users",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "All users data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUsers"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUsers"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -320,24 +332,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "phone": {
-                    "example": "any"
-                  },
-                  "password": {
-                    "example": "any"
-                  },
-                  "in": {
-                    "example": "any"
-                  },
-                  "required": {
-                    "example": "any"
-                  },
-                  "schema": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/LoginData"
               }
             }
           }
@@ -349,7 +344,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "Endpoint to authenticate All logins login",
+        "description": "Endpoint to authenticate All registers",
         "responses": {
           "201": {
             "description": "Created"
@@ -939,6 +934,31 @@
         ],
         "xml": {
           "name": "AllPars"
+        }
+      },
+      "AllUsers": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "xml": {
+                "name": "user"
+              },
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "data"
+        ],
+        "xml": {
+          "name": "AllUsers"
         }
       }
     },

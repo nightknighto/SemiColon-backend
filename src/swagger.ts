@@ -75,6 +75,12 @@ const doc = {
       $data: [{
         $ref: "#/definitions/Participant"
       }]
+    },
+    AllUsers: {
+      $status: "success",
+      $data: [{
+        $ref: "#/definitions/User"
+      }]
     }
   },
   servers: [

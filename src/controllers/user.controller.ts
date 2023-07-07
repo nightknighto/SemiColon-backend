@@ -44,6 +44,11 @@ export async function getAllUsers(req: Request, res: Response) {
   /* #swagger.security = [{
             "bearerAuth": []
     }] */
+
+	/* #swagger.responses[200] = {
+			schema: {"$ref": "#/definitions/AllUsers"},
+			description: "All users data"
+  }*/
   try {
     const users = await dbGetAllUsers();
     res.status(200).json({
