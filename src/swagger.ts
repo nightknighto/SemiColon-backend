@@ -5,8 +5,8 @@ const doc = {
     title: "Semicolon API",
   },
   basePath: "/",
-  consumes: ['application/json'],
-  produces: ['application/json'],
+  consumes: ["application/json"],
+  produces: ["application/json"],
   tags: [
     {
       name: "User",
@@ -26,22 +26,20 @@ const doc = {
     },
   ],
   securityDefinitions: {
-    apiKeyAuth: {
-      type: 'apiKey',
-      in: 'cookie',
-      name: 'token',
-      description: 'user must be logged in'
-    }
+    bearerAuth: {
+      type: "http",
+      scheme: "bearer",
+      bearerFormat: "JWT",
+    },
   },
   definitions: {
     User: {
       $username: "Ahmed Atwa",
-      $phone: "01xxxxxxxxx",
-      $password: "********",
       $role: "admin",
-      $active: "true",
+      $token: "xxxxxxx",
     },
     Participant: {
+      $_id: "xxxxx",
       $name: "Omar Fahmy",
       $email: "Omar_Fahmy@gmail.com",
       $phone: "01xxxxxxxxx",
@@ -62,6 +60,22 @@ const doc = {
       $participantId: "",
       $action: "add",
     },
+    LoginData: {
+      $phone: "01xxxxxxxxx",
+      $password: "********",
+    },
+    Responses: {
+      $status: "success",
+      $data: {
+        $ref: "#/definitions/User"
+      }
+    },
+    AllPars: {
+      $status: "success",
+      $data: [{
+        $ref: "#/definitions/Participant"
+      }]
+    }
   },
   servers: [
     {

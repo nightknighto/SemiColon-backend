@@ -47,7 +47,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "User data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -58,7 +70,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/getAll": {
@@ -67,7 +84,6 @@
           "User"
         ],
         "description": "Endpoint to get all users",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -78,7 +94,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/": {
@@ -87,7 +108,6 @@
           "User"
         ],
         "description": "Endpoint to get add a new user",
-        "parameters": [],
         "responses": {
           "201": {
             "description": "Created"
@@ -101,7 +121,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/update/{id}": {
@@ -133,7 +158,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/activate/{id}": {
@@ -165,7 +195,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/deactivate/{id}": {
@@ -197,7 +232,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/{id}": {
@@ -229,7 +269,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/auth/login": {
@@ -237,11 +282,32 @@
         "tags": [
           "Auth"
         ],
-        "description": "Endpoint to authenticate All logins login",
-        "parameters": [],
+        "description": "Endpoint to authenticate All logins",
+        "parameters": [
+          {
+            "name": "loginData",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/LoginData"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "User data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Responses"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Responses"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -261,6 +327,15 @@
                   },
                   "password": {
                     "example": "any"
+                  },
+                  "in": {
+                    "example": "any"
+                  },
+                  "required": {
+                    "example": "any"
+                  },
+                  "schema": {
+                    "example": "any"
                   }
                 }
               }
@@ -275,7 +350,6 @@
           "Auth"
         ],
         "description": "Endpoint to authenticate All logins login",
-        "parameters": [],
         "responses": {
           "201": {
             "description": "Created"
@@ -312,10 +386,21 @@
           "Participants"
         ],
         "description": "Endpoint to get all participants from database",
-        "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "All Participants data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllPars"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllPars"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -323,7 +408,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/participants/add": {
@@ -332,7 +422,6 @@
           "Participants"
         ],
         "description": "Endpoint to get add a participant to database",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -341,6 +430,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -363,7 +457,6 @@
           "Participants"
         ],
         "description": "Endpoint to update a participant in database",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -375,6 +468,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -400,7 +498,6 @@
           "Participants"
         ],
         "description": "Endpoint to get delete a participant from database",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -412,6 +509,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -430,8 +532,10 @@
     },
     "/participants/email": {
       "post": {
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Participants"
+        ],
+        "description": "Endpoint to email a participant in database",
         "responses": {
           "200": {
             "description": "OK"
@@ -446,6 +550,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -471,7 +580,6 @@
           "Participants"
         ],
         "description": "Endpoint to add a note to a participant in database",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -480,6 +588,11 @@
             "description": "Unauthorized"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -505,12 +618,16 @@
           "Participants"
         ],
         "description": "Endpoint to update a participant",
-        "parameters": [],
         "responses": {
           "401": {
             "description": "Unauthorized"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -533,7 +650,6 @@
           "Log"
         ],
         "description": "Endpoint to get all logs by all admins",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -544,7 +660,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/log/admin/{phone}": {
@@ -573,7 +694,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/log/participant/{id}": {
@@ -602,7 +728,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -615,34 +746,31 @@
             "type": "string",
             "example": "Ahmed Atwa"
           },
-          "phone": {
-            "type": "string",
-            "example": "01xxxxxxxxx"
-          },
-          "password": {
-            "type": "string",
-            "example": "********"
-          },
           "role": {
             "type": "string",
             "example": "admin"
           },
-          "active": {
+          "token": {
             "type": "string",
-            "example": "true"
+            "example": "xxxxxxx"
           }
         },
         "required": [
           "username",
-          "phone",
-          "password",
           "role",
-          "active"
-        ]
+          "token"
+        ],
+        "xml": {
+          "name": "User"
+        }
       },
       "Participant": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "example": "xxxxx"
+          },
           "name": {
             "type": "string",
             "example": "Omar Fahmy"
@@ -697,6 +825,7 @@
           }
         },
         "required": [
+          "_id",
           "name",
           "email",
           "phone",
@@ -710,7 +839,10 @@
           "year",
           "acceptanceStatus",
           "emailedStatus"
-        ]
+        ],
+        "xml": {
+          "name": "Participant"
+        }
       },
       "Log": {
         "type": "object",
@@ -737,15 +869,84 @@
           "adminPhone",
           "participantId",
           "action"
-        ]
+        ],
+        "xml": {
+          "name": "Log"
+        }
+      },
+      "LoginData": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "example": "01xxxxxxxxx"
+          },
+          "password": {
+            "type": "string",
+            "example": "********"
+          }
+        },
+        "required": [
+          "phone",
+          "password"
+        ],
+        "xml": {
+          "name": "LoginData"
+        }
+      },
+      "Responses": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "xml": {
+              "name": "user"
+            },
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "required": [
+          "status",
+          "data"
+        ],
+        "xml": {
+          "name": "Responses"
+        }
+      },
+      "AllPars": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "xml": {
+                "name": "participant"
+              },
+              "$ref": "#/components/schemas/Participant"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "data"
+        ],
+        "xml": {
+          "name": "AllPars"
+        }
       }
     },
     "securitySchemes": {
-      "apiKeyAuth": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "token",
-        "description": "user must be logged in"
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

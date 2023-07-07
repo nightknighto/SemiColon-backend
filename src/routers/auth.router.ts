@@ -8,7 +8,7 @@ authRouter.post(
 	(req, res, next) => {
 		/**
 		 * #swagger.tags = ['Auth']
-		 * #swagger.description = 'Endpoint to authenticate All logins login'
+		 * #swagger.description = 'Endpoint to authenticate All logins'
 		 */
 		next();
 	},
