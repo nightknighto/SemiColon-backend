@@ -19,7 +19,6 @@ import { limiter } from "../middlewares/rate-limiter";
 
 const userRouter = Router();
 
-userRouter.use(limiter);
 userRouter.get(
   "/phone/:phone",
   isLoggedIn,
