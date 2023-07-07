@@ -9,5 +9,5 @@ export const limiter = rateLimiter({
 export const signInLimiter = rateLimiter({
   max: 3,
   windowMs: 60000,
-  message: "Too many sign-in attempts, Try again in 60 minutes.",
+  message: "Too many sign-in attempts, Try again in 60 seconds.",
 });
