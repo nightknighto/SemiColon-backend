@@ -7,6 +7,7 @@ import {
 	dbDeleteParticipant,
 } from '../../models/participant/participant.model';
 import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
+import { faker } from '@faker-js/faker';
 
 let jwtToken: string;
 
@@ -14,7 +15,7 @@ beforeAll(async () => {
 	const user = {
 		username: 'Test_user',
 		password: 'Test_password',
-		phone: '01000000000',
+		phone: faker.phone.number("01#########"),
 		role: 'admin',
 		active: true,
 	};
@@ -22,7 +23,7 @@ beforeAll(async () => {
 	await dbAddNewUser(user);
 	const response = await superTest(api)
 		.post('/auth/login')
-		.send({ phone: '01000000000', password: 'Test_password' });
+		.send({ phone: user.phone, password: 'Test_password' });
 	jwtToken = response.body.data.token;
 });
 
