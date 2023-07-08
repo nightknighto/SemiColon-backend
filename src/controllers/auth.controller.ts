@@ -33,20 +33,3 @@ export async function Login(req: Request, res: Response) {
 		data: { token, username: user.username, role: user.role },
 	});
 }
-
-export async function Register(req: Request, res: Response) {
-	const user = req.body;
-	try {
-		const newUser = await dbAddNewUser(user);
-		const token = `Bearer ${issueToken(newUser)}`;
-		res.status(201).json({
-			status: "success",
-			data: { token, username: user.username, role: user.role },
-		});
-	} catch (error: unknown) {
-		res.status((error as ErrorWithStatusCode).statusCode || 500).json({
-			status: "failure",
-			data: (error as Error).message,
-		});
-	}
-}
