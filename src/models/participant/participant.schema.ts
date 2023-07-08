@@ -91,7 +91,6 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         },
         secondPreference: {
             type: String,
-            required: true,
             enum: Object.values(PreferencesEnum),
         },
         firstPrefReason: {
