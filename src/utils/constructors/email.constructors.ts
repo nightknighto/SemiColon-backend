@@ -160,7 +160,7 @@ function ConstructBulkRejectionEmail(participants: ParticipantType[]): Email[] {
     //TODO:: generate emails based on template for acceptance
     for (const participant of participants) {
         const bodyOptions = emailBodyOptions[participant.firstPreference];
-        const emailBody = `<p>Dear ${participant.name}</p><p>We are sorry to inform you that you have been not passed the second stage of filtrations for the ${bodyOptions.title} workshop.<p>We look forward to hearing from you in other activites.</p><p>Best regards,<br>SemiColon team</p>`;
+        const emailBody = `<p>Dear ${participant.name}</p><p>We are sorry to inform you that you have been not passed the second stage of filtrations for the ${bodyOptions.title} workshop.<p>However, you can still re-apply to any other workshop you'd like from https://asusemicolon.tech/. We look forward to hearing from you in other activites.</p><p>If you have any questions or concerns, you can contact us through our Facebook social page. Please do not reply to this email.</p><p>Best regards,<br>SemiColon team</p>`;
         const email: Email = {
             to: participant.email,
             subject: "Semicolon Workshop Interview",
