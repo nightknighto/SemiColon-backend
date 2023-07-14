@@ -19,7 +19,7 @@ export default function giveAccessTo(role: Role) {
 		} else if (!isActive) {
 			res.status(403).send({
 				status: 'failure',
-				data: `Your account is unactive. Please contact an admin to activate your account.`,
+				data: `Your account is inactive. Please contact an admin to activate your account.`,
 			});
 		} else if(permissionLevels[userRole] < permissionLevels[role]) {
 			res.status(403).send({
