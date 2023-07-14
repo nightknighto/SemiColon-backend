@@ -10,7 +10,7 @@ type Info = {
 
 export default function (req: Request, res: Response, next: NextFunction) {
 	passport.authenticate("jwt", { session: false, failureMessage: true }, (err: any, user: UserType, info: Info) => {
-		if (info?.message === "JsonWebTokenError" || info?.message === "jwt malformed") {
+		if (info?.message === "JsonWebTokenError" || info?.message === "jwt malformed" || !user) {
 			return res.status(401).json({
 				status: "failure",
 				data: "invalid or expired token, you need to login again.",
