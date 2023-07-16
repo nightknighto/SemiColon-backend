@@ -6,12 +6,14 @@ import authRouter from "./auth.router";
 import logRouter from "./log.router";
 import { serve, setup } from "swagger-ui-express";
 import swaggerDoc from "../swagger_output.json";
+import timeSlotRouter from "./timeslots.routers";
 
 const globalRouter = Router();
 
 // HANDLE ALL ROUTES
 globalRouter.use("/user", userRouter);
 globalRouter.use("/auth", authRouter);
+globalRouter.use("/timeslots", timeSlotRouter);
 globalRouter.use("/participants", participantRouter);
 globalRouter.use("/log", logRouter);
 
