@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Login, Register } from "../controllers/auth.controller";
+import { Login } from "../controllers/auth.controller";
 import {
   mwValidateLoginData,
   mwValidateUserData,
