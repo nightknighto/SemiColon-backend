@@ -1,15 +1,15 @@
 import { Router } from "express";
 import {
-  acceptParticipantByPhone,
+  acceptParticipantById,
   addNoteToParticipant,
   addParticipant,
   bulkEmailParticipants,
   deleteParticipantByEmail,
-  deleteParticipantByPhone,
+  deleteParticipantById,
   emailParticipantByPhone,
   getAllParticipants,
   rejectParticipantByPhone,
-  updateParticipantByPhone,
+  updateParticipantById,
   updateParticipantStatus,
 } from "../controllers/participant.controller";
 import {
@@ -25,12 +25,12 @@ const participantRouter = Router();
 participantRouter
   .get("/getAll", isLoggedIn, giveAccessTo("member"), getAllParticipants)
   .post("/add", applyLimiter, mwValidateParticipant, addParticipant)
-  .patch("/update", isLoggedIn, giveAccessTo("hr"), updateParticipantByPhone)
+  .patch("/update", isLoggedIn, giveAccessTo("hr"), updateParticipantById)
   .delete(
     "/delete",
     isLoggedIn,
     giveAccessTo("admin"),
-    deleteParticipantByPhone
+    deleteParticipantById
   )
   .post("/email", isLoggedIn, giveAccessTo("admin"), bulkEmailParticipants)
   .patch(

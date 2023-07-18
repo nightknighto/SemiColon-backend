@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { participant as ParticipantType } from "../types/participant";
 import mongoose from "mongoose";
 import {
-	dbGetParticipantByPhone,
 	dbGetAllParticipants,
 	dbUpsertParticipant,
 	dbDeleteParticipant,
@@ -95,7 +94,7 @@ export async function deleteParticipantByEmail(req: Request, res: Response) {
 	}
 }
 
-export async function deleteParticipantByPhone(req: Request, res: Response) {
+export async function deleteParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get delete a participant from database'
@@ -107,8 +106,8 @@ export async function deleteParticipantByPhone(req: Request, res: Response) {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { phone } = req.body;
-		const deletedParticipant = await dbDeleteParticipant({ phone }, session);
+		const { _id } = req.body;
+		const deletedParticipant = await dbDeleteParticipant({ _id }, session);
 		await dbAddNewParticipantLog(
 			{
 				initiator: req.user?._id as string,
@@ -130,7 +129,7 @@ export async function deleteParticipantByPhone(req: Request, res: Response) {
 	}
 }
 
-export async function updateParticipantByPhone(req: Request, res: Response) {
+export async function updateParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to update a participant in database'
@@ -142,8 +141,8 @@ export async function updateParticipantByPhone(req: Request, res: Response) {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { update, phone }: { update: Partial<ParticipantType>; phone: string } = req.body;
-		const originalParticipant = await dbUpdateParticipant(update, { phone }, session);
+		const { update, _id }: { update: Partial<ParticipantType>; _id: string } = req.body;
+		const originalParticipant = await dbUpdateParticipant(update, { _id }, session);
 		const diff = getChanges(update, originalParticipant);
 		await dbAddNewParticipantLog(
 			{
@@ -207,7 +206,7 @@ export async function bulkEmailParticipants(req: Request, res: Response) {
 	}
 }
 
-export async function acceptParticipantByPhone(req: Request, res: Response) {
+export async function acceptParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get accept a participant from database'
@@ -219,10 +218,10 @@ export async function acceptParticipantByPhone(req: Request, res: Response) {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { phone }: { phone: string } = req.body;
+		const { _id }: { _id: string } = req.body;
 		const originalParticipant = await dbUpdateParticipant(
 			{ acceptanceStatus: StatusEnum.ACCEPTED },
-			{ phone },
+			{ _id },
 			session
 		);
 		const diff = {
@@ -398,13 +397,13 @@ export async function addNoteToParticipant(req: Request, res: Response) {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { note, phone }: { note: InterviewNotes; phone: string } = req.body;
+		const { note, _id }: { note: InterviewNotes; _id: string } = req.body;
 		const interviewNoteObj: InterviewerObject = {
 			interviewNotes: note,
 			interviewerId: req.user?._id,
 			date: new Date(),
 		};
-		const originalParticipant = await dbUpdateParticipant({ InterviewerNote: interviewNoteObj }, { phone });
+		const originalParticipant = await dbUpdateParticipant({ InterviewerNote: interviewNoteObj }, { _id });
 		const diff = {
 			OLD: { InterviewerNote: originalParticipant.InterviewerNote },
 			NEW: { InterviewerNote: interviewNoteObj },
