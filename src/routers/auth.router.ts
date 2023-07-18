@@ -4,7 +4,7 @@ import {
   mwValidateLoginData,
   mwValidateUserData,
 } from "../middlewares/userDataValidator";
-import { limiter, signInLimiter } from "../middlewares/rate-limiter";
+import { signInLimiter } from "../middlewares/rate-limiter";
 const authRouter = Router();
 
 authRouter.post(
@@ -28,8 +28,6 @@ authRouter.post(
   mwValidateLoginData,
   Login
 );
-
-authRouter.use(limiter);
 
 authRouter.post(
   "/register",

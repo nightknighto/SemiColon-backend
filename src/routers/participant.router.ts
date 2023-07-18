@@ -18,14 +18,13 @@ import {
 } from "../middlewares/participants/participant.validation.middleware";
 import isLoggedIn from "../middlewares/authentication/login.middleware";
 import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware";
-import { limiter } from "../middlewares/rate-limiter";
+import { applyLimiter } from "../middlewares/rate-limiter";
 
 const participantRouter = Router();
 
 participantRouter
-  .use(limiter)
   .get("/getAll", isLoggedIn, giveAccessTo("member"), getAllParticipants)
-  .post("/add", mwValidateParticipant, addParticipant)
+  .post("/add", applyLimiter, mwValidateParticipant, addParticipant)
   .patch("/update", isLoggedIn, giveAccessTo("hr"), updateParticipantByPhone)
   .delete(
     "/delete",

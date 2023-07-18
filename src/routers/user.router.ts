@@ -15,7 +15,6 @@ import {
 } from "../middlewares/userDataValidator";
 import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware";
 import isLoggedIn from "../middlewares/authentication/login.middleware";
-import { limiter } from "../middlewares/rate-limiter";
 
 const userRouter = Router();
 
