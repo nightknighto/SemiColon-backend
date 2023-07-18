@@ -88,7 +88,7 @@ function ConstructBulkInitialEmails(participants: ParticipantType[]): Email[] {
     const emails: Email[] = [];
     for (const participant of participants) {
         const bodyOptions = emailBodyOptions[participant.firstPreference];
-        const emailBody: string = `<html><p>Dear Applicant,</p><div style='width:50%'><p>We would like to extend our appreciation for your interest in applying to Semicolon workshops Program.We are glad to inform you that after reviewing your application, you have passed the filtration phase with the pool of selected applicants who fit our workshop criteria. You will receive another email soon to schedule an interview within the next week.</p><p>The ${participant.firstPreference} workshop will start at ${bodyOptions.startDate}.<p>Best wishes,<br>SemiColon team</p></div></html>`;
+        const emailBody: string = `<html><p>Dear Applicant,</p><div style='width:50%'><p>We would like to extend our appreciation for your interest in applying to Semicolon workshops Program.We are glad to inform you that after reviewing your application, you have passed the filtration phase with the pool of selected applicants who fit our workshop criteria. You will receive another email soon to schedule an interview within the next week.</p><p>The ${participant.firstPreference} workshop will start at ${bodyOptions.startDate}.</p><p>If you have any questions, please contact us through our Facebook page. Please do not reply to this email.</p><p>Best wishes,<br>SemiColon team</p></div></html>`;
         const email: Email = {
             to: participant.email,
             subject: "Semicolon Workshop Application",
@@ -114,7 +114,7 @@ function ConstructBulkInterviewEmail(participants: ParticipantType[]): Email[] {
     for (const participant of participants) {
         let bodyOptions =
             emailBodyOptions[participant.firstPreference as PreferencesEnum];
-        let emailBody = `<p>Dear ${participant.name},</p><p>We are writing to inform you that the interview schedule for the ${bodyOptions.title} workshop is now available.<br> Please find your designated interview time below: <br> <a href="${bodyOptions.link}"> http://bit.ly/semicolon-interviews</a> <br> </p><p>The interviews will be conducted via Google Meet with your camera on. Please ensure that you have a stable internet connection and a quiet environment during the interview.</p><p>Slots will be added every day, so please check back if you do not see a time that is suitable for you. The last day of interviews is ${bodyOptions.endDate}.</p><p>If you have any questions or concerns, you can contact us through our Facebook social page.</p><p>Thank you for your interest in the workshop. We look forward to hearing from you soon.</p><p>Best regards,<br>SemiColon team</p>`;
+        let emailBody = `<p>Dear ${participant.name},</p><p>We are writing to inform you that the interview schedule for the ${bodyOptions.title} workshop is now available.<br> Please find your designated interview time below: <br> <a href="${bodyOptions.link}"> http://bit.ly/semicolon-interviews</a> <br> </p><p>The interviews will be conducted via Google Meet with your camera on. Please ensure that you have a stable internet connection and a quiet environment during the interview.</p><p>Slots will be added every day, so please check back if you do not see a time that is suitable for you. The last day of interviews is ${bodyOptions.endDate}.</p><p>If you have any questions, please contact us through our Facebook page. Please do not reply to this email.</p><p>Thank you for your interest in the workshop. We look forward to hearing from you soon.</p><p>Best regards,<br>SemiColon team</p>`;
         const email: Email = {
             to: participant.email,
             subject: "Semicolon Workshop Interview",
@@ -138,7 +138,7 @@ function ConstructBulkAcceptanceEmail(
     //TODO:: generate emails based on template for acceptance
     for (const participant of participants) {
         const bodyOptions = emailBodyOptions[participant.firstPreference];
-        let emailBody = `<p>Dear ${participant.name}</p><p>We are pleased to inform you that you have been accepted to the ${bodyOptions.title} workshop.<p>We look forward to hearing from you soon.</p><p>Best regards,<br>SemiColon team</p>`;
+        let emailBody = `<p>Dear ${participant.name}</p><p>We are pleased to inform you that you have been accepted to the ${bodyOptions.title} workshop.<p>We look forward to hearing from you soon.</p><p>If you have any questions, please contact us through our Facebook page. Please do not reply to this email.</p><p>Best regards,<br>SemiColon team</p>`;
         const email: Email = {
             to: participant.email,
             subject: "Semicolon Workshop Interview",
@@ -160,7 +160,7 @@ function ConstructBulkRejectionEmail(participants: ParticipantType[]): Email[] {
     //TODO:: generate emails based on template for acceptance
     for (const participant of participants) {
         const bodyOptions = emailBodyOptions[participant.firstPreference];
-        const emailBody = `<p>Dear ${participant.name}</p><p>We are sorry to inform you that you have been not passed the second stage of filtrations for the ${bodyOptions.title} workshop.<p>We look forward to hearing from you in other activites.</p><p>Best regards,<br>SemiColon team</p>`;
+        const emailBody = `<p>Dear ${participant.name},</p><p>Thank you for your interest in the ${bodyOptions.title} workshop. Unfortunately, we regret to inform you that you did not pass the second stage of filtrations. The competition was tough, and we received a large number of applications. Possible reasons for your rejection could be overqualification, not meeting the minimum requirements, or not attending the interview.</p><p>We encourage you to continue your learning journey and re-apply to any other workshop that interests you. You can find current workshops on our website at https://asusemicolon.tech/.</p><p>If you have any questions, please contact us through our Facebook page. Please do not reply to this email.</p><p>Best regards,</p><p>SemiColon team</p>`;
         const email: Email = {
             to: participant.email,
             subject: "Semicolon Workshop Interview",
