@@ -39,7 +39,7 @@ export async function dbDeleteParticipant(filter: UpdateParticipant, session?: m
 }
 
 export async function dbUpsertParticipant(participant: ParticipantType, session?: mongoose.ClientSession) {
-	let filter = { phone: participant.phone };
+	let filter = { phone: participant.phone, firstPreference: participant.firstPreference };
 	let update = participant;
 	const newParticipant = await Participant.findOneAndUpdate(filter, update, {
 		new: true,

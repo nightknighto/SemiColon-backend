@@ -29,17 +29,4 @@ authRouter.post(
   Login
 );
 
-authRouter.post(
-  "/register",
-  (req, res, next) => {
-    /**
-     * #swagger.tags = ['Auth']
-     * #swagger.description = 'Endpoint to authenticate All registers'
-     */
-    next();
-  },
-  mwValidateUserData,
-  Register
-);
-
 export default authRouter;

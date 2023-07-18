@@ -32,17 +32,18 @@ function createInterviewerNoteSchema(criteria: string[]) {
     const criteriaSchema: any = {};
     for (const criterion of criteria) {
         criteriaSchema[criterion] = {
-            rating: {
-                type: Number,
-                enum: [1, 2, 3, 4, 5],
-                default: 1,
+            type: {
+                rating: {
+                    type: Number,
+                    enum: [1, 2, 3, 4, 5],
+                    required: true,
+                },
+                note: {
+                    type: String,
+                    trim: true,
+                }
             },
-            note: {
-                type: String,
-                default: "",
-                trim: true,
-            
-            },
+            required: false,
         };
     }
     const interviewerObjectSchema = {
@@ -91,7 +92,6 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         },
         secondPreference: {
             type: String,
-            required: true,
             enum: Object.values(PreferencesEnum),
         },
         firstPrefReason: {
