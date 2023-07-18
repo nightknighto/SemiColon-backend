@@ -357,8 +357,8 @@ export async function updateParticipantStatus(req: Request, res: Response) {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { status, phone }: { status: StatusEnum; phone: string } = req.body;
-		const originalParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { phone }, session);
+		const { status, _id }: { status: StatusEnum; _id: string } = req.body;
+		const originalParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { _id }, session);
 		const diff = {
 			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
 			NEW: { acceptanceStatus: status },
