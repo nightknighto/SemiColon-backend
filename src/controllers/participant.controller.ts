@@ -13,7 +13,7 @@ import { sendBulkEmail, sendMail } from "../services/node-mailer";
 import mailGen, { EmailTypeEnum } from "../utils/constructors/email.constructors";
 import { Email } from "../types/email";
 // import { Preference } from "../models/participant/participant.schema";
-import { StatusEnum } from "../models/participant/participant.schema";
+import Participant, { StatusEnum } from "../models/participant/participant.schema";
 import { InterviewerObject, InterviewNotes } from "../types/interviewNote";
 import { getChanges } from "../utils/diffing/getChanges.util";
 
@@ -419,7 +419,8 @@ export async function addNoteToParticipant(req: Request, res: Response) {
 			session
 		);
 		await session.commitTransaction();
-		res.status(200).json({ status: "success", data: diff });
+		await Participant.populate(diff.NEW, { path: "InterviewerNote.interviewerId", select: "_id phone role username" });
+		res.status(200).json({ status: "success", data: diff.NEW });
 	} catch (error) {
 		await session.abortTransaction();
 		console.log((error as Error).name);
