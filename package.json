@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "deploy-windows": "set NODE_ENV=production && node build/server.js",
-    "deploy-linux": "NODE_ENV=production && node build/server.js",
+    "deploy-windows": "set NODE_ENV=production&& node build/server.js",
+    "deploy-linux": "NODE_ENV=production&& node build/server.js",
     "build": "npm run swagger-autogen && tsc",
-    "dev-windows": "set NODE_ENV=development && npm run swagger-autogen && nodemon src/server.ts",
-    "dev-linux": "NODE_ENV=development && npm run swagger-autogen && nodemon src/server.ts",
+    "dev-windows": "set NODE_ENV=development&& npm run swagger-autogen && nodemon src/server.ts",
+    "dev-linux": "NODE_ENV=development&& npm run swagger-autogen && nodemon src/server.ts",
     "test": "jest --verbose --runInBand",
     "test:watch": "npm run test -- --watchAll",
     "swagger-autogen": "node src/swagger.ts"

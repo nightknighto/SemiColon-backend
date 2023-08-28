@@ -1,4 +1,5 @@
 const swaggerAutogen = require("swagger-autogen")({ openapi: "3.0.0" });
+require("dotenv").config();
 
 const doc = {
   info: {
@@ -83,11 +84,19 @@ const doc = {
       }]
     }
   },
-  servers: [
-    {
-      url: "https://semicolon-registration-backend.onrender.com/",
-    },
-  ],
+  servers:
+    process.env.NODE_ENV === "development" ? [
+      {
+        url: `http://localhost:${process.env.PORT}`,
+      },
+      {
+        url: "https://semicolon-registration-backend.onrender.com/",
+      }
+    ] : [
+      {
+        url: "https://semicolon-registration-backend.onrender.com/",
+      }
+    ],
 };
 
 const outputFile = "./swagger_output.json";
