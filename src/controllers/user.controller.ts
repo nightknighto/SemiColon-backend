@@ -139,6 +139,14 @@ export async function updateUser(req: Request, res: Response) {
   /* #swagger.security = [{
             "bearerAuth": []
     }] */
+
+  /* #swagger.requestBody = {
+    content: {
+      "application/json": {
+        schema: {$ref: "#/definitions/UserUpdate"}
+      }
+    }
+  }*/
   const { id } = req.params;
   const user = req.body as Partial<UserType>;
   const session = await mongoose.startSession();

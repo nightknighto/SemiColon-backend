@@ -35,9 +35,12 @@ const doc = {
   },
   definitions: {
     User: {
+      $_id: "64583be0090f575e810b0999",
       $username: "Ahmed Atwa",
       $role: "admin",
-      $token: "xxxxxxx",
+      $active: true,
+      $updatedAt: "2021-07-01T00:00:00.000Z",
+      $phone: "01xxxxxxxxx",
     },
     Participant: {
       $_id: "xxxxx",
@@ -80,14 +83,22 @@ const doc = {
       $participantId: "",
       $action: "add",
     },
+    UserUpdate: {
+      username: "Ahmed Atwa",
+      role: "hr",
+      active: true,
+      phone: "01xxxxxxxxx"
+    },
     LoginData: {
       $phone: "01xxxxxxxxx",
       $password: "********",
     },
-    Responses: {
+    LoginResponse: {
       $status: "success",
       $data: {
-        $ref: "#/definitions/User"
+        $username: "Ahmed Atwa",
+        $role: "admin",
+        $token: "xxxxxxx",
       }
     },
     AllPars: {

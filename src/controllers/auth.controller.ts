@@ -39,7 +39,7 @@ export async function Login(req: Request, res: Response) {
   }
 
   /* #swagger.responses[200] = {
-			schema: {"$ref": "#/definitions/Responses"},
+			schema: {"$ref": "#/definitions/LoginResponse"},
 			description: "User data"
   }*/
 
