@@ -1,4 +1,5 @@
 const swaggerAutogen = require("swagger-autogen")({ openapi: "3.0.0" });
+require("dotenv").config();
 
 const doc = {
   info: {
@@ -53,6 +54,25 @@ const doc = {
       $year: "Junior",
       $acceptanceStatus: "accepted",
       $emailedStatus: "true",
+      $createdAt: "2021-07-01T00:00:00.000Z",
+      $updatedAt: "2021-07-01T00:00:00.000Z",
+      InterviewerNote: {
+        $interviewNotes: {
+          "Teamwork": {
+            "rating": 4,
+            "note": "Very good teamwork skills",
+            "_id": "64ca1de9f25c1d1689368202"
+          }
+        },
+        $interviewerId: {
+          "_id": "64b14d016067b13617b1acf3",
+          "phone": "01113629376",
+          "role": "admin",
+          "username": "Atwa"
+        },
+        $date: "2023-08-02T09:12:09.848Z",
+        $_id: "64ca1de9f25c1d1689368201"
+      }
     },
     Log: {
       $adminId: "",
@@ -83,11 +103,19 @@ const doc = {
       }]
     }
   },
-  servers: [
-    {
-      url: "https://semicolon-registration-backend.onrender.com/",
-    },
-  ],
+  servers:
+    process.env.NODE_ENV === "development" ? [
+      {
+        url: `http://localhost:${process.env.PORT}`,
+      },
+      {
+        url: "https://semicolon-registration-backend.onrender.com/",
+      }
+    ] : [
+      {
+        url: "https://semicolon-registration-backend.onrender.com/",
+      }
+    ],
 };
 
 const outputFile = "./swagger_output.json";
