@@ -3,6 +3,7 @@ import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
 import { connectMONGODB, disconnectMONGODB } from '../../services/mongodb';
 import UserType from '../../types/user';
 import api from '../../api';
+import { faker } from '@faker-js/faker';
 
 beforeAll(async () => {
 	await connectMONGODB();
@@ -14,9 +15,8 @@ afterAll(async () => {
 });
 
 describe('Auth API', () => {
-	let phone = '01444444444';
+	let phone = faker.phone.number("01#########");
 	let password = 'test';
-
 	beforeAll(async () => {
 		const authenticatedUser: UserType = {
 			phone,
@@ -45,7 +45,6 @@ describe('Auth API', () => {
 		const response = await superTest(api)
 			.post('/auth/login')
 			.send({ phone: '01444444244', password })
-		console.log(response.body);
 		expect(response.status).toBe(401);
 	});
 });

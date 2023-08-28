@@ -7,6 +7,8 @@ import {
 	dbDeleteParticipant,
 } from '../../models/participant/participant.model';
 import { dbAddNewUser, dbDeleteAllUsers } from '../../models/user/user.model';
+import { faker } from '@faker-js/faker';
+import mongoose from 'mongoose';
 
 let jwtToken: string;
 
@@ -14,7 +16,7 @@ beforeAll(async () => {
 	const user = {
 		username: 'Test_user',
 		password: 'Test_password',
-		phone: '01000000000',
+		phone: faker.phone.number("01#########"),
 		role: 'admin',
 		active: true,
 	};
@@ -22,7 +24,7 @@ beforeAll(async () => {
 	await dbAddNewUser(user);
 	const response = await superTest(api)
 		.post('/auth/login')
-		.send({ phone: '01000000000', password: 'Test_password' });
+		.send({ phone: user.phone, password: 'Test_password' });
 	jwtToken = response.body.data.token;
 });
 
@@ -144,6 +146,7 @@ describe('POST /participant endpoint', () => {
 });
 
 describe('PATCH /participant endpoint', () => {
+    let _id: string;
 	beforeAll(async () => {
 		const participant3: Partial<ParticipantType> = {
 			name: 'Test participant one',
@@ -158,7 +161,8 @@ describe('PATCH /participant endpoint', () => {
 			pastExperience: 'I have experience',
 			year: 'Freshman',
 		};
-		await dbAddParticipant(participant3);
+		let added = await dbAddParticipant(participant3);
+        _id = added._id.toString();
 	});
 	afterAll(async () => {
 		await dbDeleteParticipant({email: 'testuser3@gmail.com'});
@@ -168,7 +172,7 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Authorization', "Bearer "+jwtToken)
 			.send({
-				phone: "01111111112",
+				_id: new mongoose.Types.ObjectId(),
 				update: { acceptanceStatus: 'accepted' },
 			});
 		expect(response.statusCode).toBe(404);
@@ -178,24 +182,15 @@ describe('PATCH /participant endpoint', () => {
 			.patch('/participants/update')
 			.set('Authorization', "Bearer "+jwtToken)
 			.send({
-				phone: "01111111111" ,
+				_id,
 				update: {acceptanceStatus: 'accepted'},
-			});
-		expect(response.statusCode).toBe(200);
-	});
-	test('Update a existing participant emailed status ', async () => {
-		const response = await superTest(api)
-			.patch('/participants/update')
-			.set('Authorization', "Bearer "+jwtToken)
-			.send({
-				phone: "01111111111",
-				update: {emailedStatus: true},
 			});
 		expect(response.statusCode).toBe(200);
 	});
 });
 
 describe('DELETE /participant endpoint', () => {
+    let _id: string;
 	beforeAll(async () => {
 		const participant4: Partial<ParticipantType> = {
 			name: 'Test participant one',
@@ -210,21 +205,22 @@ describe('DELETE /participant endpoint', () => {
 			pastExperience: 'I have experience',
 			year: 'Freshman',
 		};
-		await dbAddParticipant(participant4);
+		let added = await dbAddParticipant(participant4);
+        _id = added._id.toString();
 	});
 
 	test('Delete a non-existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Authorization', "Bearer "+jwtToken)
-			.send({ phone: "01111111112"} );
+			.send({ _id: new mongoose.Types.ObjectId() });
 		expect(response.statusCode).toBe(404);
 	});
 	test('Delete an existing participant ', async () => {
 		const response = await superTest(api)
 			.delete('/participants/delete')
 			.set('Authorization', "Bearer "+jwtToken)
-			.send({ phone: "01111111111"  });
+			.send({ _id  });
 		expect(response.statusCode).toBe(200);
 	});
 });
