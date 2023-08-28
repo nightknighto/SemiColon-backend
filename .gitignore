@@ -1,4 +1,4 @@
 node_modules
 build
 .env
-swagger_output.json
+src/swagger_output.json
