@@ -21,7 +21,7 @@ export async function Login(req: Request, res: Response) {
   let user: UserType = {} as UserType;
 
   try {
-    user = await dbGetUserByPhone(phone);
+    user = await dbGetUserByPhone(phone, true);
   } catch (err: unknown) {
     if ((err as ErrorWithStatusCode).statusCode === 404)
       return res.status(401).json({

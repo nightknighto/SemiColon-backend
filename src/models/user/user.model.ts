@@ -16,8 +16,8 @@ export async function dbGetAllUsers() {
 	return await User.find({}, { password: 0 });
 }
 
-export async function dbGetUserByPhone(phone: string) {
-	const result = await User.findOne({ phone }, { password: 0 });
+export async function dbGetUserByPhone(phone: string, getPassword = false) {
+	const result = await User.findOne({ phone }, { password: getPassword });
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}
