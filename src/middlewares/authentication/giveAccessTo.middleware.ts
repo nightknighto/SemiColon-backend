@@ -13,12 +13,18 @@ export default function giveAccessTo(role: Role) {
 	return (req: Request, res: Response, next: NextFunction) => {
 		let userRole = req.user?.role as Role;
 		let isActive = req.user?.active as boolean;
+
 		if (permissionLevels[userRole] >= permissionLevels[role] && isActive) {
 			next();
-		} else {
-			res.status(401).send({
+		} else if (!isActive) {
+			res.status(403).send({
 				status: 'failure',
-				message: `You must be at least an ACTIVE ${role} to access this route`,
+				data: `Your account is inactive. Please contact an admin to activate your account.`,
+			});
+		} else if(permissionLevels[userRole] < permissionLevels[role]) {
+			res.status(403).send({
+				status: 'failure',
+				data: `You don't have permission to access this route.`,
 			});
 		}
 	};

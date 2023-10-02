@@ -71,14 +71,13 @@ export function ValidateStatus(status: string): boolean {
     return true;
 }
 export function ValidatePreference(
-    preference: PreferencesEnum,
-    order: string
+    preference: PreferencesEnum
 ): boolean {
     if (!preference) {
-        throw new ErrorWithStatusCode(`${order} Preference is required`, 400);
+        throw new ErrorWithStatusCode(`Preference is required`, 400);
     } else if (!Object.values(PreferencesEnum).includes(preference)) {
         throw new ErrorWithStatusCode(
-            `Invalid ${order} Preference: Preference must be one of ${[
+            `Invalid Preference: Preference must be one of ${[
                 ...Object.values(PreferencesEnum),
             ]}}`,
             400
@@ -91,12 +90,9 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
     if (!participant) {
         throw new ErrorWithStatusCode("Participant is required", 400);
     }
-    if (participant.firstPreference === participant.secondPreference) {
-        throw new ErrorWithStatusCode("Preferences must be different", 400);
-    }
     if (!participant.firstPrefKnowledge) {
         throw new ErrorWithStatusCode(
-            "First Preference Knowledge is required",
+            "Preference Knowledge is required",
             400
         );
     }
@@ -107,12 +103,7 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
         // ValidateCollegeId(participant.collegeId) &&
         ValidateYear(participant.year) &&
         ValidatePreference(
-            participant.firstPreference as PreferencesEnum,
-            "first"
-        ) &&
-        ValidatePreference(
-            participant.secondPreference as PreferencesEnum,
-            "second"
+            participant.firstPreference as PreferencesEnum
         )
     );
 }

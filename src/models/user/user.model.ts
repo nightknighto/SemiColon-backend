@@ -5,7 +5,7 @@ import ErrorWithStatusCode from "../../utils/classes/ErrorWithStatusCode";
 import User from "./user.schema";
 
 export async function dbGetUserById(id: string) {
-	const result = await User.findById(id);
+	const result = await User.findById(id, { password: 0 });
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}
@@ -13,11 +13,12 @@ export async function dbGetUserById(id: string) {
 }
 
 export async function dbGetAllUsers() {
-	return await User.find();
+	return await User.find({}, { password: 0 });
 }
 
-export async function dbGetUserByPhone(phone: string) {
-	const result = await User.findOne({ phone });
+export async function dbGetUserByPhone(phone: string, getPassword = false) {
+	const projection = getPassword ? {} : { password: 0 };
+	const result = await User.findOne({ phone }, projection);
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}
@@ -37,7 +38,7 @@ export async function dbAddNewUser(user: UserType, session?: mongoose.ClientSess
 
 	// Check for duplication error
 	try {
-		return await userToAdd.save({ session});
+		return await userToAdd.save({ session });
 	} catch (error: any) {
 		if ((error.code = 11000)) {
 			throw new ErrorWithStatusCode(error.message, 400);
@@ -47,7 +48,7 @@ export async function dbAddNewUser(user: UserType, session?: mongoose.ClientSess
 }
 
 export async function dbUpdateUserById(id: string, user: Partial<UserType>, session?: mongoose.ClientSession) {
-	const result = await User.findByIdAndUpdate(id, user, { session });
+	const result = await User.findByIdAndUpdate(id, user, { session, projection: { password: 0 } });
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}
@@ -63,7 +64,7 @@ export async function dbDeleteUserById(id: string, session?: mongoose.ClientSess
 }
 
 export async function dbActivateUserById(id: string, session?: mongoose.ClientSession) {
-	const result = await User.findByIdAndUpdate(id, { active: true }, { new: true, session });
+	const result = await User.findByIdAndUpdate(id, { active: true }, { new: true, session, projection: { password: 0 } });
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}
@@ -71,7 +72,7 @@ export async function dbActivateUserById(id: string, session?: mongoose.ClientSe
 }
 
 export async function dbDeactivateUserById(id: string, session?: mongoose.ClientSession) {
-	const result = await User.findByIdAndUpdate(id, { active: false }, { new: true, session });
+	const result = await User.findByIdAndUpdate(id, { active: false }, { new: true, session, projection: { password: 0 } });
 	if (!result) {
 		throw new ErrorWithStatusCode("User not found", 404);
 	}

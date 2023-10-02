@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { participant as ParticipantType } from "../types/participant";
 import mongoose from "mongoose";
 import {
-	dbGetParticipantByPhone,
 	dbGetAllParticipants,
 	dbUpsertParticipant,
 	dbDeleteParticipant,
@@ -14,7 +13,7 @@ import { sendBulkEmail, sendMail } from "../services/node-mailer";
 import mailGen, { EmailTypeEnum } from "../utils/constructors/email.constructors";
 import { Email } from "../types/email";
 // import { Preference } from "../models/participant/participant.schema";
-import { StatusEnum } from "../models/participant/participant.schema";
+import Participant, { StatusEnum } from "../models/participant/participant.schema";
 import { InterviewerObject, InterviewNotes } from "../types/interviewNote";
 import { getChanges } from "../utils/diffing/getChanges.util";
 
@@ -24,6 +23,15 @@ export async function getAllParticipants(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get all participants from database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+
+	/* #swagger.responses[200] = {
+			schema: {"$ref": "#/definitions/AllPars"},
+			description: "All Participants data"
+  }*/
 	try {
 		const participants = await dbGetAllParticipants();
 		res.status(200).json({ status: "success", data: participants });
@@ -40,6 +48,10 @@ export async function addParticipant(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get add a participant to database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	try {
 		const { participant }: { participant: ParticipantType } = req.body;
 		const newParticipant = await dbUpsertParticipant(participant);
@@ -53,6 +65,9 @@ export async function addParticipant(req: Request, res: Response) {
 }
 
 export async function deleteParticipantByEmail(req: Request, res: Response) {
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
@@ -79,16 +94,20 @@ export async function deleteParticipantByEmail(req: Request, res: Response) {
 	}
 }
 
-export async function deleteParticipantByPhone(req: Request, res: Response) {
+export async function deleteParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get delete a participant from database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { phone } = req.body;
-		const deletedParticipant = await dbDeleteParticipant({ phone }, session);
+		const { _id } = req.body;
+		const deletedParticipant = await dbDeleteParticipant({ _id }, session);
 		await dbAddNewParticipantLog(
 			{
 				initiator: req.user?._id as string,
@@ -110,16 +129,20 @@ export async function deleteParticipantByPhone(req: Request, res: Response) {
 	}
 }
 
-export async function updateParticipantByPhone(req: Request, res: Response) {
+export async function updateParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to update a participant in database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { update, phone }: { update: Partial<ParticipantType>; phone: string } = req.body;
-		const originalParticipant = await dbUpdateParticipant(update, { phone }, session);
+		const { update, _id }: { update: Partial<ParticipantType>; _id: string } = req.body;
+		const originalParticipant = await dbUpdateParticipant(update, { _id }, session);
 		const diff = getChanges(update, originalParticipant);
 		await dbAddNewParticipantLog(
 			{
@@ -147,6 +170,14 @@ export async function updateParticipantByPhone(req: Request, res: Response) {
 //------------------Emails------------------//
 
 export async function bulkEmailParticipants(req: Request, res: Response) {
+	/**
+	 * #swagger.tags = ['Participants']
+	 * #swagger.description = 'Endpoint to email a participant in database'
+	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const { type, preferences } = req.body;
 	try {
 		let EmailType = type as EmailTypeEnum;
@@ -175,18 +206,22 @@ export async function bulkEmailParticipants(req: Request, res: Response) {
 	}
 }
 
-export async function acceptParticipantByPhone(req: Request, res: Response) {
+export async function acceptParticipantById(req: Request, res: Response) {
 	/**
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get accept a participant from database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { phone }: { phone: string } = req.body;
+		const { _id }: { _id: string } = req.body;
 		const originalParticipant = await dbUpdateParticipant(
 			{ acceptanceStatus: StatusEnum.ACCEPTED },
-			{ phone },
+			{ _id },
 			session
 		);
 		const diff = {
@@ -221,6 +256,10 @@ export async function rejectParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get reject a participant from database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
@@ -262,6 +301,10 @@ export async function emailParticipantByPhone(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to get send an email to a participant from database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
@@ -306,11 +349,15 @@ export async function updateParticipantStatus(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to update a participant's status'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { status, phone }: { status: StatusEnum; phone: string } = req.body;
-		const originalParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { phone }, session);
+		const { status, _id }: { status: StatusEnum; _id: string } = req.body;
+		const originalParticipant = await dbUpdateParticipant({ acceptanceStatus: status }, { _id }, session);
 		const diff = {
 			OLD: { acceptanceStatus: originalParticipant.acceptanceStatus },
 			NEW: { acceptanceStatus: status },
@@ -343,16 +390,20 @@ export async function addNoteToParticipant(req: Request, res: Response) {
 	 * #swagger.tags = ['Participants']
 	 * #swagger.description = 'Endpoint to add a note to a participant in database'
 	 */
+
+	/* #swagger.security = [{
+            "bearerAuth": []
+    }] */
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const { note, phone }: { note: InterviewNotes; phone: string } = req.body;
+		const { note, _id }: { note: InterviewNotes; _id: string } = req.body;
 		const interviewNoteObj: InterviewerObject = {
 			interviewNotes: note,
 			interviewerId: req.user?._id,
 			date: new Date(),
 		};
-		const originalParticipant = await dbUpdateParticipant({ InterviewerNote: interviewNoteObj }, { phone });
+		const originalParticipant = await dbUpdateParticipant({ InterviewerNote: interviewNoteObj }, { _id });
 		const diff = {
 			OLD: { InterviewerNote: originalParticipant.InterviewerNote },
 			NEW: { InterviewerNote: interviewNoteObj },
@@ -368,7 +419,8 @@ export async function addNoteToParticipant(req: Request, res: Response) {
 			session
 		);
 		await session.commitTransaction();
-		res.status(200).json({ status: "success", data: diff });
+		await Participant.populate(diff.NEW, { path: "InterviewerNote.interviewerId", select: "_id phone role username" });
+		res.status(200).json({ status: "success", data: diff.NEW });
 	} catch (error) {
 		await session.abortTransaction();
 		console.log((error as Error).name);
