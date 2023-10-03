@@ -17,6 +17,11 @@ export const userSchema = new mongoose.Schema<UserType>(
             type: String,
             required: true,
         },
+		committee:{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Committee",
+			required: false,
+		},
         role: {
             type: String,
             required: true,

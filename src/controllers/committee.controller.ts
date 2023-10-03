@@ -5,6 +5,7 @@ import {
     dbGetAllCommittees,
     dbGetCommitteeByTitle,
     dbUpdateCommitteeByTitle,
+    getCommitteeMembersByCommitteeId,
 } from '../models/committee/committee.model'
 
 export async function addNewCommittee(req: Request, res: Response) {
@@ -34,7 +35,14 @@ export async function getAllCommittees(req: Request, res: Response) {
 export async function getCommitteeByTitle(req: Request, res: Response) {
     try {
         const committee = await dbGetCommitteeByTitle(req.params.title)
-        res.status(200).json({ status: 'success', data: committee })
+        const committeeMembers = await getCommitteeMembersByCommitteeId(
+            String(committee?._id),
+        )
+        const formattedCommittee = {
+            ...committee,
+            members: committeeMembers,
+        }
+        res.status(200).json({ status: 'success', data: formattedCommittee })
     } catch (error) {
         res.status(500).json({
             status: 'failure',
