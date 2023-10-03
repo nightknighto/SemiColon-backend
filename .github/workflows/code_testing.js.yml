@@ -4,34 +4,34 @@
 name: Code Testing
 
 on:
-  pull_request:
-    branches: [ "**" ]
-  push:
-    branches: [ "master" ]
-  workflow_dispatch:
+    pull_request:
+        branches: ['**']
+    push:
+        branches: ['master']
+    workflow_dispatch:
 
 jobs:
-  build:
-    name: Code Testing
-    
-    runs-on: ubuntu-latest
+    build:
+        name: Code Testing
 
-    env:
-      TEST_DB_URL: ${{ secrets.TEST_DB_URL }}
-      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        env:
+            TEST_DB_URL: ${{ secrets.TEST_DB_URL }}
+            SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - run: npm run test
+        strategy:
+            matrix:
+                node-version: [18.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run build
+            - run: npm run test

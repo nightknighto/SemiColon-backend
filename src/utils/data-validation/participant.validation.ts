@@ -1,21 +1,24 @@
-import ErrorWithStatusCode from "../classes/ErrorWithStatusCode";
-import { participant as ParticipantType } from "../../types/participant";
-import { PreferencesEnum, StatusEnum } from "../../models/participant/participant.schema";
+import ErrorWithStatusCode from '../classes/ErrorWithStatusCode'
+import { participant as ParticipantType } from '../../types/participant'
+import {
+    PreferencesEnum,
+    StatusEnum,
+} from '../../models/participant/participant.schema'
 
 export function ValidateName(name: string): boolean {
     if (!name) {
-        throw new ErrorWithStatusCode("Name is required", 400);
+        throw new ErrorWithStatusCode('Name is required', 400)
     } else if (!name.match(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Name: name must not contain special characters or digits.",
-            400
-        );
+            'Invalid Name: name must not contain special characters or digits.',
+            400,
+        )
     }
-    return true;
+    return true
 }
 export function ValidateCollegeId(collegeId: string): boolean {
     if (!collegeId) {
-        throw new ErrorWithStatusCode("College ID is required", 400);
+        throw new ErrorWithStatusCode('College ID is required', 400)
     }
     //  else if (!collegeId.match(/^\d{2}[a-zA-Z0-9]?\d{4}$/)) {
     //     throw new ErrorWithStatusCode(
@@ -23,78 +26,75 @@ export function ValidateCollegeId(collegeId: string): boolean {
     //         400
     //     );
     // } // removed to allow students from other colleges to participate
-    return true;
+    return true
 }
 export function ValidatePhone(phoneNumber: string): boolean {
     if (!phoneNumber) {
-        throw new ErrorWithStatusCode("Phone number is required", 400);
+        throw new ErrorWithStatusCode('Phone number is required', 400)
     } else if (!phoneNumber.match(/^01\d{9}$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Phone number: Phone number must be 11 digits long and start with 01",
-            400
-        );
+            'Invalid Phone number: Phone number must be 11 digits long and start with 01',
+            400,
+        )
     }
-    return true;
+    return true
 }
 export function ValidateEmail(email: string): boolean {
     if (!email) {
-        throw new ErrorWithStatusCode("Email is required", 400);
+        throw new ErrorWithStatusCode('Email is required', 400)
     }
     if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Email: Email must be in the form of  person@mailServer.oneormore",
-            400
-        );
+            'Invalid Email: Email must be in the form of  person@mailServer.oneormore',
+            400,
+        )
     }
-    return true;
+    return true
 }
 export function ValidateYear(year: string): boolean {
     if (!year) {
-        throw new ErrorWithStatusCode("Year is required", 400);
+        throw new ErrorWithStatusCode('Year is required', 400)
     } else if (!year.match(/^(Freshman|Sophomore|Junior|Senior 1|Senior 2)$/)) {
         throw new ErrorWithStatusCode(
-            "Invalid Year: Year must be one of Freshman, Sophomore, Junior, Senior 1, Senior 2",
-            400
-        );
+            'Invalid Year: Year must be one of Freshman, Sophomore, Junior, Senior 1, Senior 2',
+            400,
+        )
     }
-    return true;
+    return true
 }
 export function ValidateStatus(status: string): boolean {
     if (!status) {
-        throw new ErrorWithStatusCode("Status is required", 400);
-    } else if (!(Object.values(StatusEnum).includes(status as StatusEnum))) {
+        throw new ErrorWithStatusCode('Status is required', 400)
+    } else if (!Object.values(StatusEnum).includes(status as StatusEnum)) {
         throw new ErrorWithStatusCode(
-            `Invalid Status: Status must be one of ${Object.values(StatusEnum).join(", ")}`,
-            400
-        );
+            `Invalid Status: Status must be one of ${Object.values(
+                StatusEnum,
+            ).join(', ')}`,
+            400,
+        )
     }
-    return true;
+    return true
 }
-export function ValidatePreference(
-    preference: PreferencesEnum
-): boolean {
+export function ValidatePreference(preference: PreferencesEnum): boolean {
     if (!preference) {
-        throw new ErrorWithStatusCode(`Preference is required`, 400);
+        throw new ErrorWithStatusCode(`Preference is required`, 400)
     } else if (!Object.values(PreferencesEnum).includes(preference)) {
         throw new ErrorWithStatusCode(
             `Invalid Preference: Preference must be one of ${[
                 ...Object.values(PreferencesEnum),
             ]}}`,
-            400
-        );
+            400,
+        )
     }
-    return true;
+    return true
 }
 
 export function ValidateParticipant(participant: ParticipantType): boolean {
     if (!participant) {
-        throw new ErrorWithStatusCode("Participant is required", 400);
+        throw new ErrorWithStatusCode('Participant is required', 400)
     }
     if (!participant.firstPrefKnowledge) {
-        throw new ErrorWithStatusCode(
-            "Preference Knowledge is required",
-            400
-        );
+        throw new ErrorWithStatusCode('Preference Knowledge is required', 400)
     }
     return (
         ValidateName(participant.name) &&
@@ -102,8 +102,6 @@ export function ValidateParticipant(participant: ParticipantType): boolean {
         ValidatePhone(participant.phone) &&
         // ValidateCollegeId(participant.collegeId) &&
         ValidateYear(participant.year) &&
-        ValidatePreference(
-            participant.firstPreference as PreferencesEnum
-        )
-    );
+        ValidatePreference(participant.firstPreference as PreferencesEnum)
+    )
 }

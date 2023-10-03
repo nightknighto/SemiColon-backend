@@ -1,7 +1,7 @@
 export default class ErrorWithStatusCode extends Error {
-    statusCode: number;
+    statusCode: number
     constructor(message: string, statusCode: number) {
-        super(message);
-        this.statusCode = statusCode;
+        super(message)
+        this.statusCode = statusCode
     }
 }

@@ -1,35 +1,35 @@
-import mongoose, { Schema } from "mongoose";
-import { participant as ParticipantType } from "../../types/participant";
-import { CriteriaEnum, InterviewerObject } from "../../types/interviewNote";
+import mongoose, { Schema } from 'mongoose'
+import { participant as ParticipantType } from '../../types/participant'
+import { CriteriaEnum, InterviewerObject } from '../../types/interviewNote'
 export enum PreferencesEnum {
-    C_PROG = "c-prog",
-    AVR = "avr",
-    ARM = "arm",
-    FULLSTACK = "fullstack",
-    FRONTEND = "frontend",
-    REACT = "react",
-    NODEJS = "nodejs",
-    PYTHON = "python",
-    DIGITAL_DESIGN = "digital",
-    FLUTTER = "flutter",
-    DESKTOP = "desktop",
+    C_PROG = 'c-prog',
+    AVR = 'avr',
+    ARM = 'arm',
+    FULLSTACK = 'fullstack',
+    FRONTEND = 'frontend',
+    REACT = 'react',
+    NODEJS = 'nodejs',
+    PYTHON = 'python',
+    DIGITAL_DESIGN = 'digital',
+    FLUTTER = 'flutter',
+    DESKTOP = 'desktop',
 }
 
 export enum StatusEnum {
-    ACCEPTED = "accepted",
-    REJECTED = "rejected",
-    PENDING = "pending",
-    EMAILED = "emailed",
-    FILTERED = "filtered",
-    SCHEDULED = "scheduled",
-    SECONDPREF = "secondpref",
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+    PENDING = 'pending',
+    EMAILED = 'emailed',
+    FILTERED = 'filtered',
+    SCHEDULED = 'scheduled',
+    SECONDPREF = 'secondpref',
 }
 
 //TODO:: participant last updated status
 // TODO:: populate interviewerId
 
 function createInterviewerNoteSchema(criteria: string[]) {
-    const criteriaSchema: any = {};
+    const criteriaSchema: any = {}
     for (const criterion of criteria) {
         criteriaSchema[criterion] = {
             type: {
@@ -41,16 +41,16 @@ function createInterviewerNoteSchema(criteria: string[]) {
                 note: {
                     type: String,
                     trim: true,
-                }
+                },
             },
             required: false,
-        };
+        }
     }
     const interviewerObjectSchema = {
         interviewNotes: criteriaSchema,
         interviewerId: {
             type: Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'User',
             required: true,
         },
         date: {
@@ -58,13 +58,13 @@ function createInterviewerNoteSchema(criteria: string[]) {
             required: true,
             default: Date.now,
         },
-    };
-    return new mongoose.Schema<InterviewerObject>(interviewerObjectSchema);
+    }
+    return new mongoose.Schema<InterviewerObject>(interviewerObjectSchema)
 }
 
 const interviewerNotesSchema = createInterviewerNoteSchema(
-    Object.values(CriteriaEnum)
-);
+    Object.values(CriteriaEnum),
+)
 
 export const participantSchema = new mongoose.Schema<ParticipantType>(
     {
@@ -118,7 +118,7 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         year: {
             type: String,
             required: true,
-            enum: ["Freshman", "Sophomore", "Junior", "Senior 1", "Senior 2"],
+            enum: ['Freshman', 'Sophomore', 'Junior', 'Senior 1', 'Senior 2'],
         },
         acceptanceStatus: {
             type: String,
@@ -128,16 +128,16 @@ export const participantSchema = new mongoose.Schema<ParticipantType>(
         },
         InterviewerNote: {
             type: interviewerNotesSchema,
-            requiredPaths: ["interviewNotes", "interviewerId", "date"],
+            requiredPaths: ['interviewNotes', 'interviewerId', 'date'],
             trim: true,
         },
     },
-    { timestamps: true }
-);
+    { timestamps: true },
+)
 
 const Participant = mongoose.model<ParticipantType>(
-    "Participant",
-    participantSchema
-);
+    'Participant',
+    participantSchema,
+)
 
-export default Participant;
+export default Participant

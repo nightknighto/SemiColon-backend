@@ -1,4 +1,4 @@
-import cors from "cors";
+import cors from 'cors'
 
 /* 
 	CORS (Cross-Origin Resource Sharing) is a security feature implemented in web browsers that aims to
@@ -6,7 +6,7 @@ import cors from "cors";
 	being made by scripts running in the browser.
 */
 const corsOptions = {
-  origin: "*",
-};
+    origin: '*',
+}
 
-export default cors(corsOptions);
+export default cors(corsOptions)

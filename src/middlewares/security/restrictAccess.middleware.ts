@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
 
 let whiteList: string[] = [
-	/* TODO: add origin of hosted frontend */
-];
+    /* TODO: add origin of hosted frontend */
+]
 
 /*
 	This middleware is to restrict access to the API to only the whiteListed origins
@@ -10,17 +10,17 @@ let whiteList: string[] = [
 	but this middleware is used to secure the API from malicious clients
 */
 export default function restrictAccess(
-	req: Request,
-	res: Response,
-	next: Function
+    req: Request,
+    res: Response,
+    next: Function,
 ) {
-	const { origin } = req.headers;
-	if (whiteList.includes(origin as string)) {
-		next();
-	} else {
-		res.status(403).json({
-			status: 'failure',
-			data: 'Access denied',
-		});
-	}
+    const { origin } = req.headers
+    if (whiteList.includes(origin as string)) {
+        next()
+    } else {
+        res.status(403).json({
+            status: 'failure',
+            data: 'Access denied',
+        })
+    }
 }

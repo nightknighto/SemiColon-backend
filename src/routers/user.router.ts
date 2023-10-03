@@ -1,64 +1,64 @@
-import { Router } from "express";
+import { Router } from 'express'
 import {
-  addNewUser,
-  deleteUser,
-  getUserByPhone,
-  updateUser,
-  activateUser,
-  deactivateUser,
-  getAllUsers,
-} from "../controllers/user.controller";
+    addNewUser,
+    deleteUser,
+    getUserByPhone,
+    updateUser,
+    activateUser,
+    deactivateUser,
+    getAllUsers,
+} from '../controllers/user.controller'
 import {
-  mwValidateId,
-  mwValidatePhone,
-  mwValidateUserData,
-} from "../middlewares/userDataValidator";
-import giveAccessTo from "../middlewares/authentication/giveAccessTo.middleware";
-import isLoggedIn from "../middlewares/authentication/login.middleware";
+    mwValidateId,
+    mwValidatePhone,
+    mwValidateUserData,
+} from '../middlewares/userDataValidator'
+import giveAccessTo from '../middlewares/authentication/giveAccessTo.middleware'
+import isLoggedIn from '../middlewares/authentication/login.middleware'
 
-const userRouter = Router();
+const userRouter = Router()
 
 userRouter.get(
-  "/phone/:phone",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidatePhone,
-  getUserByPhone
-);
-userRouter.get("/getAll", isLoggedIn, giveAccessTo("admin"), getAllUsers);
+    '/phone/:phone',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidatePhone,
+    getUserByPhone,
+)
+userRouter.get('/getAll', isLoggedIn, giveAccessTo('admin'), getAllUsers)
 userRouter.post(
-  "/",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidateUserData,
-  addNewUser
-);
+    '/',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidateUserData,
+    addNewUser,
+)
 userRouter.patch(
-  "/update/:id",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidateId,
-  updateUser
-);
+    '/update/:id',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidateId,
+    updateUser,
+)
 userRouter.patch(
-  "/activate/:id",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidateId,
-  activateUser
-);
+    '/activate/:id',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidateId,
+    activateUser,
+)
 userRouter.patch(
-  "/deactivate/:id",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidateId,
-  deactivateUser
-);
+    '/deactivate/:id',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidateId,
+    deactivateUser,
+)
 userRouter.delete(
-  "/:id",
-  isLoggedIn,
-  giveAccessTo("admin"),
-  mwValidateId,
-  deleteUser
-);
-export default userRouter;
+    '/:id',
+    isLoggedIn,
+    giveAccessTo('admin'),
+    mwValidateId,
+    deleteUser,
+)
+export default userRouter

@@ -1,36 +1,36 @@
-import mongoose from 'mongoose';
-import UserType from '../../types/user';
+import mongoose from 'mongoose'
+import UserType from '../../types/user'
 
 export const userSchema = new mongoose.Schema<UserType>(
-	{
-		username: {
-			type: String,
-			required: true,
-		},
-		phone: {
-			type: String,
-			required: true,
-			unique: true,
-			match: /^01\d{9}$/,
-		},
-		password: {
-			type: String,
-			required: true,
-		},
-		role: {
-			type: String,
-			required: true,
-			enum: ['admin', 'hr', 'member'],
-		},
-		active: {
-			type: Boolean,
-			required: true,
-			default: false,
-		},
-	},
-	{ timestamps: true }
-);
+    {
+        username: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+            unique: true,
+            match: /^01\d{9}$/,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        role: {
+            type: String,
+            required: true,
+            enum: ['admin', 'hr', 'member'],
+        },
+        active: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+    },
+    { timestamps: true },
+)
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema)
 
-export default User;
+export default User
