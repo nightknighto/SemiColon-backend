@@ -8,6 +8,7 @@ import { serve, setup } from 'swagger-ui-express'
 import swaggerDoc from '../swagger_output.json'
 import { limiter } from '../middlewares/rate-limiter'
 import committeeRouter from './committee.router'
+import applicantRouter from './applicant.router'
 
 const globalRouter = Router()
 
@@ -18,6 +19,7 @@ globalRouter.use('/auth', authRouter)
 globalRouter.use('/participants', participantRouter)
 globalRouter.use('/log', logRouter)
 globalRouter.use('/committee', committeeRouter)
+globalRouter.use('/applicant', applicantRouter)
 
 globalRouter.use(
     '/',
