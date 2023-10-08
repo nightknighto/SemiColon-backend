@@ -1,6 +1,5 @@
 import { Committee } from './committee.schema'
 import { CommitteeEnum, CommitteeType } from '../../types/committee'
-import UserType from '../../types/user'
 import User from '../user/user.schema'
 
 export async function dbAddNewCommittee(committee: CommitteeType) {
@@ -10,13 +9,13 @@ export async function dbAddNewCommittee(committee: CommitteeType) {
 }
 
 export async function dbGetAllCommittees() {
-    const committees = await Committee.find().populate('members')
+    const committees = await Committee.find()
     return committees
 }
 
 export async function dbGetCommitteeByTitle(title: string) {
     const committee = await Committee.findOne({ title }).lean()
-    return committee 
+    return committee
 }
 
 export async function dbDeleteCommitteeByTitle(title: string) {
