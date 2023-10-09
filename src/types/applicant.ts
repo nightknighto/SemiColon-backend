@@ -4,6 +4,7 @@ export enum DepartmentEnum {
     mechanical = 'Mechanical',
     civil = 'Civil',
     architecture = 'Architecture',
+    other = 'Other',
 }
 
 export enum AcademicYearsEnum {
