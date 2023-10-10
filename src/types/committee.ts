@@ -3,6 +3,8 @@ import { Types } from 'mongoose'
 export enum CommitteeEnum {
     advanced_web = 'Advanced Web',
     basic_web = 'Basic Web',
+    pr = 'PR',
+    media = 'Media',
     avr = 'Avr',
     arm = 'Arm',
     embedded_c = 'Embedded C',
@@ -10,10 +12,10 @@ export enum CommitteeEnum {
 }
 
 export enum SectorEnum {
-    web = 'Web Development',
-    embedded = 'Embedded Systems',
-    software_engineering = 'Software Engineering',
-    operational = 'Operational',
+    web = 'Web Development Sector',
+    embedded = 'Embedded Systems Sector',
+    software_engineering = 'Software Engineering Sector',
+    operational = 'Operational Sector',
     other = 'Other',
 }
 
