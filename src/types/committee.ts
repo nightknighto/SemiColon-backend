@@ -9,6 +9,7 @@ export enum CommitteeEnum {
     arm = 'Arm',
     embedded_c = 'Embedded C',
     python = 'Python',
+    fundraising = 'Fundraising',
 }
 
 export enum SectorEnum {
