@@ -1,3 +1,5 @@
+import { InterviewerObject } from "./interviewNote"
+
 export enum DepartmentEnum {
     freshman = 'Freshman',
     electrical = 'Electrical',
@@ -26,4 +28,5 @@ export interface ApplicantType {
     second_preference_experience: string
     academic_year: string
     acceptanceStatus: string
+    InterviewerNote: InterviewerObject
 }
