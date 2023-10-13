@@ -7,11 +7,17 @@ export async function dbAddNewApplicant(applicant: ApplicantType) {
 }
 
 export async function dbGetAllApplicants() {
-    return await Applicant.find()
+    return await Applicant.find().populate({
+        path: 'InterviewerNote.interviewerId',
+        select: '_id phone username role',
+    })
 }
 
 export async function dbGetApplicantById(id: string) {
-    return await Applicant.findById(id)
+    return await Applicant.findById(id).populate({
+        path: 'InterviewerNote.interviewerId',
+        select: '_id phone username role',
+    })
 }
 
 export async function dbUpdateApplicantById(
@@ -20,4 +26,3 @@ export async function dbUpdateApplicantById(
 ) {
     return await Applicant.findByIdAndUpdate(id, update, { new: true })
 }
-
