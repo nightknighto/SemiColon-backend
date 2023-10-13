@@ -10,14 +10,9 @@ import giveAccessTo from '../middlewares/authentication/giveAccessTo.middleware'
 
 const applicantRouter = Router()
 
-applicantRouter.get('/', isLoggedIn, getAllApplicants)
-applicantRouter.get('/:id', isLoggedIn, getApplicantById)
+applicantRouter.get('/', getAllApplicants)
+applicantRouter.get('/:id', getApplicantById)
 applicantRouter.post('/', addNewApplicant)
-applicantRouter.patch(
-    '/:id',
-    isLoggedIn,
-    giveAccessTo('hr'),
-    updateApplicantById,
-)
+applicantRouter.patch('/:id', updateApplicantById)
 
 export default applicantRouter
