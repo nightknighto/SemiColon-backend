@@ -1,5 +1,5 @@
 import { Committee } from './committee.schema'
-import { CommitteeEnum, CommitteeType } from '../../types/committee'
+import { CommitteeType } from '../../types/committee'
 import User from '../user/user.schema'
 
 export async function dbAddNewCommittee(committee: CommitteeType) {

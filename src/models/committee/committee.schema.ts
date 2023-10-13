@@ -1,10 +1,9 @@
 import mongoose from 'mongoose'
-import { CommitteeEnum, CommitteeType, SectorEnum } from '../../types/committee'
+import { CommitteeType, SectorEnum } from '../../types/committee'
 
 const committeeSchema = new mongoose.Schema<CommitteeType>({
     title: {
         type: String,
-        enum: CommitteeEnum,
         required: true,
         unique: true,
     },

@@ -4,7 +4,6 @@ import {
     DepartmentEnum,
     AcademicYearsEnum,
 } from '../../types/applicant'
-import { CommitteeEnum } from '../../types/committee'
 import { StatusEnum } from '../participant/participant.schema'
 
 const applicantSchema = new mongoose.Schema<ApplicantType>(
@@ -37,19 +36,21 @@ const applicantSchema = new mongoose.Schema<ApplicantType>(
         },
         first_preference: {
             type: String,
-            enum: CommitteeEnum,
             required: true,
         },
-        first_preference_experience: {
+        first_preference_reason: {
             type: String,
             required: true,
         },
         second_preference: {
             type: String,
-            enum: CommitteeEnum,
             required: true,
         },
-        second_preference_experience: {
+        second_preference_reason: {
+            type: String,
+            required: true,
+        },
+        previousExperience: {
             type: String,
             required: true,
         },

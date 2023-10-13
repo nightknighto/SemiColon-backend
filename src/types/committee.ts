@@ -1,16 +1,5 @@
 import { Types } from 'mongoose'
 
-export enum CommitteeEnum {
-    advanced_web = 'Advanced Web',
-    basic_web = 'Basic Web',
-    pr = 'PR',
-    media = 'Media',
-    avr = 'Avr',
-    arm = 'Arm',
-    embedded_c = 'Embedded C',
-    python = 'Python',
-    fundraising = 'Fundraising',
-}
 
 export enum SectorEnum {
     web = 'Web Development Sector',

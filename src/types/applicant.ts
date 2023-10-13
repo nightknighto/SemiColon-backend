@@ -23,10 +23,11 @@ export interface ApplicantType {
     phone: string
     email: string
     first_preference: string
-    first_preference_experience: string
+    first_preference_reason: string
     second_preference: string
-    second_preference_experience: string
+    second_preference_reason: string
     academic_year: string
+    previousExperience: string
     acceptanceStatus: string
     InterviewerNote: InterviewerObject
 }
