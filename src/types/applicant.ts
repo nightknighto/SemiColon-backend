@@ -1,4 +1,4 @@
-import { InterviewerObject } from "./interviewNote"
+import { InterviewerObject } from './interviewNote'
 
 export enum DepartmentEnum {
     freshman = 'Freshman',
@@ -20,6 +20,7 @@ export enum AcademicYearsEnum {
 export interface ApplicantType {
     name: string
     department: DepartmentEnum
+    specialization: string
     phone: string
     email: string
     first_preference: string

@@ -17,6 +17,10 @@ const applicantSchema = new mongoose.Schema<ApplicantType>(
             enum: DepartmentEnum,
             required: true,
         },
+        specialization: {
+            type: String,
+            required: true,
+        },
         academic_year: {
             type: String,
             enum: AcademicYearsEnum,
