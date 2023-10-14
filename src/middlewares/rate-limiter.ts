@@ -1,7 +1,7 @@
 import rateLimiter from 'express-rate-limit'
 
 export const limiter = rateLimiter({
-    max: 20,
+    max: 30,
     windowMs: 60000,
     message:
         "You can't make any more requests at the moment. Try again in 60 seconds.",
