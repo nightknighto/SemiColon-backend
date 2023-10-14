@@ -25,7 +25,7 @@ export enum StatusEnum {
     SECONDPREF = 'secondpref',
 }
 
-//TODO:: participant last updated status
+// TODO:: participant last updated status
 // TODO:: populate interviewerId
 
 function createInterviewerNoteSchema(criteria: string[]) {
@@ -62,7 +62,7 @@ function createInterviewerNoteSchema(criteria: string[]) {
     return new mongoose.Schema<InterviewerObject>(interviewerObjectSchema)
 }
 
-const interviewerNotesSchema = createInterviewerNoteSchema(
+export const interviewerNotesSchema = createInterviewerNoteSchema(
     Object.values(CriteriaEnum),
 )
 

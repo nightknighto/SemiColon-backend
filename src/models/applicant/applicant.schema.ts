@@ -5,6 +5,7 @@ import {
     AcademicYearsEnum,
 } from '../../types/applicant'
 import { StatusEnum } from '../participant/participant.schema'
+import { interviewerNotesSchema } from '../participant/participant.schema'
 
 const applicantSchema = new mongoose.Schema<ApplicantType>(
     {
@@ -63,6 +64,11 @@ const applicantSchema = new mongoose.Schema<ApplicantType>(
             required: true,
             default: StatusEnum.PENDING,
             enum: StatusEnum,
+        },
+        InterviewerNote: {
+            type: interviewerNotesSchema,
+            requiredPaths: ['interviewNotes', 'interviewerId', 'date'],
+            trim: true,
         },
     },
     { timestamps: true },
