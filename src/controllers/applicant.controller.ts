@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { InterviewerObject } from '../types/interviewNote'
 import {
     dbAddNewApplicant,
     dbGetAllApplicants,
@@ -57,6 +58,29 @@ export async function updateApplicantById(req: Request, res: Response) {
             req.params.id,
             req.body,
         )
+        res.status(200).json({
+            status: 'success',
+            data: updatedApplicant,
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: 'failure',
+            data: (error as Error).message,
+        })
+    }
+}
+
+export async function addNoteToApplicant(req: Request, res: Response) {
+    try {
+        const { note, _id } = req.body
+        const interviewNoteObj: InterviewerObject = {
+            interviewNotes: note,
+            interviewerId: req.user?._id,
+            date: new Date(),
+        }
+        const updatedApplicant = await dbUpdateApplicantById(_id, {
+            InterviewerNote: interviewNoteObj,
+        })
         res.status(200).json({
             status: 'success',
             data: updatedApplicant,
