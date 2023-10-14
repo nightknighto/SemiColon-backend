@@ -10,6 +10,7 @@ export async function dbGetAllApplicants() {
     return await Applicant.find().populate({
         path: 'InterviewerNote.interviewerId',
         select: '_id phone username role',
+        strictPopulate: false,
     })
 }
 
@@ -17,6 +18,7 @@ export async function dbGetApplicantById(id: string) {
     return await Applicant.findById(id).populate({
         path: 'InterviewerNote.interviewerId',
         select: '_id phone username role',
+        strictPopulate: false,
     })
 }
 
