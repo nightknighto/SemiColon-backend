@@ -24,5 +24,10 @@ export async function dbUpdateApplicantById(
     id: string,
     update: Partial<ApplicantType>,
 ) {
-    return await Applicant.findByIdAndUpdate(id, update, { new: true })
+    return await Applicant.findByIdAndUpdate(id, update, {
+        new: true,
+    }).populate({
+        path: 'InterviewerNote.interviewerId',
+        select: '_id phone username role',
+    })
 }
