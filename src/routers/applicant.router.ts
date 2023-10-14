@@ -14,7 +14,12 @@ const applicantRouter = Router()
 applicantRouter.get('/', isLoggedIn, getAllApplicants)
 applicantRouter.get('/:id', isLoggedIn, getApplicantById)
 applicantRouter.post('/', addNewApplicant)
-applicantRouter.patch('/:id', giveAccessTo('hr'), updateApplicantById)
+applicantRouter.patch(
+    '/:id',
+    isLoggedIn,
+    giveAccessTo('hr'),
+    updateApplicantById,
+)
 applicantRouter.patch(
     '/interview/note',
     isLoggedIn,
