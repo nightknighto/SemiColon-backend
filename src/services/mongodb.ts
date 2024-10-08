@@ -7,6 +7,7 @@ export async function connectMONGODB() {
 		await mongoose.connect(configs.DB_URL as string);
 	} catch (err) {
 		console.log(err);
+		throw new Error('Error connecting to MongoDB: ' + err);
 	}
 }
 
