@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: semicolon-backend-db-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: semicolon-backend
+    type: db
+  ports:
+  - port: 27017
+    targetPort: 27017

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: semicolon-backend-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: semicolon-backend
+      type: db
+  template:
+    metadata:
+      labels:
+        app: semicolon-backend
+        type: db
+    spec:
+      containers:
+        - name: semicolon-backend
+          image: bitnami/mongodb:5.0
+          env:
+            - name: MONGODB_REPLICA_SET_MODE
+              value: "primary"
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: semicolon-backend-storage
+              mountPath: /data/db
+      volumes:
+        - name: semicolon-backend-storage
+          emptyDir: {}

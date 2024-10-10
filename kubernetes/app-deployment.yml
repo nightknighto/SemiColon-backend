@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: semicolon-backend-app
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: semicolon-backend
+      type: backend
+  template:
+    metadata:
+      labels:
+        app: semicolon-backend
+        type: backend
+    spec:
+      containers:
+      - name: semicolon-backend
+        image: nightknighto/semicolon-backend:v1-prod
+        command: ["npm", "run", "deploy-linux"]
+        envFrom:
+          - configMapRef:
+              name: semicolon-backend-config
+          - secretRef:
+              name: semicolon-backend-secret
+        ports:
+        - containerPort: 3000
+      initContainers:
+      - name: semicolon-backend-test # This container is used to run tests before the main container starts
+        image: nightknighto/semicolon-backend:v1-base
+        command: ["npm", "run", "test"]
+        envFrom:
+          - configMapRef:
+              name: semicolon-backend-config
+          - secretRef:
+              name: semicolon-backend-secret
+      
