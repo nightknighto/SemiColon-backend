@@ -1,0 +1,34 @@
+
+services:
+  mongo:
+    image: bitnami/mongodb:5.0
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      ALLOW_EMPTY_PASSWORD: 'yes'
+
+  test:
+    image: semicolon-backend:v1-base
+    build:
+      context: .
+      target: build
+      dockerfile: Dockerfile
+    command: npm run test
+    environment:
+      - PROD_SESSION_SECRET=secret
+      - SESSION_SECRET=secret
+      - PORT=3000
+      - DEV_DB_URL=mongodb://mongo:27017/semicolon-dev?directConnection=true
+      - PROD_DB_URL=mongodb://mongo:27017/semicolon-prod?directConnection=true
+      - TEST_DB_URL=mongodb://mongo:27017/semicolon-test?directConnection=true
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+
+volumes:
+  mongo-data:
+
