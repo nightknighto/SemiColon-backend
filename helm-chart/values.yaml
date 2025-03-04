@@ -18,10 +18,10 @@ app:
     PORT: '3000'
     NODE_ENV: 'production'
     # Database URLs
-    # These values are templated with the release name to ensure that each release can find its own database
-    DEV_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-dev?directConnection=true'
-    TEST_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-test?directConnection=true'
-    PROD_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-prod?directConnection=true'
+    # These values are templated with the release name and db port to ensure that each release can find its own database
+    DEV_DB_URL: 'mongodb://{{ include "db-name" $ }}:{{ .Values.db.service.port }}/semicolon-dev?directConnection=true'
+    TEST_DB_URL: 'mongodb://{{ include "db-name" $ }}:{{ .Values.db.service.port }}/semicolon-test?directConnection=true'
+    PROD_DB_URL: 'mongodb://{{ include "db-name" $ }}:{{ .Values.db.service.port }}/semicolon-prod?directConnection=true'
 
   ingress: # Ingress configuration
     enabled: true # Whether or not the ingress should be created
