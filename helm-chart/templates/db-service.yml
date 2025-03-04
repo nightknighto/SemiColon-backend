@@ -1,0 +1,15 @@
+{{- with .Values.db.service }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "db-name" $ }}
+spec:
+  type: {{ .type | default "ClusterIP" }}
+  selector:
+    {{- include "db-labels" $ | nindent 4 }}
+  ports:
+  - port: {{ .port | default 27017 }}
+    targetPort: {{ .targetPort | default 27017 }}
+
+{{- end }}

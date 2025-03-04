@@ -1,0 +1,15 @@
+{{- with .Values.app.service }}
+  
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app-name" $ }}
+spec:
+  type: {{ .type | default "ClusterIP" }}
+  selector:
+    {{- include "app-labels" $ | nindent 4 }}
+  ports:
+  - port: {{ .port | default 80 }}
+    targetPort: {{ .targetPort | default 3000 }}
+
+{{- end }}

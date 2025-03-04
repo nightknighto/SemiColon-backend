@@ -1,0 +1,40 @@
+{{- with .Values.db }}
+  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "db-name" $ }}
+spec:
+  replicas: {{ .replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "db-labels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "db-labels" $ | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "db-name" $ }}
+          image: {{ .image.repo }}:{{ .image.tag }}
+          {{- with .env }}
+          env:
+            {{- range $key, $val := . }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .service.port }}
+  {{- if and .volume .volume.enabled }}
+          volumeMounts:
+            - name: {{ include "db-name" $ }}
+              mountPath: {{ .volume.mountPath | default "/data/db" }}
+      volumes:
+        - name: {{ include "db-name" $ }}
+          emptyDir: {}
+  {{- end }}
+
+{{- end -}}

@@ -1,0 +1,51 @@
+{{- with .Values.app }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app-name" $ }}
+spec:
+  replicas: {{ .replicas | default 1 }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "app-labels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "app-labels" $ | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ include "app-name" $ }}
+        image: {{ .main_image.repo }}:{{ .main_image.tag }}
+        command: {{ .main_image.command | default (list "npm" "run" "deploy-linux") | toJson }}
+        {{- if or .env .secrets }}
+        envFrom:
+          {{- if .env }}
+          - configMapRef:
+              name: {{ include "app-name" $ }}
+          {{- end }}
+          {{- if .secrets }}
+          - secretRef:
+              name: {{ include "app-name" $ }}
+          {{- end }}
+        {{- end }}
+        ports:
+        - containerPort: {{ .service.targetPort | default 3000 }}
+      initContainers:
+      - name: {{ include "app-name" $ }}-test # This container is used to run tests before the main container starts
+        image: {{ .test_image.repo }}:{{ .test_image.tag }}
+        command: {{ .test_image.command | default (list "npm" "run" "test") | toJson }}
+        {{- if or .env .secrets }}
+        envFrom:
+          {{- if .env }}
+          - configMapRef:
+              name: {{ include "app-name" $ }}
+          {{- end }}
+          {{- if .secrets }}
+          - secretRef:
+              name: {{ include "app-name" $ }}
+          {{- end }}
+        {{- end }}
+
+{{- end }}

@@ -1,0 +1,58 @@
+
+
+
+app:
+  replicas: 1 # Number of replicas to run
+
+  main_image: # This container is used to run the main application
+    repo: 'nightknighto/semicolon-backend'
+    tag: 'v1-prod'
+    command: ["npm", "run", "deploy-linux"]
+
+  test_image: # This container is used to run tests before the main container starts
+    repo: 'nightknighto/semicolon-backend'
+    tag: 'v1-base'
+    command: ["npm", "run", "test"]
+
+  env: 
+    PORT: '3000'
+    NODE_ENV: 'production'
+    # Database URLs
+    # These values are templated with the release name to ensure that each release can find its own database
+    DEV_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-dev?directConnection=true'
+    TEST_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-test?directConnection=true'
+    PROD_DB_URL: 'mongodb://{{ .Release.Name }}-db:27017/semicolon-prod?directConnection=true'
+
+  ingress: # Ingress configuration
+    enabled: true # Whether or not the ingress should be created
+    host: 'semicolon-backend.com' # Hostname that the ingress will route traffic to
+    path: '/' # Path that the ingress will route traffic to
+
+  service:
+    type: 'NodePort' # Type of service to create
+    port: 80 # Port that the service will listen on for external traffic
+    targetPort: 3000 # Port that the container exposes internally
+
+  secrets:
+    PROD_SESSION_SECRET: c2VjcmV0 # dummy value
+    SESSION_SECRET: c2VjcmV0 # dummy value
+
+db:
+  replicas: 1
+
+  image:
+    repo: 'bitnami/mongodb'
+    tag: '5.0'
+
+  volume:
+    enabled: true # Whether or not to create a volume for the database
+    mountPath: '/data/db' # Path to mount the volume to
+
+  env:
+    MONGODB_REPLICA_SET_MODE: 'primary'
+    ALLOW_EMPTY_PASSWORD: 'yes'
+
+  service:
+    type: 'ClusterIP'
+    port: 27017 # Port that the service will listen on for external traffic
+    targetPort: 27017 # Port that the container exposes internally
