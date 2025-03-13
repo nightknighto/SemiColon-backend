@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base
+
+components:
+  - ../../components/ingress
+  - ../../components/redis
+
+replicas:
+  - name: backend-app
+    count: 3
+
+commonLabels:
+  env: prod
+  
+configMapGenerator:
+  - name: app-config
+    literals:
+      - NODE_ENV=production
+    behavior: merge

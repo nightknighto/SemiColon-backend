@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base
+
+commonLabels:
+  env: dev
+
+images:
+  - name: nightknighto/semicolon-backend
+    newTag: v1-base
+
+patches:
+  - path: api-service-patch.yaml
+  - target: # Delete the initContainers from the deployment
+      kind: Deployment
+      name: semicolon-backend-app
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/initContainers
+
+configMapGenerator:
+  - name: app-config
+    literals:
+      - NODE_ENV=development
+    behavior: merge
+  

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+  template:
+    spec:
+      containers:
+        - name: backend-db
+          image: bitnami/mongodb:5.0
+          envFrom:
+            - configMapRef:
+                name: db-config
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: semicolon-backend-storage
+              mountPath: /data/db
+      volumes:
+        - name: semicolon-backend-storage
+          emptyDir: {}
