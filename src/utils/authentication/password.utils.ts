@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-const SALT_ROUND = 10;
+const SALT_ROUND = 8;
 
 export async function hashPassword(plainTextPassword: string) {
 	return await bcrypt.hash(plainTextPassword, SALT_ROUND);

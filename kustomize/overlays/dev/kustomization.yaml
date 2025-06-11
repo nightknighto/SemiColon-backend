@@ -12,7 +12,7 @@ images:
     newTag: v1-base
 
 patches:
-  - path: api-service-patch.yaml
+  - path: app-service-patch.yaml
   - target: # Delete the initContainers from the deployment
       kind: Deployment
       name: semicolon-backend-app
