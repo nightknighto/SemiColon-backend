@@ -3,6 +3,7 @@ import { Strategy as JWTStrategy, StrategyOptions, VerifyCallback, ExtractJwt } 
 import { dbGetUserById, dbGetUserByPhone } from "../models/user/user.model";
 import configs from "../config/config";
 import UserType from "../types/user";
+import { Request } from "express";
 
 declare global {
 	namespace Express {
@@ -10,8 +11,17 @@ declare global {
 	}
 }
 
+const cookieExtractor = (req: Request) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies['token'];   // <-- change 'jwt' to your cookie name
+  }
+  return token;
+};
+
 const options: StrategyOptions = {
-	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+	// jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+	jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
 	secretOrKey: configs.SESSION_SECRET,
 	ignoreExpiration: false,
 	algorithms: ["HS256"],
