@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Login, Logout } from "../controllers/auth.controller";
+import { Login } from "../controllers/auth.controller";
 import {
   mwValidateLoginData,
   mwValidateUserData,
@@ -28,7 +28,5 @@ authRouter.post(
   mwValidateLoginData,
   Login
 );
-
-authRouter.get('/logout', Logout);
 
 export default authRouter;
